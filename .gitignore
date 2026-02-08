@@ -1,3 +1,5 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
 # Logs
 logs
 *.log
@@ -126,6 +128,7 @@ dist
 .vscode-test
 
 # yarn v3
+/.pnp
 .pnp.*
 .yarn/*
 !.yarn/patches
@@ -137,3 +140,19 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+.pnpm-debug.log*
+
+# vercel
+.vercel
