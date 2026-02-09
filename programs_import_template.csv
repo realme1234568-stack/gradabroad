@@ -1,4 +1,10 @@
-user_id,university_name,course_name,status,checklist
-YOUR_USER_UUID,Technical University of Munich,MSc Computer Science,Documents in progress,"CV;Transcript;Motivation Letter"
-YOUR_USER_UUID,RWTH Aachen University,BSc Mechanical Engineering,Applied,"Recommendation;Transcript;Language Test"
-YOUR_USER_UUID,University of Mannheim,MSc Data Science,Decision pending,"Portfolio;Motivation Letter"
+university_name,course_name,level,language
+Leuphana University of Lüneburg,M.Sc. Management & Entrepreneurship,,
+Otto von Guericke University Magdeburg,"M.Sc. International Management, Marketing & Entrepreneurship (IMME)",,
+Chemnitz University of Technology,M.Sc. Management & Economics,,
+University of Duisburg-Essen,M.Sc. Economics (Applied / Business),,
+University of Siegen,M.Sc. Economics / Economic Policy,,
+University of Cologne,M.Sc. Economics,,
+University of Passau,M.Sc. International Economics & Business,,
+TU Berlin,IMES,,
+Technical University of Munich,M.Sc. Management and digital technology,,

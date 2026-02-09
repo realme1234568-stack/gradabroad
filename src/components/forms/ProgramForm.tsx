@@ -11,7 +11,6 @@ export default function ProgramForm() {
     course_name: "",
     level: "",
     language: "",
-    intake: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,7 +36,6 @@ export default function ProgramForm() {
       course_name: form.course_name,
       level: form.level || null,
       language: form.language || null,
-      intake: form.intake || null,
     });
 
     if (insertError) {
@@ -48,7 +46,6 @@ export default function ProgramForm() {
         course_name: "",
         level: "",
         language: "",
-        intake: "",
       });
       router.refresh();
     }
@@ -81,12 +78,6 @@ export default function ProgramForm() {
           value={form.language}
           onChange={(event) => handleChange("language", event.target.value)}
           placeholder="Language"
-          className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-white/10 dark:bg-black/60 dark:text-white"
-        />
-        <input
-          value={form.intake}
-          onChange={(event) => handleChange("intake", event.target.value)}
-          placeholder="Intake (e.g., Winter 2025)"
           className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-white/10 dark:bg-black/60 dark:text-white"
         />
       </div>

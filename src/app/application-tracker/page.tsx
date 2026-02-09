@@ -1,5 +1,4 @@
 import { createSupabaseServerClient } from "@/lib/supabaseServer";
-import TrackerForm from "@/components/forms/TrackerForm";
 
 const stageColors: Record<string, string> = {
   "Documents in progress": "bg-amber-400/20 text-amber-200",
@@ -45,10 +44,6 @@ export default async function ApplicationTrackerPage() {
       <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
         Monitor every shortlisted university from document prep to decision.
       </p>
-
-      <div className="mt-6">
-        <TrackerForm />
-      </div>
 
       <div className="mt-8 grid gap-6">
         {trackerItems.length === 0 ? (

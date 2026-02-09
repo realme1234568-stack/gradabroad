@@ -6,7 +6,7 @@ import { supabase } from "@/lib/supabaseClient";
 type TableOption = "programs" | "shortlists" | "application_tracker";
 
 const schemaHints: Record<TableOption, string> = {
-  programs: "user_id, university_name, course_name, level, language, intake",
+  programs: "university_name, course_name, level, language",
   shortlists: "user_id, university_name, course_name, deadline, status",
   application_tracker: "user_id, university_name, course_name, status, checklist",
 };
@@ -112,6 +112,10 @@ export default function DevCsvImport() {
     }
 
     const payload = rows.map((row) => {
+      if (table === "programs") {
+        const { user_id, ...rest } = row;
+        return rest;
+      }
       const userId = row.user_id || user.id;
       const base = { ...row, user_id: userId };
       if (table === "application_tracker") {

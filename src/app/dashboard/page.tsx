@@ -1,5 +1,4 @@
 import { createSupabaseServerClient } from "@/lib/supabaseServer";
-import ShortlistForm from "@/components/forms/ShortlistForm";
 
 type Shortlist = {
   id: string;
@@ -40,16 +39,9 @@ export default async function DashboardPage() {
         Track your shortlisted universities and application milestones.
       </p>
 
-      <div className="mt-6">
-        <ShortlistForm />
-      </div>
-
       <section className="mt-8 rounded-3xl border border-black/10 bg-white/80 p-8 shadow-xl shadow-emerald-200/30 backdrop-blur dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold">My Shortlisted Universities</h2>
-          <button className="rounded-full bg-[radial-gradient(circle_at_top,_#34d399,_#22d3ee,_#0ea5e9)] px-4 py-2 text-xs font-semibold text-zinc-900 shadow-md shadow-emerald-300/40 transition hover:scale-[1.01]">
-            Add new
-          </button>
         </div>
         <div className="mt-6 grid gap-4">
           {shortlisted.length === 0 ? (
