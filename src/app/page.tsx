@@ -41,8 +41,7 @@ export default function Home() {
             Plan your Germany study journey from shortlisting to admission.
           </h1>
           <p className="text-base text-zinc-600 dark:text-zinc-300 md:text-lg">
-            Gradabroad helps ambitious students organize programs, documents, and
-            application progress for bachelor’s and master’s studies in Germany.
+            Make your abroad study dream come true.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
@@ -75,15 +74,12 @@ export default function Home() {
                 Featured
               </p>
               <h2 className="mt-2 text-xl font-semibold">
-                Ambitious students outside a German campus
+                Make your abroad study dream come true
               </h2>
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-                Illustration placeholder — swap with your final hero artwork later.
-              </p>
             </div>
             <Image
-              src="/hero-illustration.svg"
-              alt="Students outside a university with books"
+              src="/hero-students.jpg"
+              alt="Student outside a university campus"
               width={420}
               height={300}
               className="w-full rounded-2xl border border-black/10 bg-white/80 shadow-lg shadow-cyan-200/30 dark:border-white/10 dark:bg-black/50 dark:shadow-none"

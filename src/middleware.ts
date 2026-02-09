@@ -8,6 +8,11 @@ export async function middleware(request: NextRequest) {
     },
   });
 
+  const allowedEmails = (process.env.DEV_EMAILS ?? "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
@@ -26,7 +31,18 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (request.nextUrl.pathname.startsWith("/dev")) {
+    if (allowedEmails.length > 0) {
+      const userEmail = user?.email?.toLowerCase() ?? "";
+      if (!userEmail || !allowedEmails.includes(userEmail)) {
+        return new NextResponse("Access denied", { status: 403 });
+      }
+    }
+  }
 
   return response;
 }

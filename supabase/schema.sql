@@ -49,6 +49,7 @@ create policy "Programs are readable" on public.programs
   for select
   using (true);
 
+
 create policy "Shortlists are private" on public.shortlists
   for all
   using (auth.uid() = user_id)
