@@ -1,0 +1,4 @@
+user_id,university_name,course_name,status,checklist
+YOUR_USER_UUID,Technical University of Munich,MSc Computer Science,Documents in progress,"CV;Transcript;Motivation Letter"
+YOUR_USER_UUID,RWTH Aachen University,BSc Mechanical Engineering,Applied,"Recommendation;Transcript;Language Test"
+YOUR_USER_UUID,University of Mannheim,MSc Data Science,Decision pending,"Portfolio;Motivation Letter"
