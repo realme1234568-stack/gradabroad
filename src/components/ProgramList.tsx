@@ -27,9 +27,10 @@ type ProgramMeta = {
 
 type Props = {
   programs: Program[];
+  ignoreFilters?: boolean;
 };
 
-export default function ProgramList({ programs }: Props) {
+export default function ProgramList({ programs, ignoreFilters }: Props) {
   const router = useRouter();
   const [statuses, setStatuses] = useState<Record<string, Status>>({});
   const [shortlistedIds, setShortlistedIds] = useState<Set<string>>(new Set());
@@ -186,14 +187,13 @@ export default function ProgramList({ programs }: Props) {
   };
 
   const filteredPrograms = useMemo(() => {
+    if (ignoreFilters) return programs;
     const normalizedGpa = gpaMax.trim() === "" ? null : Number(gpaMax);
-
     return programs.filter((program) => {
       const languageValue = (program.language ?? "").toLowerCase();
       const tuitionValue = (program.tuition_type ?? "").toLowerCase();
       const applyValue = (program.application_mode ?? "").toLowerCase();
       const intakeValue = (program.intake ?? "").toLowerCase();
-
       const matchesTuition =
         tuitionFilter === "any"
           ? true
@@ -202,12 +202,10 @@ export default function ProgramList({ programs }: Props) {
                 tuitionValue.includes(value)
               )
             : tuitionValue.includes(tuitionFilter);
-
       const matchesLanguage =
         languageFilter === "any"
           ? true
           : languageValue.includes(languageFilter);
-
       const matchesGpa =
         normalizedGpa === null
           ? true
@@ -215,20 +213,16 @@ export default function ProgramList({ programs }: Props) {
             program.gpa_requirement === undefined
             ? true
             : program.gpa_requirement <= normalizedGpa;
-
       const matchesGmat =
         gmatFilter === "any"
           ? true
           : gmatFilter === "required"
             ? program.gmat_required === true
             : program.gmat_required === false;
-
       const matchesApply =
         applyFilter === "any" ? true : applyValue.includes(applyFilter);
-
       const matchesIntake =
         intakeFilter === "any" ? true : intakeValue.includes(intakeFilter);
-
       return (
         matchesTuition &&
         matchesLanguage &&
@@ -246,6 +240,7 @@ export default function ProgramList({ programs }: Props) {
     gmatFilter,
     applyFilter,
     intakeFilter,
+    ignoreFilters
   ]);
 
   return (
