@@ -1,3 +1,4 @@
+"use client";
 import { createSupabaseServerClient } from "@/lib/supabaseServer";
 import ProgramList from "@/components/ProgramList";
 
