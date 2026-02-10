@@ -1,5 +1,5 @@
 "use client";
-import { createSupabaseServerClient } from "@/lib/supabaseServer";
+import { useState } from "react";
 import ProgramList from "@/components/ProgramList";
 
 type Program = {
@@ -15,17 +15,8 @@ type Program = {
   intake?: string | null;
 };
 
-import { useState } from "react";
-
-export default function BrowseProgramsPageWrapper() {
-  // This wrapper is needed to use state in a server component
-  // The actual data fetching is still done server-side
-  return <BrowseProgramsPageInner />;
-}
-
-function BrowseProgramsPageInner() {
+export default function BrowseProgramsPage() {
   const [selectedLevel, setSelectedLevel] = useState<string | null>("masters");
-
   // Data fetching must be done in a server component, so this is a placeholder for the real fetch
   // In a real Next.js app, you would fetch data in the server component and pass as props
   // For now, assume all programs are masters
