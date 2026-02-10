@@ -7,6 +7,11 @@ create table if not exists public.programs (
   course_name text not null,
   level text,
   language text,
+  tuition_type text,
+  gpa_requirement numeric,
+  gmat_required boolean,
+  application_mode text,
+  intake text,
   created_at timestamptz default now()
 );
 

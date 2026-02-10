@@ -39,8 +39,23 @@ export default function Header() {
             Get started
           </Link>
           <details className="group relative">
-            <summary className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-black/10 bg-black/5 text-xs font-semibold text-zinc-900 transition hover:border-black/40 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:border-white/50 [&::-webkit-details-marker]:hidden">
-              ST
+            <summary
+              aria-label="Open settings"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-black/10 bg-black/5 text-zinc-900 transition hover:border-black/40 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:border-white/50 [&::-webkit-details-marker]:hidden"
+            >
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="3.5" />
+                <path d="M19.4 15a7.8 7.8 0 0 0 .1-6l1.9-1.1-2-3.4-2.2 1a7.7 7.7 0 0 0-5.2-2.1l-.4-2.4h-4l-.4 2.4a7.7 7.7 0 0 0-5.2 2.1l-2.2-1-2 3.4L4.5 9a7.8 7.8 0 0 0 .1 6l-1.9 1.1 2 3.4 2.2-1a7.7 7.7 0 0 0 5.2 2.1l.4 2.4h4l.4-2.4a7.7 7.7 0 0 0 5.2-2.1l2.2 1 2-3.4L19.4 15z" />
+              </svg>
             </summary>
             <div className="absolute right-0 mt-3 w-56 overflow-hidden rounded-2xl border border-black/10 bg-white/95 p-4 shadow-xl dark:border-white/10 dark:bg-zinc-950/95">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
