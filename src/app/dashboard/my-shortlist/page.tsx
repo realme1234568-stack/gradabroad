@@ -27,7 +27,7 @@ export default function MyShortlistPage() {
     fetchShortlist();
   }, []);
 
-  const handleRemoveShortlist = async (id) => {
+  const handleRemoveShortlist = async (id: string) => {
     await supabase.from("shortlists").delete().eq("id", id);
     setShortlist((prev) => prev.filter((item) => item.id !== id));
   };
