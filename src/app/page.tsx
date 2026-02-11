@@ -93,6 +93,12 @@ export default function Home() {
               Browse Programs
             </Link>
             <Link
+              href="/dashboard"
+              className="rounded-full bg-[radial-gradient(circle_at_top,_#a78bfa,_#6366f1,_#06b6d4)] px-6 py-3 text-base font-bold text-zinc-900 shadow-md shadow-indigo-300/40 transition hover:scale-105 hover:brightness-110"
+            >
+              My Dashboard
+            </Link>
+            <Link
               href="/application-tracker"
               className="rounded-full bg-[radial-gradient(circle_at_top,_#fbbf24,_#f59e0b,_#d97706)] px-6 py-3 text-base font-bold text-zinc-900 shadow-md shadow-amber-300/40 transition hover:scale-105 hover:brightness-110"
             >

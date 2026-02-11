@@ -1,3 +1,6 @@
+// This page is intentionally left empty. The tracker is now inside the dashboard.
+
+
 import { createSupabaseServerClient } from "@/lib/supabaseServer";
 
 const stageColors: Record<string, string> = {

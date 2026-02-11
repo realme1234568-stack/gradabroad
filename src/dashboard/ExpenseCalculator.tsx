@@ -23,6 +23,9 @@ export default function ExpenseCalculator() {
   const [expenses, setExpenses] = useState(initialExpenses);
   const [newHead, setNewHead] = useState("");
   const [newAmount, setNewAmount] = useState("");
+  const [editIdx, setEditIdx] = useState<number | null>(null);
+  const [editHead, setEditHead] = useState("");
+  const [editAmount, setEditAmount] = useState("");
 
   const handleAddExpense = () => {
     if (!newHead || !newAmount) return;
@@ -34,6 +37,22 @@ export default function ExpenseCalculator() {
     setNewAmount("");
   };
 
+  const handleEditExpense = (idx: number) => {
+    setEditIdx(idx);
+    setEditHead(expenses[idx].head);
+    setEditAmount(expenses[idx].amount.toString());
+  };
+
+  const handleSaveEdit = () => {
+    if (editIdx === null) return;
+    const updated = [...expenses];
+    updated[editIdx] = { head: editHead, amount: parseInt(editAmount, 10) };
+    setExpenses(updated);
+    setEditIdx(null);
+    setEditHead("");
+    setEditAmount("");
+  };
+
   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
 
   return (
@@ -42,20 +61,19 @@ export default function ExpenseCalculator() {
         background: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
         borderRadius: 3,
         boxShadow: 3,
-        padding: 3,
-        maxWidth: 400,
+        padding: 5,
+        maxWidth: 600,
         margin: "auto",
       }}
     >
       <h3 style={{ fontWeight: 700, color: "#333", marginBottom: 8 }}>My Expense Calculator</h3>
       <Divider sx={{ marginBottom: 2 }} />
-      <div style={{ maxHeight: 220, overflowY: "auto", marginBottom: 16 }}>
+      <div style={{ maxHeight: 350, overflowY: "auto", marginBottom: 16 }}>
         {expenses.map((exp, idx) => (
           <div
             key={idx}
             style={{
               display: "flex",
-              justifyContent: "space-between",
               alignItems: "center",
               marginBottom: 6,
               background: "rgba(255,255,255,0.7)",
@@ -63,8 +81,50 @@ export default function ExpenseCalculator() {
               padding: "6px 10px",
             }}
           >
-            <span style={{ fontWeight: 500 }}>{exp.head}</span>
-            <span style={{ color: "#4a90e2", fontWeight: 600 }}>{exp.amount.toLocaleString()}</span>
+            <div style={{ flex: 2 }}>
+              {editIdx === idx ? (
+                <Input
+                  value={editHead}
+                  onChange={e => setEditHead(e.target.value)}
+                  sx={{ width: '100%' }}
+                />
+              ) : (
+                <span style={{ fontWeight: 500 }}>{exp.head}</span>
+              )}
+            </div>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+              {editIdx === idx ? (
+                <Input
+                  value={editAmount}
+                  type="number"
+                  onChange={e => setEditAmount(e.target.value)}
+                  sx={{ width: '80px', marginBottom: 1 }}
+                />
+              ) : (
+                <span style={{ color: "#4a90e2", fontWeight: 600, width: '80px', textAlign: 'right', display: 'block' }}>{exp.amount.toLocaleString()}</span>
+              )}
+              {editIdx === idx ? (
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  sx={{ minWidth: 36, borderRadius: 2, marginTop: 1 }}
+                  onClick={handleSaveEdit}
+                >
+                  ✓
+                </Button>
+              ) : (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  size="small"
+                  sx={{ minWidth: 36, borderRadius: 2, marginLeft: 8 }}
+                  onClick={() => handleEditExpense(idx)}
+                >
+                  Edit
+                </Button>
+              )}
+            </div>
           </div>
         ))}
       </div>

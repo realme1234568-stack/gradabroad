@@ -8,7 +8,7 @@ import { useState, useRef, useEffect } from "react";
 const navLinks = [
   { href: "/browse-programs", label: "Browse Programs" },
   { href: "/dashboard", label: "Your Dashboard" },
-  { href: "/application-tracker", label: "Application Tracker" },
+  { href: "/dashboard/my-tracker", label: "Application Tracker" },
 ];
 
 

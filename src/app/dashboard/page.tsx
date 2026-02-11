@@ -30,12 +30,7 @@ export default function DashboardPage() {
     // Fetch shortlist and tracker from Supabase
     const fetchData = async () => {
       setLoading(true);
-      const { data: userData } = await supabase.auth.getUser();
-      const user = userData.user;
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+      // Removed user check: always load features
       const { data: shortlistedData } = await supabase
         .from("shortlists")
         .select("id, university_name, course_name, deadline, status")
@@ -92,7 +87,7 @@ export default function DashboardPage() {
 
       <div className="mt-8 grid gap-8 md:grid-cols-4">
         {/* My Shortlist */}
-        <section className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-emerald-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none">
+        <section className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-emerald-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none flex flex-col">
           <h2 className="text-lg font-semibold mb-4">My Shortlist</h2>
           {loading ? (
             <div>Loading...</div>
@@ -101,23 +96,36 @@ export default function DashboardPage() {
               No shortlisted universities yet.
             </div>
           ) : (
-            shortlisted.map((item) => (
-              <div key={item.id} className="flex flex-col gap-2 border-b border-black/10 py-2 last:border-b-0 dark:border-white/10">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-semibold">{item.university_name}</div>
-                    <div className="text-xs text-zinc-500">{item.course_name}</div>
+            <>
+              {shortlisted.slice(0, 4).map((item) => (
+                <div key={item.id} className="flex flex-col gap-2 border-b border-black/10 py-2 last:border-b-0 dark:border-white/10">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-semibold">{item.university_name}</div>
+                      <div className="text-xs text-zinc-500">{item.course_name}</div>
+                    </div>
+                    <button
+                      className="ml-2 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-200"
+                      onClick={() => handleRemoveShortlist(item.id)}
+                    >
+                      Remove
+                    </button>
                   </div>
-                  <button
-                    className="ml-2 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-200"
-                    onClick={() => handleRemoveShortlist(item.id)}
-                  >
-                    Remove
-                  </button>
+                  <div className="text-xs text-zinc-600">Deadline: {item.deadline ?? "TBD"}</div>
                 </div>
-                <div className="text-xs text-zinc-600">Deadline: {item.deadline ?? "TBD"}</div>
-              </div>
-            ))
+              ))}
+              {shortlisted.length > 4 && (
+                <div className="flex justify-end mt-2">
+                  <a
+                    href="/dashboard/my-shortlist"
+                    className="text-xs px-2 py-1 rounded bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border border-emerald-200"
+                    style={{ fontSize: '12px' }}
+                  >
+                    See more
+                  </a>
+                </div>
+              )}
+            </>
           )}
         </section>
 
@@ -126,17 +134,24 @@ export default function DashboardPage() {
           <h2 className="text-lg font-semibold mb-4">My Docs</h2>
           <div className="space-y-3">
             {DOC_TYPES.map((doc) => (
-              <div key={doc} className="flex items-center gap-3">
-                <span className="w-32 text-xs font-semibold">{doc}</span>
-                <input
-                  type="file"
-                  accept="application/pdf,image/*"
-                  className="flex-1"
-                  onChange={(e) => handleDocUpload(e, doc)}
-                />
-                {docs.find((d) => d.name === doc)?.file && (
-                  <span className="text-xs text-emerald-600">{docs.find((d) => d.name === doc)?.file?.name}</span>
-                )}
+              <div key={doc} className="flex flex-col md:flex-row md:items-center gap-2 w-full">
+                <span className="text-xs font-semibold md:text-base md:font-bold break-words w-full md:w-32">{doc}</span>
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-2 w-full">
+                  <label className="relative w-full md:w-auto">
+                    <input
+                      type="file"
+                      accept="application/pdf,image/*"
+                      className="w-full md:w-auto opacity-0 absolute left-0 top-0 h-full cursor-pointer"
+                      onChange={(e) => handleDocUpload(e, doc)}
+                    />
+                    <span className="block bg-white border border-black/10 rounded px-3 py-1 cursor-pointer text-xs md:text-sm text-zinc-700 dark:text-zinc-200">
+                      Choose File
+                    </span>
+                  </label>
+                  {docs.find((d) => d.name === doc)?.file && (
+                    <span className="text-xs text-emerald-600">{docs.find((d) => d.name === doc)?.file?.name}</span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -152,7 +167,11 @@ export default function DashboardPage() {
                   <h2 className="text-lg font-semibold mb-4">My Expense Calculator</h2>
                   <div className="text-sm text-zinc-600 dark:text-zinc-300">Track and add your study abroad expenses.</div>
                 </a>
-        <section className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-purple-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none">
+        <a
+          href="/dashboard/my-tracker"
+          className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-purple-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none flex flex-col transition hover:scale-[1.03] hover:shadow-purple-400/40 cursor-pointer"
+          style={{ textDecoration: 'none' }}
+        >
           <h2 className="text-lg font-semibold mb-4">My Tracker</h2>
           {loading ? (
             <div>Loading...</div>
@@ -161,26 +180,39 @@ export default function DashboardPage() {
               No applications to track yet.
             </div>
           ) : (
-            tracker.map((item) => (
-              <div key={item.id} className="flex items-center justify-between border-b border-black/10 py-2 last:border-b-0 dark:border-white/10">
-                <div>
-                  <div className="font-semibold">{item.university_name}</div>
-                  <div className="text-xs text-zinc-500">{item.course_name}</div>
+            <>
+              {tracker.slice(0, 4).map((item) => (
+                <div key={item.id} className="flex items-center justify-between border-b border-black/10 py-2 last:border-b-0 dark:border-white/10">
+                  <div>
+                    <div className="font-semibold">{item.university_name}</div>
+                    <div className="text-xs text-zinc-500">{item.course_name}</div>
+                  </div>
+                  <select
+                    value={item.status}
+                    onClick={e => e.stopPropagation()}
+                    onChange={(e) => handleTrackerStatus(item.id, e.target.value)}
+                    className="rounded-xl border border-black/10 bg-white/80 px-2 py-1 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
+                  >
+                    <option value="Shortlisted">Shortlisted</option>
+                    <option value="Applied">Applied</option>
+                    <option value="Accepted">Accepted</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
                 </div>
-                <select
-                  value={item.status}
-                  onChange={(e) => handleTrackerStatus(item.id, e.target.value)}
-                  className="rounded-xl border border-black/10 bg-white/80 px-2 py-1 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-                >
-                  <option value="Shortlisted">Shortlisted</option>
-                  <option value="Applied">Applied</option>
-                  <option value="Accepted">Accepted</option>
-                  <option value="Rejected">Rejected</option>
-                </select>
-              </div>
-            ))
+              ))}
+              {tracker.length > 4 && (
+                <div className="flex justify-end mt-2">
+                  <span
+                    className="text-xs px-2 py-1 rounded bg-purple-100 text-purple-700 border border-purple-200"
+                    style={{ fontSize: '12px', pointerEvents: 'none' }}
+                  >
+                    See more
+                  </span>
+                </div>
+              )}
+            </>
           )}
-        </section>
+        </a>
       </div>
     </div>
   );
