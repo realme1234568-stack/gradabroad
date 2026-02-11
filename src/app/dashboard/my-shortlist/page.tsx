@@ -2,8 +2,16 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
+type ShortlistItem = {
+  id: string;
+  university_name: string;
+  course_name: string;
+  deadline: string;
+  status: string;
+};
+
 export default function MyShortlistPage() {
-  const [shortlist, setShortlist] = useState([]);
+  const [shortlist, setShortlist] = useState<ShortlistItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
