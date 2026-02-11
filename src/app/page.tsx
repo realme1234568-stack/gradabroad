@@ -46,36 +46,25 @@ const steps = [
 const testimonials = [
   {
     name: "Aarav S.",
-    avatar: "/avatar1.png",
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
     quote: "Gradabroad made my Germany application journey so much easier! The tracker is a game changer.",
   },
   {
     name: "Maya R.",
-    avatar: "/avatar2.png",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
     quote: "Loved the clean UI and the reminders. I never missed a deadline!",
   },
   {
     name: "Lukas F.",
-    avatar: "/avatar3.png",
+    avatar: "https://randomuser.me/api/portraits/men/65.jpg",
     quote: "The shortlist feature helped me stay organized and focused. Highly recommend!",
   },
 ];
 
 export default function Home() {
-  // Scroll-based scaling for hero image
-  const [scale, setScale] = useState(1);
-  const heroImgRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!heroImgRef.current) return;
-      const rect = heroImgRef.current.getBoundingClientRect();
-      // When top of image is at top of viewport, scale = 1.2; when 400px down, scale = 1
-      const y = Math.max(0, Math.min(400, rect.top));
-      setScale(1.2 - 0.2 * (y / 400));
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  // Removed scroll-based scaling for hero image
+
+  // Removed scroll-based scaling for pexels image
 
   return (
     <div className="relative overflow-hidden bg-white text-zinc-900 transition-colors duration-200 dark:bg-black dark:text-white">
@@ -94,7 +83,7 @@ export default function Home() {
             Your Germany Study Journey, Upgraded.
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-300 md:text-xl animate-fade-in">
-            Plan, shortlist, and track your applications with a modern, Gen Z-inspired dashboard.
+            Plan, shortlist, and track your applications with a modern dashboard.
           </p>
           <div className="flex flex-wrap gap-4 animate-fade-in">
             <Link
@@ -119,7 +108,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <div ref={heroImgRef} className="relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br from-emerald-50 via-white to-cyan-50 p-8 shadow-xl shadow-emerald-200/30 dark:border-white/10 dark:from-zinc-900 dark:via-zinc-950 dark:to-black dark:shadow-none animate-fade-in flex flex-col items-center">
+        <div className="relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br from-emerald-50 via-white to-cyan-50 p-8 shadow-xl shadow-emerald-200/30 dark:border-white/10 dark:from-zinc-900 dark:via-zinc-950 dark:to-black dark:shadow-none animate-fade-in flex flex-col items-center">
           <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-emerald-500/20 blur-3xl" />
           <div className="space-y-6 w-full">
             <div className="rounded-2xl border border-black/10 bg-white/90 p-4 shadow-sm backdrop-blur dark:border-white/10 dark:bg-white/5 dark:shadow-none">
@@ -130,19 +119,34 @@ export default function Home() {
                 Make your abroad study dream come true
               </h2>
             </div>
-            <div
-              style={{ transform: `scale(${scale})`, transition: 'transform 0.2s cubic-bezier(.4,2,.6,1)' }}
-              className="w-full flex justify-center"
-            >
+            <div className="w-full flex justify-center">
               <Image
-                src="/hero-animated.jpg"
-                alt="Students cycling in front of a German university"
+                src="/hero-students.jpg"
+                alt="Students in front of a German university"
                 width={420}
                 height={300}
                 className="rounded-2xl border border-black/10 bg-white/80 shadow-lg shadow-cyan-200/30 dark:border-white/10 dark:bg-black/50 dark:shadow-none object-cover max-h-[320px] w-auto"
                 priority
               />
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Animated Pexels Image Section */}
+      <section className="mx-auto w-full max-w-6xl px-6 pb-20 animate-fade-in">
+        <div className="relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br from-cyan-50 via-white to-emerald-50 p-10 shadow-xl shadow-cyan-200/30 backdrop-blur dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none flex flex-col items-center justify-center">
+          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-cyan-500/20 blur-3xl" />
+          <h2 className="text-2xl font-bold mb-8 text-center">Enjoy the culture of Germany</h2>
+          <div className="w-full flex justify-center">
+            <Image
+              src="/pexels-laura-paredis-1047081-13138159.jpg"
+              alt="Cologne Cathedral"
+              width={900}
+              height={600}
+              className="rounded-2xl border border-black/10 bg-white/80 shadow-lg shadow-purple-200/30 dark:border-white/10 dark:bg-black/50 dark:shadow-none object-cover w-full h-[420px] max-w-3xl"
+              priority
+            />
           </div>
         </div>
       </section>
@@ -188,8 +192,8 @@ export default function Home() {
           </div>
           <div className="flex justify-center">
             <Image
-              src="/why-germany.jpg"
-              alt="Beautiful German street with historic buildings"
+              src="/pexels-tretty-gmbh-bike-scooter-sharing-51316081-7706670.jpg"
+              alt="Cycling in Germany"
               width={420}
               height={560}
               className="rounded-2xl border border-black/10 shadow-lg shadow-cyan-200/30 dark:border-white/10 dark:shadow-none object-cover max-h-[420px] w-auto"

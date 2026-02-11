@@ -32,8 +32,9 @@ type Props = {
 
 export default function ProgramList({ programs, ignoreFilters }: Props) {
   const router = useRouter();
+  // Use composite key for shortlist state
   const [statuses, setStatuses] = useState<Record<string, Status>>({});
-  const [shortlistedIds, setShortlistedIds] = useState<Set<string>>(new Set());
+  const [shortlistedKeys, setShortlistedKeys] = useState<Set<string>>(new Set());
   const [tuitionFilter, setTuitionFilter] = useState("any");
   const [languageFilter, setLanguageFilter] = useState("any");
   const [gpaMax, setGpaMax] = useState<string>("");
@@ -45,8 +46,9 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
   const [programMeta, setProgramMeta] = useState<Record<string, ProgramMeta>>({});
   const [metaLoading, setMetaLoading] = useState<Record<string, boolean>>({});
 
-  const setStatus = (id: string, status: Status) => {
-    setStatuses((prev) => ({ ...prev, [id]: status }));
+  const getKey = (program: Program) => `${program.university_name}|||${program.course_name}`;
+  const setStatus = (key: string, status: Status) => {
+    setStatuses((prev) => ({ ...prev, [key]: status }));
   } 
 
   // Fetch user's shortlist from Supabase on mount
@@ -60,8 +62,8 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
         .select("course_name, university_name, note, status, deadline")
         .eq("user_id", user.id);
       if (!error && data) {
-        // Find matching program IDs
-        const ids = new Set(
+        // Find matching program keys
+        const keys = new Set(
           programs
             .filter((p) =>
               data.some(
@@ -70,14 +72,14 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
                   s.university_name === p.university_name
               )
             )
-            .map((p) => p.id)
+            .map((p) => getKey(p))
         );
-        setShortlistedIds(ids);
+        setShortlistedKeys(keys);
         // Set status for UI
         setStatuses((prev) => {
           const updated = { ...prev };
-          ids.forEach((id) => {
-            updated[id] = "shortlisted";
+          keys.forEach((key) => {
+            updated[key] = "shortlisted";
           });
           return updated;
         });
@@ -90,7 +92,7 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
               row.university_name === p.university_name
           );
           if (s) {
-            meta[p.id] = {
+            meta[getKey(p)] = {
               note: s.note || "",
               status: s.status || "Shortlisted",
               deadline: s.deadline || null,
@@ -106,14 +108,15 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
 
   // Toggle shortlist (add/remove)
   const handleShortlist = async (program: Program) => {
-    setStatus(program.id, "loading");
+    const key = getKey(program);
+    setStatus(key, "loading");
     const { data: userData } = await supabase.auth.getUser();
     const user = userData.user;
     if (!user) {
-      setStatus(program.id, "error");
+      setStatus(key, "error");
       return;
     }
-    const isShortlisted = shortlistedIds.has(program.id);
+    const isShortlisted = shortlistedKeys.has(key);
     if (!isShortlisted) {
       // Add to shortlist
       const { error } = await supabase.from("shortlists").insert({
@@ -124,12 +127,12 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
         status: "Shortlisted",
       });
       if (error) {
-        setStatus(program.id, "error");
+        setStatus(key, "error");
         return;
       }
-      setShortlistedIds((prev) => new Set(prev).add(program.id));
-      setStatus(program.id, "shortlisted");
-      setProgramMeta((prev) => ({ ...prev, [program.id]: { note: "", status: "Shortlisted", deadline: null } }));
+      setShortlistedKeys((prev) => new Set(prev).add(key));
+      setStatus(key, "shortlisted");
+      setProgramMeta((prev) => ({ ...prev, [key]: { note: "", status: "Shortlisted", deadline: null } }));
     } else {
       // Remove from shortlist
       const { error } = await supabase
@@ -139,18 +142,18 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
         .eq("university_name", program.university_name)
         .eq("course_name", program.course_name);
       if (error) {
-        setStatus(program.id, "error");
+        setStatus(key, "error");
         return;
       }
-      setShortlistedIds((prev) => {
+      setShortlistedKeys((prev) => {
         const next = new Set(prev);
-        next.delete(program.id);
+        next.delete(key);
         return next;
       });
-      setStatus(program.id, "idle");
+      setStatus(key, "idle");
       setProgramMeta((prev) => {
         const next = { ...prev };
-        delete next[program.id];
+        delete next[key];
         return next;
       });
     }
@@ -251,80 +254,7 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
           </span>
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          <label className="flex flex-col gap-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            Tuition
-            <select
-              value={tuitionFilter}
-              onChange={(event) => setTuitionFilter(event.target.value)}
-              className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-            >
-              <option value="any">Any</option>
-              <option value="free">Free</option>
-              <option value="low">Low cost</option>
-              <option value="free-low">Free or low cost</option>
-              <option value="paid">Paid</option>
-            </select>
-          </label>
-          <label className="flex flex-col gap-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            Language
-            <select
-              value={languageFilter}
-              onChange={(event) => setLanguageFilter(event.target.value)}
-              className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-            >
-              <option value="any">Any</option>
-              <option value="english">English-taught</option>
-              <option value="german">German-taught</option>
-            </select>
-          </label>
-          <label className="flex flex-col gap-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            Max GPA requirement
-            <input
-              type="number"
-              min="0"
-              step="0.1"
-              value={gpaMax}
-              onChange={(event) => setGpaMax(event.target.value)}
-              placeholder="e.g. 3.0"
-              className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-            />
-          </label>
-          <label className="flex flex-col gap-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            GMAT
-            <select
-              value={gmatFilter}
-              onChange={(event) => setGmatFilter(event.target.value)}
-              className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-            >
-              <option value="any">Any</option>
-              <option value="required">Required</option>
-              <option value="not-required">Not required</option>
-            </select>
-          </label>
-          <label className="flex flex-col gap-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            Application
-            <select
-              value={applyFilter}
-              onChange={(event) => setApplyFilter(event.target.value)}
-              className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-            >
-              <option value="any">Any</option>
-              <option value="uni-assist">Uni-assist</option>
-              <option value="direct">Direct apply</option>
-            </select>
-          </label>
-          <label className="flex flex-col gap-2 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-            Intake
-            <select
-              value={intakeFilter}
-              onChange={(event) => setIntakeFilter(event.target.value)}
-              className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-sm text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-            >
-              <option value="any">Any</option>
-              <option value="winter">Winter</option>
-              <option value="summer">Summer</option>
-            </select>
-          </label>
+          {/* ...existing code... */}
         </div>
       </section>
       <div className="grid gap-6 md:grid-cols-2">
@@ -334,13 +264,14 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
         </div>
       ) : (
         filteredPrograms.map((program) => {
-          const status = statuses[program.id] ?? "idle";
+          const key = getKey(program);
+          const status = statuses[key] ?? "idle";
           const isLoading = status === "loading";
-          const isShortlisted = shortlistedIds.has(program.id);
+          const isShortlisted = shortlistedKeys.has(key);
 
           return (
             <div
-              key={program.id}
+              key={key}
               className="group relative overflow-hidden rounded-2xl border border-black/10 bg-gradient-to-br from-white via-emerald-50 to-cyan-50 p-6 shadow-lg shadow-emerald-200/30 dark:border-white/10 dark:from-zinc-900 dark:via-zinc-950 dark:to-black dark:shadow-none"
             >
               <div className="pointer-events-none absolute -right-16 -top-16 h-32 w-32 rounded-full bg-emerald-400/20 blur-2xl transition group-hover:scale-110" />
@@ -416,9 +347,9 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
                       <textarea
                         className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
                         rows={2}
-                        value={programMeta[program.id]?.note || ""}
+                        value={programMeta[key]?.note || ""}
                         onChange={(e) => handleMetaChange(program, "note", e.target.value)}
-                        disabled={metaLoading[program.id]}
+                        disabled={metaLoading[key]}
                         placeholder="Add your notes..."
                       />
                     </div>
@@ -426,9 +357,9 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
                       <label className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">Status</label>
                       <select
                         className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-                        value={programMeta[program.id]?.status || "Shortlisted"}
+                        value={programMeta[key]?.status || "Shortlisted"}
                         onChange={(e) => handleMetaChange(program, "status", e.target.value)}
-                        disabled={metaLoading[program.id]}
+                        disabled={metaLoading[key]}
                       >
                         <option value="Shortlisted">Shortlisted</option>
                         <option value="Applied">Applied</option>
@@ -442,9 +373,9 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
                       <input
                         type="date"
                         className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-                        value={programMeta[program.id]?.deadline || ""}
+                        value={programMeta[key]?.deadline || ""}
                         onChange={(e) => handleMetaChange(program, "deadline", e.target.value)}
-                        disabled={metaLoading[program.id]}
+                        disabled={metaLoading[key]}
                       />
                     </div>
                   </>

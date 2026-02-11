@@ -2,16 +2,27 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
 export async function middleware(request: NextRequest) {
+  // Robust localhost bypass
+  const host = request.headers.get("host") || "";
+  const isLocalhost = /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host);
+
+  if (isLocalhost) {
+    // Always allow access on localhost
+    return NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   });
 
-  const allowedEmails = (process.env.DEV_EMAILS ?? "")
-    .split(",")
-    .map((email) => email.trim().toLowerCase())
-    .filter(Boolean);
+  // Only allow your Google dev account email
+  const allowedEmail = process.env.GOOGLE_DEV_EMAIL?.trim().toLowerCase();
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
@@ -35,17 +46,18 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (request.nextUrl.pathname.startsWith("/dev")) {
-    if (allowedEmails.length > 0) {
-      const userEmail = user?.email?.toLowerCase() ?? "";
-      if (!userEmail || !allowedEmails.includes(userEmail)) {
-        return new NextResponse("Access denied", { status: 403 });
-      }
+  // Allow public access only to landing page
+  const isLandingPage = request.nextUrl.pathname === "/";
+  if (!isLandingPage) {
+    const userEmail = user?.email?.toLowerCase() ?? "";
+    if (!userEmail || userEmail !== allowedEmail) {
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
   return response;
 }
+
 
 export const config = {
   matcher: [

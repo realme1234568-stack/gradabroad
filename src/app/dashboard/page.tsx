@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import ExpenseCalculator from "../../dashboard/ExpenseCalculator";
 
 type Shortlist = {
   id: string;
@@ -89,7 +90,7 @@ export default function DashboardPage() {
         Track your shortlisted universities, documents, and application milestones.
       </p>
 
-      <div className="mt-8 grid gap-8 md:grid-cols-3">
+      <div className="mt-8 grid gap-8 md:grid-cols-4">
         {/* My Shortlist */}
         <section className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-emerald-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none">
           <h2 className="text-lg font-semibold mb-4">My Shortlist</h2>
@@ -142,6 +143,15 @@ export default function DashboardPage() {
         </section>
 
         {/* My Tracker */}
+                {/* My Expense Calculator Tab */}
+                <a
+                  href="/dashboard/expense-calculator"
+                  className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-pink-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none transition hover:scale-[1.03] hover:shadow-pink-400/40"
+                  style={{ display: 'block', textDecoration: 'none' }}
+                >
+                  <h2 className="text-lg font-semibold mb-4">My Expense Calculator</h2>
+                  <div className="text-sm text-zinc-600 dark:text-zinc-300">Track and add your study abroad expenses.</div>
+                </a>
         <section className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-purple-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none">
           <h2 className="text-lg font-semibold mb-4">My Tracker</h2>
           {loading ? (
