@@ -122,7 +122,6 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
         course_name: program.course_name,
         deadline: null,
         status: "Shortlisted",
-        note: "",
       });
       if (error) {
         setStatus(program.id, "error");
