@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
+import FeedbackBox from "@/components/FeedbackBox";
 
 export default function MyProfilePage() {
   // For demo: use local state. Replace with Supabase fetch/save for real app.
@@ -141,6 +142,8 @@ export default function MyProfilePage() {
       </form>
 
       {/* Dev dashboard removed: was referencing missing isDev variable. */}
+      {/* Feedback Section */}
+      <FeedbackBox />
     </div>
   );
 }

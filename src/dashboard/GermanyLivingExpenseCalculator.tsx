@@ -1,0 +1,222 @@
+import React, { useState } from "react";
+import emailjs from '@emailjs/browser';
+import { useUser } from "@/lib/UserContext";
+import { Card, Button, Input, Divider } from "@mui/material";
+
+const defaultGermanyExpenses = [
+  { head: "Rent", amount: 400 },
+  { head: "Groceries", amount: 200 },
+  { head: "Transport", amount: 100 },
+  { head: "Misc", amount: 100 },
+];
+
+export default function GermanyLivingExpenseCalculator() {
+  const [expenses, setExpenses] = useState(defaultGermanyExpenses);
+  const { email, firstName } = useUser ? useUser() : { email: null, firstName: null };
+  const [exporting, setExporting] = useState(false);
+  const [newHead, setNewHead] = useState("");
+  const [newAmount, setNewAmount] = useState("");
+  const [editIdx, setEditIdx] = useState<number | null>(null);
+  const [editHead, setEditHead] = useState("");
+  const [editAmount, setEditAmount] = useState("");
+
+  const handleAddExpense = () => {
+    if (!newHead || !newAmount) return;
+    setExpenses([
+      ...expenses,
+      { head: newHead, amount: parseInt(newAmount, 10) },
+    ]);
+    setNewHead("");
+    setNewAmount("");
+  };
+
+  const handleEditExpense = (idx: number) => {
+    setEditIdx(idx);
+    setEditHead(expenses[idx].head);
+    setEditAmount(expenses[idx].amount.toString());
+  };
+
+  const handleSaveEdit = () => {
+    if (editIdx === null) return;
+    const updated = [...expenses];
+    updated[editIdx] = { head: editHead, amount: parseInt(editAmount, 10) };
+    setExpenses(updated);
+    setEditIdx(null);
+    setEditHead("");
+    setEditAmount("");
+  };
+
+  const handleRemove = (idx: number) => {
+    setExpenses(expenses.filter((_, i) => i !== idx));
+  };
+
+  const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+
+  const handleExport = async () => {
+    if (!email) {
+      alert("No email found. Please log in.");
+      return;
+    }
+    if (!window.confirm(`Are you sure you want to export this to the given email id - ${email}?`)) return;
+    setExporting(true);
+    const expenseList = expenses.map(e => `${e.head}: ${e.amount}`).join("\n");
+    const templateParams = {
+      to_email: email,
+      user_name: firstName || "User",
+      subject: "Your Exported Germany Living Expenses",
+      message: `Germany Living Expense List:\n${expenseList}\nTotal: ${total} €`,
+    };
+    try {
+      await emailjs.send(
+        'service_9u7fx3n',
+        'template_id6lw8p',
+        templateParams,
+        'hAzYMGuWTckYlKD63'
+      );
+      alert("Exported to your email!");
+    } catch (err) {
+      alert("Failed to send email. Please try again later.");
+    }
+    setExporting(false);
+  };
+  return (
+    <Card
+      sx={{
+        background: "linear-gradient(135deg, #f9f7ff 0%, #ffe6fa 100%)",
+        borderRadius: 3,
+        boxShadow: 3,
+        padding: 5,
+        maxWidth: 400,
+        margin: "auto",
+      }}
+    >
+      <h3 style={{ fontWeight: 700, color: "#333", marginBottom: 8 }}>Germany Living Expenses</h3>
+      <Divider sx={{ marginBottom: 2 }} />
+      <div style={{ maxHeight: 350, overflowY: "auto", marginBottom: 16 }}>
+        {expenses.map((exp, idx) => (
+          <div
+            key={idx}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              marginBottom: 6,
+              background: "rgba(255,255,255,0.7)",
+              borderRadius: 6,
+              padding: "6px 10px",
+            }}
+          >
+            <div style={{ flex: 2 }}>
+              {editIdx === idx ? (
+                <Input
+                  value={editHead}
+                  onChange={e => setEditHead(e.target.value)}
+                  sx={{ width: '100%' }}
+                />
+              ) : (
+                <span style={{ fontWeight: 500 }}>{exp.head}</span>
+              )}
+            </div>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+              {editIdx === idx ? (
+                <Input
+                  value={editAmount}
+                  type="number"
+                  onChange={e => setEditAmount(e.target.value)}
+                  sx={{ width: '80px', marginBottom: 1 }}
+                />
+              ) : (
+                <span style={{ color: "#e94e77", fontWeight: 600, width: '80px', textAlign: 'right', display: 'block' }}>{exp.amount.toLocaleString()}</span>
+              )}
+              {editIdx === idx ? (
+                <Button
+                  variant="contained"
+                  color="success"
+                  size="small"
+                  sx={{ minWidth: 36, borderRadius: 2, marginTop: 1 }}
+                  onClick={handleSaveEdit}
+                >
+                  ✓
+                </Button>
+              ) : (
+                <div style={{ display: 'flex', gap: 4 }}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    sx={{ minWidth: 36, borderRadius: 2, marginLeft: 8 }}
+                    onClick={() => handleEditExpense(idx)}
+                  >
+                    Edit
+                  </Button>
+                  {idx >= 4 && (
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      sx={{ minWidth: 36, borderRadius: 2, marginLeft: 4 }}
+                      onClick={() => handleRemove(idx)}
+                    >
+                      Remove
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      <Divider sx={{ marginBottom: 2 }} />
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 12 }}>
+        <span style={{ fontWeight: 600, color: "#222" }}>Total</span>
+        <span style={{ fontWeight: 700, color: "#e94e77" }}>{total.toLocaleString()} €</span>
+      </div>
+      <div style={{ background: "#fff", borderRadius: 6, padding: 10, marginBottom: 8, boxShadow: "0 1px 4px #eee" }}>
+        <div style={{ display: "flex", gap: 8, marginBottom: 6 }}>
+          <Input
+            placeholder="Expense head"
+            value={newHead}
+            onChange={e => setNewHead(e.target.value)}
+            sx={{ flex: 2 }}
+          />
+          <Input
+            placeholder="Amount"
+            type="number"
+            value={newAmount}
+            onChange={e => setNewAmount(e.target.value)}
+            sx={{ flex: 1 }}
+          />
+          <Button
+            variant="contained"
+            color="success"
+            size="small"
+            sx={{ minWidth: 36, borderRadius: 2 }}
+            onClick={handleAddExpense}
+          >
+            ✓
+          </Button>
+        </div>
+        <span style={{ fontSize: 12, color: "#888" }}>Add expense</span>
+      </div>
+      <button
+        onClick={handleExport}
+        disabled={exporting}
+        style={{
+          marginTop: 16,
+          width: '100%',
+          background: 'linear-gradient(90deg, #34d399 0%, #06b6d4 100%)',
+          color: '#fff',
+          fontWeight: 700,
+          border: 'none',
+          borderRadius: 8,
+          padding: '12px 0',
+          fontSize: 16,
+          cursor: exporting ? 'not-allowed' : 'pointer',
+          boxShadow: '0 2px 8px #a7f3d0',
+          transition: 'background 0.2s',
+        }}
+      >
+        {exporting ? 'Exporting...' : 'Export'}
+      </button>
+    </Card>
+  );
+}

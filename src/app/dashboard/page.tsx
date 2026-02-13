@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useUser } from "@/lib/UserContext";
 import { supabase } from "@/lib/supabaseClient";
 import ExpenseCalculator from "../../dashboard/ExpenseCalculator";
 
@@ -78,8 +79,18 @@ export default function DashboardPage() {
     }
   };
 
+  const { firstName } = useUser();
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
+      {/* Fun greeting if logged in */}
+      {firstName && (
+        <div className="mb-2 animate-bounce">
+          <span className="inline-block text-2xl md:text-3xl font-extrabold bg-gradient-to-r from-fuchsia-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-lg">
+            Hi {firstName}!
+          </span>
+          <span className="ml-2 text-lg md:text-xl font-bold text-emerald-400 animate-wiggle">👋</span>
+        </div>
+      )}
       <h1 className="text-3xl font-semibold">Your Dashboard</h1>
       <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
         Track your shortlisted universities, documents, and application milestones.

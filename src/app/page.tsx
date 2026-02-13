@@ -61,11 +61,14 @@ const testimonials = [
   },
 ];
 
+import { useUser } from "@/lib/UserContext";
+
 export default function Home() {
   // Removed scroll-based scaling for hero image
 
   // Removed scroll-based scaling for pexels image
 
+  const { firstName, loading } = useUser();
   return (
     <div className="relative overflow-hidden bg-white text-zinc-900 transition-colors duration-200 dark:bg-black dark:text-white">
       {/* Animated background gradients */}
@@ -76,6 +79,15 @@ export default function Home() {
       {/* Hero Section */}
       <section className="mx-auto grid w-full max-w-6xl gap-10 px-6 pb-20 pt-16 md:grid-cols-[1.1fr_0.9fr] md:items-center">
         <div className="space-y-7">
+          {/* Fun greeting if logged in */}
+          {firstName && (
+            <div className="mb-2 animate-bounce">
+              <span className="inline-block text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-fuchsia-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent drop-shadow-lg">
+                Hi {firstName}!
+              </span>
+              <span className="ml-2 text-lg md:text-xl font-bold text-emerald-400 animate-wiggle">👋</span>
+            </div>
+          )}
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-emerald-500 animate-fade-in">
             Study Abroad Planner
           </p>
@@ -141,9 +153,9 @@ export default function Home() {
 
       {/* Animated Pexels Image Section */}
       <section className="mx-auto w-full max-w-6xl px-6 pb-20 animate-fade-in">
-        <div className="relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br from-cyan-50 via-white to-emerald-50 p-10 shadow-xl shadow-cyan-200/30 backdrop-blur dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none flex flex-col items-center justify-center">
+        <div className="relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br from-cyan-50 via-white to-emerald-50 p-10 shadow-xl shadow-cyan-200/30 backdrop-blur dark:border-white/10 dark:bg-zinc-800/80 dark:shadow-none flex flex-col items-center justify-center">
           <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-cyan-500/20 blur-3xl" />
-          <h2 className="text-2xl font-bold mb-8 text-center">Enjoy the culture of Germany</h2>
+          <h2 className="text-2xl font-bold mb-8 text-center dark:text-zinc-900">Enjoy the culture of Germany</h2>
           <div className="w-full flex justify-center">
             <Image
               src="/pexels-laura-paredis-1047081-13138159.jpg"
@@ -159,40 +171,40 @@ export default function Home() {
 
       {/* Why Germany Section */}
       <section className="mx-auto w-full max-w-6xl px-6 pb-20 animate-fade-in">
-        <div className="rounded-3xl border border-black/10 bg-gradient-to-br from-white via-emerald-50 to-cyan-50 p-10 shadow-xl shadow-cyan-200/30 backdrop-blur dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none grid md:grid-cols-2 gap-10 items-center">
+        <div className="rounded-3xl border border-black/10 bg-gradient-to-br from-white via-emerald-50 to-cyan-50 p-10 shadow-xl shadow-cyan-200/30 backdrop-blur dark:border-white/10 dark:bg-white/90 dark:shadow-lg dark:shadow-white/10 grid md:grid-cols-2 gap-10 items-center">
           <div>
-            <h2 className="text-3xl font-bold mb-6 text-emerald-500">Why Study in Germany?</h2>
+            <h2 className="text-3xl font-bold mb-6 text-emerald-500 dark:text-emerald-500">Why Study in Germany?</h2>
             <div className="grid gap-6">
               <div className="flex items-center gap-4">
                 <FaCheckCircle className="text-3xl text-emerald-400" />
                 <div>
-                  <span className="font-semibold">Affordable Education</span>
-                  <div className="text-sm text-zinc-500">Most public universities have no tuition fees.</div>
+                  <span className="font-semibold dark:text-zinc-900">Affordable Education</span>
+                  <div className="text-sm text-zinc-500 dark:text-zinc-800">Most public universities have no tuition fees.</div>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <FaGlobeEurope className="text-3xl text-cyan-400" />
                 <div>
-                  <span className="font-semibold">Global Recognition</span>
-                  <div className="text-sm text-zinc-500">Degrees are valued by employers worldwide.</div>
+                  <span className="font-semibold dark:text-zinc-900">Global Recognition</span>
+                  <div className="text-sm text-zinc-500 dark:text-zinc-800">Degrees are valued by employers worldwide.</div>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <FaUserGraduate className="text-3xl text-amber-400" />
                 <div>
-                  <span className="font-semibold">Student Life</span>
-                  <div className="text-sm text-zinc-500">Vibrant cities, diverse culture, and travel opportunities.</div>
+                  <span className="font-semibold dark:text-zinc-900">Student Life</span>
+                  <div className="text-sm text-zinc-500 dark:text-zinc-800">Vibrant cities, diverse culture, and travel opportunities.</div>
                 </div>
               </div>
               <div className="flex items-center gap-4">
                 <FaChartLine className="text-3xl text-fuchsia-400" />
                 <div>
-                  <span className="font-semibold">Career Prospects</span>
-                  <div className="text-sm text-zinc-500">Strong industry links and post-study work options.</div>
+                  <span className="font-semibold dark:text-zinc-900">Career Prospects</span>
+                  <div className="text-sm text-zinc-500 dark:text-zinc-800">Strong industry links and post-study work options.</div>
                 </div>
               </div>
             </div>
-            <div className="mt-8 text-base text-zinc-700 dark:text-zinc-200 font-semibold italic">
+            <div className="mt-8 text-base text-zinc-700 dark:text-zinc-900 font-semibold italic">
               Built by study abroad students for students
             </div>
           </div>
@@ -245,21 +257,27 @@ export default function Home() {
 
       {/* Community Section */}
       <section className="mx-auto w-full max-w-6xl px-6 pb-24 animate-fade-in">
-        <div className="rounded-3xl border border-black/10 bg-gradient-to-br from-fuchsia-50 via-white to-emerald-50 p-10 shadow-xl shadow-fuchsia-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none flex flex-col items-center">
-          <h2 className="text-2xl font-bold mb-4 text-fuchsia-500">Join the Gradabroad Community</h2>
-          <p className="mb-6 text-zinc-600 dark:text-zinc-300 text-center max-w-xl">
-            Connect with other applicants, share tips, and get the latest updates. Follow us on Instagram or join our Discord!
-          </p>
-          <div className="flex gap-6">
-            <a href="https://discord.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full bg-emerald-500 px-5 py-2 text-white font-semibold shadow-lg hover:scale-105 transition">
-              <FaDiscord className="text-xl" /> Discord
-            </a>
-            <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full bg-gradient-to-r from-fuchsia-500 to-amber-400 px-5 py-2 text-white font-semibold shadow-lg hover:scale-105 transition">
-              <FaInstagram className="text-xl" /> Instagram
-            </a>
+        <div className="rounded-3xl border border-black/10 bg-gradient-to-br from-fuchsia-50 via-white to-emerald-50 p-10 shadow-xl shadow-fuchsia-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none flex flex-col md:flex-row items-center justify-between gap-8">
+          <div className="flex flex-col items-center md:items-start flex-1">
+            <h2 className="text-2xl font-bold mb-4 text-fuchsia-500">Join the Gradabroad Community</h2>
+            <p className="mb-6 text-zinc-600 dark:text-zinc-300 text-center md:text-left max-w-xl">
+              Connect with other applicants, share tips, and get the latest updates. Follow us on Instagram or join our Discord!
+            </p>
+            <div className="flex gap-6 mb-4 md:mb-0">
+              <a href="https://discord.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full bg-emerald-500 px-5 py-2 text-white font-semibold shadow-lg hover:scale-105 transition">
+                <FaDiscord className="text-xl" /> Discord
+              </a>
+              <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full bg-gradient-to-r from-fuchsia-500 to-amber-400 px-5 py-2 text-white font-semibold shadow-lg hover:scale-105 transition">
+                <FaInstagram className="text-xl" /> Instagram
+              </a>
+            </div>
           </div>
+            {/* Feedback Section removed from landing page */}
         </div>
       </section>
     </div>
   );
 }
+
+
+
