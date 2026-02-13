@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // Restrict /dashboard and /application-tracker to signed-in users
   const pathname = request.nextUrl.pathname;
   if (pathname.startsWith("/dashboard") || pathname.startsWith("/application-tracker")) {
