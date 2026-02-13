@@ -157,6 +157,18 @@ export default function DashboardPage() {
                     />
                     <span className="block bg-white border border-black/10 rounded px-3 py-1 cursor-pointer text-xs md:text-sm text-zinc-700 dark:text-zinc-200">
                       Choose File
+                      <style jsx>{`
+                        label input[type='file'] + span {
+                          transition: background 0.2s, color 0.2s;
+                        }
+                        @media (prefers-color-scheme: dark) {
+                          label input[type='file'] + span {
+                            background: #23272f !important;
+                            color: #fff !important;
+                            border: 1px solid #fff2 !important;
+                          }
+                        }
+                      `}</style>
                     </span>
                   </label>
                   {docs.find((d) => d.name === doc)?.file && (
