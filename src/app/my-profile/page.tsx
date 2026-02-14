@@ -6,7 +6,7 @@ import FeedbackBox from "@/components/FeedbackBox";
 export default function MyProfilePage() {
   // For demo: use local state. Replace with Supabase fetch/save for real app.
   const [firstName, setFirstName] = useState("");
-  const [secondName, setSecondName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [programInterest, setProgramInterest] = useState("");
   const [qualification, setQualification] = useState("");
   const [englishTest, setEnglishTest] = useState("");
@@ -16,7 +16,7 @@ export default function MyProfilePage() {
 
   const isDirty =
     firstName ||
-    secondName ||
+    lastName ||
     programInterest ||
     qualification ||
     englishTest ||
@@ -59,14 +59,14 @@ export default function MyProfilePage() {
           </div>
           <div>
             <label className="block text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400 mb-2">
-              Second Name
+              Last Name
             </label>
             <input
               type="text"
-              value={secondName}
-              onChange={e => setSecondName(e.target.value)}
+              value={lastName}
+              onChange={e => setLastName(e.target.value)}
               className="w-full rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-base text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-              placeholder="Enter second name"
+              placeholder="Enter last name"
             />
           </div>
           <div>

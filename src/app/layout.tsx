@@ -28,6 +28,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/gradabroad.png" type="image/png" />
+        <meta property="og:image" content="/gradabroad.png" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="GradAbroad" />
+        <meta property="og:description" content="Your global study abroad companion." />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content="/gradabroad.png" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} bg-white text-zinc-900 antialiased dark:bg-black dark:text-white`}
       >

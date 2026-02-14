@@ -139,11 +139,11 @@ export default function Home() {
             </div>
             <div className="w-full flex justify-center">
               <Image
-                src="/hero-students.jpg"
-                alt="Students in front of a German university"
+                src="/gradabroad.png"
+                alt="GradAbroad Logo"
                 width={420}
                 height={300}
-                className="rounded-2xl border border-black/10 bg-white/80 shadow-lg shadow-cyan-200/30 dark:border-white/10 dark:bg-black/50 dark:shadow-none object-cover max-h-[320px] w-auto"
+                className="rounded-2xl border border-black/10 bg-white/80 shadow-lg shadow-cyan-200/30 dark:border-white/10 dark:bg-black/50 dark:shadow-none object-contain max-h-[320px] w-auto"
                 priority
               />
             </div>

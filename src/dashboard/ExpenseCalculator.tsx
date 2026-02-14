@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import emailjs from '@emailjs/browser';
+import { exportExpensesToPDF } from './exportExpensesToPDF';
 import { useUser } from "@/lib/UserContext";
 import { Card, Button, Input, Divider } from "@mui/material";
 
@@ -59,47 +59,33 @@ export default function ExpenseCalculator() {
 
   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
 
-  const handleExport = async () => {
-    if (!email) {
-      alert("No email found. Please log in.");
-      return;
-    }
-    if (!window.confirm(`Are you sure you want to export this to the given email id - ${email}?`)) return;
+  const handleDownloadPDF = () => {
     setExporting(true);
-    const expenseList = expenses.map(e => `${e.head}: ${e.amount}`).join("\n");
-    const templateParams = {
-      to_email: email,
-      user_name: "User", // Optionally use a real name if available
-      subject: "Your Exported Expenses",
-      message: `Expense List:\n${expenseList}\nTotal: ${total}`,
-    };
-    console.log("Exporting with templateParams:", templateParams);
     try {
-      await emailjs.send(
-        'service_9u7fx3n',
-        'template_id6lw8p',
-        templateParams,
-        'hAzYMGuWTckYlKD63'
-      );
-      alert("Exported to your email!");
-    } catch (err) {
-      console.error("EmailJS error:", err);
-      alert("Failed to send email. Please try again later.");
+      exportExpensesToPDF(expenses, total);
+    } finally {
+      setExporting(false);
     }
-    setExporting(false);
   };
   return (
     <Card
       sx={{
         background: "linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)",
-        borderRadius: 3,
-        boxShadow: 3,
-        padding: 5,
-        maxWidth: 600,
+        borderRadius: 4,
+        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10)',
+        padding: 6,
+        maxWidth: 520,
+        minWidth: 320,
+        width: '100%',
         margin: "auto",
+        border: '1.5px solid #e0e0e0',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'stretch',
       }}
     >
-      <h3 style={{ fontWeight: 700, color: "#333", marginBottom: 8 }}>My Expense Calculator</h3>
+      <h3 style={{ fontWeight: 700, color: "#333", marginBottom: 8, fontSize: 20 }}>My Expense Calculator</h3>
       <Divider sx={{ marginBottom: 2 }} />
       <div style={{ maxHeight: 350, overflowY: "auto", marginBottom: 16 }}>
         {expenses.map((exp, idx) => (
@@ -194,7 +180,7 @@ export default function ExpenseCalculator() {
         <span style={{ fontSize: 12, color: "#888" }}>Add expense</span>
       </div>
       <button
-        onClick={handleExport}
+        onClick={handleDownloadPDF}
         disabled={exporting}
         style={{
           marginTop: 16,
@@ -211,7 +197,7 @@ export default function ExpenseCalculator() {
           transition: 'background 0.2s',
         }}
       >
-        {exporting ? 'Exporting...' : 'Export'}
+        {exporting ? 'Preparing PDF...' : 'Download PDF'}
       </button>
     </Card>
   );

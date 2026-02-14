@@ -1,3 +1,37 @@
+@media (prefers-color-scheme: dark) {
+  input[type="file"] {
+    background: #f3f4f6 !important;
+    color: #18181b !important;
+    border: 2px solid #888 !important;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    outline: none;
+    transition: border 0.2s, box-shadow 0.2s;
+    opacity: 1 !important;
+  }
+  input[type="file"]::file-selector-button {
+    background: #fff !important;
+    color: #18181b !important;
+    border: 1.5px solid #888 !important;
+    border-radius: 6px;
+    font-weight: 700;
+    opacity: 1 !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+    padding: 6px 18px;
+    margin-right: 8px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  input[type="file"]:focus {
+    border: 2px solid #06b6d4 !important;
+    box-shadow: 0 0 0 2px #06b6d4;
+  }
+  input[type="file"]::file-selector-button:focus {
+    border: 1.5px solid #06b6d4 !important;
+    outline: 2px solid #06b6d4;
+  }
+}
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));

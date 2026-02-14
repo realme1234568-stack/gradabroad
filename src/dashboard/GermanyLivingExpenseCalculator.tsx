@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import emailjs from '@emailjs/browser';
+import { exportExpensesToPDF } from './exportExpensesToPDF';
 import { useUser } from "@/lib/UserContext";
 import { Card, Button, Input, Divider } from "@mui/material";
 
@@ -52,42 +52,30 @@ export default function GermanyLivingExpenseCalculator() {
 
   const total = expenses.reduce((sum, e) => sum + e.amount, 0);
 
-  const handleExport = async () => {
-    if (!email) {
-      alert("No email found. Please log in.");
-      return;
-    }
-    if (!window.confirm(`Are you sure you want to export this to the given email id - ${email}?`)) return;
+  const handleDownloadPDF = () => {
     setExporting(true);
-    const expenseList = expenses.map(e => `${e.head}: ${e.amount}`).join("\n");
-    const templateParams = {
-      to_email: email,
-      user_name: firstName || "User",
-      subject: "Your Exported Germany Living Expenses",
-      message: `Germany Living Expense List:\n${expenseList}\nTotal: ${total} €`,
-    };
     try {
-      await emailjs.send(
-        'service_9u7fx3n',
-        'template_id6lw8p',
-        templateParams,
-        'hAzYMGuWTckYlKD63'
-      );
-      alert("Exported to your email!");
-    } catch (err) {
-      alert("Failed to send email. Please try again later.");
+      exportExpensesToPDF(expenses, total, 'Germany Living Expenses');
+    } finally {
+      setExporting(false);
     }
-    setExporting(false);
   };
   return (
     <Card
       sx={{
         background: "linear-gradient(135deg, #f9f7ff 0%, #ffe6fa 100%)",
-        borderRadius: 3,
-        boxShadow: 3,
-        padding: 5,
-        maxWidth: 400,
+        borderRadius: 4,
+        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.10)',
+        padding: 6,
+        maxWidth: 520,
+        minWidth: 320,
+        width: '100%',
         margin: "auto",
+        border: '1.5px solid #e0e0e0',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'stretch',
       }}
     >
       <h3 style={{ fontWeight: 700, color: "#333", marginBottom: 8 }}>Germany Living Expenses</h3>
@@ -198,7 +186,7 @@ export default function GermanyLivingExpenseCalculator() {
         <span style={{ fontSize: 12, color: "#888" }}>Add expense</span>
       </div>
       <button
-        onClick={handleExport}
+        onClick={handleDownloadPDF}
         disabled={exporting}
         style={{
           marginTop: 16,
@@ -215,7 +203,7 @@ export default function GermanyLivingExpenseCalculator() {
           transition: 'background 0.2s',
         }}
       >
-        {exporting ? 'Exporting...' : 'Export'}
+        {exporting ? 'Preparing PDF...' : 'Download PDF'}
       </button>
     </Card>
   );

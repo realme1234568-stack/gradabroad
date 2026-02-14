@@ -148,14 +148,44 @@ export default function DashboardPage() {
               <div key={doc} className="flex flex-col md:flex-row md:items-center gap-2 w-full">
                 <span className="text-xs font-semibold md:text-base md:font-bold break-words w-full md:w-32">{doc}</span>
                 <div className="flex flex-col md:flex-row items-start md:items-center gap-2 w-full">
-                  <label className="relative w-full md:w-auto">
+                  <label className="relative w-full md:w-auto overflow-hidden" style={{display:'inline-block'}}>
                     <input
                       type="file"
                       accept="application/pdf,image/*"
-                      className="w-full md:w-auto opacity-0 absolute left-0 top-0 h-full cursor-pointer"
+                      style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        width: '100%',
+                        height: '100%',
+                        opacity: 0,
+                        cursor: 'pointer',
+                        zIndex: 2,
+                      }}
                       onChange={(e) => handleDocUpload(e, doc)}
                     />
-                    <span className="block bg-white border border-black/10 rounded px-3 py-1 cursor-pointer text-xs md:text-sm text-zinc-700 dark:text-zinc-200">
+                    <span
+                      className="block bg-white border border-black/20 rounded text-center cursor-pointer text-xs md:text-sm text-zinc-800 dark:text-white select-none"
+                      style={{
+                        position: 'relative',
+                        zIndex: 1,
+                        fontSize: '12.5px',
+                        fontWeight: 700,
+                        padding: '4px 0',
+                        width: 120,
+                        background: '#fff',
+                        border: '1.5px solid #888',
+                        boxShadow: '0 1px 4px rgba(0,0,0,0.10)',
+                        transition: 'background 0.2s, color 0.2s',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        textOverflow: 'ellipsis',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        letterSpacing: 0.1,
+                      }}
+                    >
                       Choose File
                       <style jsx>{`
                         label input[type='file'] + span {
@@ -165,14 +195,14 @@ export default function DashboardPage() {
                           label input[type='file'] + span {
                             background: #23272f !important;
                             color: #fff !important;
-                            border: 1px solid #fff2 !important;
+                            border: 1.5px solid #fff2 !important;
                           }
                         }
                       `}</style>
                     </span>
                   </label>
                   {docs.find((d) => d.name === doc)?.file && (
-                    <span className="text-xs text-emerald-600">{docs.find((d) => d.name === doc)?.file?.name}</span>
+                    <span className="text-xs text-emerald-600 truncate max-w-[120px] md:max-w-[180px] block">{docs.find((d) => d.name === doc)?.file?.name}</span>
                   )}
                 </div>
               </div>
