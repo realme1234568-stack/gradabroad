@@ -2,7 +2,16 @@
 // This file will be used to encapsulate PDF export logic for expenses
 import jsPDF from 'jspdf';
 
-export function exportExpensesToPDF(expenses, total, title = 'Exported Expenses') {
+export interface ExpenseItem {
+  head: string;
+  amount: number;
+}
+
+export function exportExpensesToPDF(
+  expenses: ExpenseItem[],
+  total: number,
+  title = 'Exported Expenses'
+) {
   const doc = new jsPDF();
   doc.setFontSize(18);
   doc.text(title, 14, 20);
