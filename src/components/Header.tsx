@@ -4,6 +4,7 @@ import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
 import AuthPanel from "@/components/AuthPanel";
 import { useState, useRef, useEffect } from "react";
+import { FaCog } from "react-icons/fa";
 
 const navLinks = [
   { href: "/browse-programs", label: "Browse Programs" },
@@ -55,22 +56,10 @@ export default function Header() {
           <div className="relative" ref={settingsRef}>
             <button
               aria-label="Open settings"
-              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-black/10 bg-black/5 text-zinc-900 transition hover:border-black/40 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:border-white/50"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-black/10 bg-black/5 text-zinc-900 transition hover:border-black/40 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:border-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
               onClick={() => setSettingsOpen((open) => !open)}
             >
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="3.5" />
-                <path d="M19.4 15a7.8 7.8 0 0 0 .1-6l1.9-1.1-2-3.4-2.2 1a7.7 7.7 0 0 0-5.2-2.1l-.4-2.4h-4l-.4 2.4a7.7 7.7 0 0 0-5.2 2.1l-2.2-1-2 3.4L4.5 9a7.8 7.8 0 0 0 .1 6l-1.9 1.1 2 3.4 2.2-1a7.7 7.7 0 0 0 5.2 2.1l.4 2.4h4l.4-2.4a7.7 7.7 0 0 0 5.2-2.1l2.2 1 2-3.4L19.4 15z" />
-              </svg>
+              <FaCog className="h-6 w-6" />
             </button>
             {settingsOpen && (
               <div className="absolute right-0 mt-3 w-56 overflow-hidden rounded-2xl border border-black/10 bg-white/95 p-4 shadow-xl dark:border-white/10 dark:bg-zinc-950/95 z-50">

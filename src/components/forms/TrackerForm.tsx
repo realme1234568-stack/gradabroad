@@ -22,6 +22,17 @@ export default function TrackerForm() {
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
+    // Input validation
+    if (!form.university_name.trim() || !form.course_name.trim()) {
+      setError("University and course name are required.");
+      setLoading(false);
+      return;
+    }
+    if (form.university_name.length > 100 || form.course_name.length > 100) {
+      setError("Input too long.");
+      setLoading(false);
+      return;
+    }
     const { data: userData } = await supabase.auth.getUser();
     const user = userData.user;
     if (!user) {
@@ -29,22 +40,19 @@ export default function TrackerForm() {
       setLoading(false);
       return;
     }
-
     const checklistArray = form.checklist
       .split(",")
       .map((item) => item.trim())
       .filter(Boolean);
-
     const { error: insertError } = await supabase
       .from("application_tracker")
       .insert({
         user_id: user.id,
-        university_name: form.university_name,
-        course_name: form.course_name,
-        status: form.status,
+        university_name: form.university_name.trim(),
+        course_name: form.course_name.trim(),
+        status: form.status.trim(),
         checklist: checklistArray,
       });
-
     if (insertError) {
       setError(insertError.message);
     } else {

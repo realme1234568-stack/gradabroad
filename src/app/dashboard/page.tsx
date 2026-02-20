@@ -97,8 +97,16 @@ export default function DashboardPage() {
       </p>
 
       <div className="mt-8 grid gap-8 md:grid-cols-4">
-        {/* My Shortlist */}
-        <section className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-emerald-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none flex flex-col">
+        {/* My Shortlist - now interactive */}
+        <section
+          className="relative rounded-2xl border bg-white/80 p-6 flex flex-col transition-all duration-200 cursor-pointer group border-black/10 dark:border-white/10 shadow-xl hover:scale-[1.03] focus:scale-[1.03] hover:shadow-[0_0_24px_0_rgba(34,211,238,0.18),0_1.5px_8px_0_rgba(16,185,129,0.10)] focus:shadow-[0_0_24px_0_rgba(34,211,238,0.18),0_1.5px_8px_0_rgba(16,185,129,0.10)]"
+          tabIndex={0}
+          role="button"
+          aria-label="Open My Shortlist"
+          onClick={() => window.location.href = '/dashboard/my-shortlist'}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') window.location.href = '/dashboard/my-shortlist'; }}
+          style={{ outline: 'none', borderImage: 'linear-gradient(90deg, #34d399, #22d3ee, #a21caf) 1', borderWidth: '1.5px' }}
+        >
           <h2 className="text-lg font-semibold mb-4">My Shortlist</h2>
           {loading ? (
             <div>Loading...</div>
@@ -115,25 +123,15 @@ export default function DashboardPage() {
                       <div className="font-semibold">{item.university_name}</div>
                       <div className="text-xs text-zinc-500">{item.course_name}</div>
                     </div>
-                    <button
-                      className="ml-2 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-200"
-                      onClick={() => handleRemoveShortlist(item.id)}
-                    >
-                      Remove
-                    </button>
                   </div>
                   <div className="text-xs text-zinc-600">Deadline: {item.deadline ?? "TBD"}</div>
                 </div>
               ))}
               {shortlisted.length > 4 && (
                 <div className="flex justify-end mt-2">
-                  <a
-                    href="/dashboard/my-shortlist"
-                    className="text-xs px-2 py-1 rounded bg-emerald-100 text-emerald-700 hover:bg-emerald-200 border border-emerald-200"
-                    style={{ fontSize: '12px' }}
-                  >
-                    See more
-                  </a>
+                  <span className="text-xs px-2 py-1 rounded bg-emerald-100 text-emerald-700 border border-emerald-200" style={{ fontSize: '12px' }}>
+                    +{shortlisted.length - 4} more
+                  </span>
                 </div>
               )}
             </>
@@ -159,13 +157,14 @@ export default function DashboardPage() {
                         width: '100%',
                         height: '100%',
                         opacity: 0,
-                        cursor: 'pointer',
+                        cursor: 'not-allowed',
                         zIndex: 2,
                       }}
-                      onChange={(e) => handleDocUpload(e, doc)}
+                      disabled
+                      title="Document upload is temporarily disabled."
                     />
                     <span
-                      className="block bg-white border border-black/20 rounded text-center cursor-pointer text-xs md:text-sm text-zinc-800 dark:text-white select-none"
+                      className="block bg-white border border-black/20 rounded text-center cursor-not-allowed text-xs md:text-sm text-zinc-800 dark:text-white select-none opacity-60"
                       style={{
                         position: 'relative',
                         zIndex: 1,
@@ -187,6 +186,7 @@ export default function DashboardPage() {
                       }}
                     >
                       Choose File
+                      <span className="ml-2 text-xs text-red-500">(Uploads disabled)</span>
                       <style jsx>{`
                         label input[type='file'] + span {
                           transition: background 0.2s, color 0.2s;

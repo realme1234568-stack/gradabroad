@@ -1,45 +1,38 @@
-// This page is intentionally left empty. The tracker is now inside the dashboard.
-
-
-import { createSupabaseServerClient } from "@/lib/supabaseServer";
-
-const stageColors: Record<string, string> = {
-  "Documents in progress": "bg-amber-400/20 text-amber-200",
-  Applied: "bg-blue-400/20 text-blue-200",
-  "Decision pending": "bg-purple-400/20 text-purple-200",
-};
+"use client";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 type TrackerItem = {
   id: string;
   university_name: string;
   course_name: string;
   status: string;
-  checklist: string[] | null;
+  checklist?: string[];
 };
 
-export default async function ApplicationTrackerPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+const stageColors: Record<string, string> = {
+  "Shortlisted": "bg-emerald-400/20 text-emerald-700",
+  "Applied": "bg-cyan-400/20 text-cyan-700",
+  "Accepted": "bg-green-400/20 text-green-700",
+  "Rejected": "bg-rose-400/20 text-rose-700",
+};
 
-  if (!user) {
-    return (
-      <div className="mx-auto w-full max-w-6xl px-6 py-12">
-        <h1 className="text-3xl font-semibold">Application Tracker</h1>
-        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-          Sign in to track your application progress.
-        </p>
-      </div>
-    );
-  }
+export default function ApplicationTrackerPage() {
+  const [trackerItems, setTrackerItems] = useState<TrackerItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const { data: trackerData } = await supabase
-    .from("application_tracker")
-    .select("id, university_name, course_name, status, checklist")
-    .order("created_at", { ascending: false });
-
-  const trackerItems: TrackerItem[] = trackerData ?? [];
+  useEffect(() => {
+    const fetchTracker = async () => {
+      setLoading(true);
+      const { data } = await supabase
+        .from("application_tracker")
+        .select("id, university_name, course_name, status, checklist")
+        .order("created_at", { ascending: false });
+      setTrackerItems(data ?? []);
+      setLoading(false);
+    };
+    fetchTracker();
+  }, []);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -49,12 +42,16 @@ export default async function ApplicationTrackerPage() {
       </p>
 
       <div className="mt-8 grid gap-6">
-        {trackerItems.length === 0 ? (
+        {loading ? (
+          <div className="rounded-2xl border border-dashed border-black/20 bg-white/60 p-6 text-sm text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
+            Loading tracker entries...
+          </div>
+        ) : trackerItems.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-black/20 bg-white/60 p-6 text-sm text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
             No tracker entries yet. Add rows in Supabase to see them here.
           </div>
         ) : (
-          trackerItems.map((item: TrackerItem) => (
+          trackerItems.map((item) => (
             <div
               key={item.id}
               className="relative overflow-hidden rounded-3xl border border-black/10 bg-gradient-to-br from-white via-purple-50 to-emerald-50 p-6 shadow-lg shadow-purple-200/30 dark:border-white/10 dark:from-zinc-900 dark:via-zinc-950 dark:to-black dark:shadow-none"

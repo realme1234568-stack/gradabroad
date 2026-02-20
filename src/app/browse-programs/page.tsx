@@ -18,8 +18,10 @@ type Program = {
 
 export default function BrowseProgramsPage() {
   const [selectedLevel, setSelectedLevel] = useState<string | null>("masters");
+  const [bachelorPrograms, setBachelorPrograms] = useState<Program[]>([]);
+  const [loadingBachelors, setLoadingBachelors] = useState(false);
 
-  // Hardcoded master's programs
+  // Hardcoded master's programs (keep as is)
   const mastersPrograms: Program[] = [
     {
       id: "1",
@@ -86,7 +88,20 @@ export default function BrowseProgramsPage() {
     },
   ];
 
-  // UI for level selection
+  useEffect(() => {
+    if (selectedLevel === "bachelors") {
+      setLoadingBachelors(true);
+      supabase
+        .from("programs")
+        .select("*")
+        .eq("level", "bachelor")
+        .then(({ data }) => {
+          setBachelorPrograms(data || []);
+          setLoadingBachelors(false);
+        });
+    }
+  }, [selectedLevel]);
+
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
       <h1 className="text-3xl font-semibold mb-6">Browse Programs</h1>
@@ -112,15 +127,19 @@ export default function BrowseProgramsPage() {
           Masters
         </button>
       </div>
-      {selectedLevel ? (
-        selectedLevel === "masters" ? (
-          <ProgramList programs={mastersPrograms} ignoreFilters />
-        ) : (
-          <div className="rounded-2xl border border-black/10 bg-white/60 p-8 text-center text-lg text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
-            No bachelors programs available yet.
-          </div>
-        )
-      ) : null}
+      {selectedLevel === "masters" ? (
+        <ProgramList programs={mastersPrograms} ignoreFilters />
+      ) : loadingBachelors ? (
+        <div className="rounded-2xl border border-black/10 bg-white/60 p-8 text-center text-lg text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
+          Loading bachelors programs...
+        </div>
+      ) : bachelorPrograms.length > 0 ? (
+        <ProgramList programs={bachelorPrograms} ignoreFilters />
+      ) : (
+        <div className="rounded-2xl border border-black/10 bg-white/60 p-8 text-center text-lg text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
+          No bachelors programs available yet.
+        </div>
+      )}
     </div>
   );
 }

@@ -111,7 +111,7 @@ export default function Home() {
               My Dashboard
             </Link>
             <Link
-              href="/application-tracker"
+              href="/dashboard/my-tracker"
               className="rounded-full bg-[radial-gradient(circle_at_top,_#fbbf24,_#f59e0b,_#d97706)] px-6 py-3 text-base font-bold text-zinc-900 shadow-md shadow-amber-300/40 transition hover:scale-105 hover:brightness-110"
             >
               Application Tracker

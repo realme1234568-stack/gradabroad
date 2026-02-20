@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { rateLimit } from '@/utils/rateLimitEdge';
 
 export async function GET(request: Request) {
+  const rateLimitResponse = await rateLimit(request);
+  if (rateLimitResponse) return rateLimitResponse;
+
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
 

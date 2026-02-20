@@ -22,6 +22,17 @@ export default function ShortlistForm() {
   const handleSubmit = async () => {
     setLoading(true);
     setError(null);
+    // Input validation
+    if (!form.university_name.trim() || !form.course_name.trim()) {
+      setError("University and course name are required.");
+      setLoading(false);
+      return;
+    }
+    if (form.university_name.length > 100 || form.course_name.length > 100) {
+      setError("Input too long.");
+      setLoading(false);
+      return;
+    }
     const { data: userData } = await supabase.auth.getUser();
     const user = userData.user;
     if (!user) {
@@ -29,15 +40,13 @@ export default function ShortlistForm() {
       setLoading(false);
       return;
     }
-
     const { error: insertError } = await supabase.from("shortlists").insert({
       user_id: user.id,
-      university_name: form.university_name,
-      course_name: form.course_name,
-      deadline: form.deadline || null,
-      status: form.status || null,
+      university_name: form.university_name.trim(),
+      course_name: form.course_name.trim(),
+      deadline: form.deadline.trim() || null,
+      status: form.status.trim() || null,
     });
-
     if (insertError) {
       setError(insertError.message);
     } else {
