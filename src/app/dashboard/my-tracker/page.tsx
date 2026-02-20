@@ -12,7 +12,7 @@ type ShortlistItem = {
   program_level?: string; // 'bachelor' | 'master' | undefined
 };
 
-const DEFAULT_MANDATORY_DOCS: { label: string; icon: JSX.Element }[] = [
+const DEFAULT_MANDATORY_DOCS: { label: string; icon: React.ReactElement }[] = [
   { label: "Passport", icon: <FaPassport className="text-emerald-400 text-lg" /> },
   { label: "APS", icon: <FaCertificate className="text-cyan-400 text-lg" /> },
   { label: "IELTS", icon: <FaGlobe className="text-fuchsia-400 text-lg" /> },
