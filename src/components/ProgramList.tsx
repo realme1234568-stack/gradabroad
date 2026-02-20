@@ -117,46 +117,31 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
       return;
     }
     const isShortlisted = shortlistedKeys.has(key);
-    if (!isShortlisted) {
-      // Add to shortlist
-      const { error } = await supabase.from("shortlists").insert({
-        user_id: user.id,
-        university_name: program.university_name,
-        course_name: program.course_name,
-        deadline: null,
-        status: "Shortlisted",
-      });
-      if (error) {
-        setStatus(key, "error");
-        return;
-      }
-      setShortlistedKeys((prev) => new Set(prev).add(key));
+    if (isShortlisted) {
+      // Already shortlisted, do nothing
       setStatus(key, "shortlisted");
-      setProgramMeta((prev) => ({ ...prev, [key]: { note: "", status: "Shortlisted", deadline: null } }));
-    } else {
-      // Remove from shortlist
-      const { error } = await supabase
-        .from("shortlists")
-        .delete()
-        .eq("user_id", user.id)
-        .eq("university_name", program.university_name)
-        .eq("course_name", program.course_name);
-      if (error) {
-        setStatus(key, "error");
-        return;
-      }
-      setShortlistedKeys((prev) => {
-        const next = new Set(prev);
-        next.delete(key);
-        return next;
-      });
-      setStatus(key, "idle");
-      setProgramMeta((prev) => {
-        const next = { ...prev };
-        delete next[key];
-        return next;
-      });
+      return;
     }
+    // Add to shortlist
+    const { error } = await supabase.from("shortlists").insert({
+      user_id: user.id,
+      university_name: program.university_name,
+      course_name: program.course_name,
+      deadline: null,
+      status: "Shortlisted",
+    });
+    if (error) {
+      if (error.code === "23505") {
+        // Unique violation, already exists
+        setStatus(key, "shortlisted");
+      } else {
+        setStatus(key, "error");
+      }
+      return;
+    }
+    setShortlistedKeys((prev) => new Set(prev).add(key));
+    setStatus(key, "shortlisted");
+    setProgramMeta((prev) => ({ ...prev, [key]: { note: "", status: "Shortlisted", deadline: null } }));
     router.refresh();
   };
 
@@ -321,8 +306,10 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
               <div className="mt-6 flex flex-col gap-2">
                 <button
                   type="button"
-                  onClick={() => handleShortlist(program)}
-                  disabled={isLoading}
+                  onClick={() => {
+                    if (!isShortlisted) handleShortlist(program);
+                  }}
+                  disabled={isLoading || isShortlisted}
                   className={`inline-flex items-center gap-2 rounded-full bg-[radial-gradient(circle_at_top,_#34d399,_#22d3ee,_#0ea5e9)] px-4 py-2 text-xs font-semibold text-zinc-900 shadow-md shadow-emerald-300/40 transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70 ${isShortlisted ? 'ring-2 ring-emerald-400' : ''}`}
                 >
                   {isLoading ? (
@@ -330,11 +317,11 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
                   ) : status === "error" ? (
                     "Try again"
                   ) : isShortlisted ? (
-                    <span className="inline-flex items-center gap-2 text-emerald-900">
-                      <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-100 text-emerald-700 animate-pulse">
-                        ✓
-                      </span>
-                      Remove from shortlist
+                    <span className="inline-flex items-center gap-2 text-emerald-600 font-semibold">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                      </svg>
+                      Already Shortlisted
                     </span>
                   ) : (
                     "Add to shortlist"
