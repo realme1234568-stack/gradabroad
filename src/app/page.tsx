@@ -6,7 +6,7 @@ import Link from "next/link";
 import { FaDiscord, FaInstagram, FaCheckCircle, FaGlobeEurope, FaUserGraduate, FaChartLine } from "react-icons/fa";
 import { useEffect, useRef, useState } from "react";
 import Typewriter from "@/components/Typewriter";
-import ScrollReveal from "../../components/ScrollReveal";
+import ScrollReveal from "@/components/ScrollReveal";
 
 const benefits = [
   {
