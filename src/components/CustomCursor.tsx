@@ -26,7 +26,11 @@ export default function CustomCursor() {
       requestRef.current = requestAnimationFrame(animate);
     };
     requestRef.current = requestAnimationFrame(animate);
-    return () => requestRef.current && cancelAnimationFrame(requestRef.current);
+    return () => {
+      if (typeof requestRef.current === "number") {
+        cancelAnimationFrame(requestRef.current);
+      }
+    };
   }, []);
 
   useEffect(() => {
