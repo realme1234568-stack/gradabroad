@@ -1,31 +1,10 @@
 "use client";
 
-
 import Image from "next/image";
 import Link from "next/link";
 import { FaDiscord, FaInstagram, FaCheckCircle, FaGlobeEurope, FaUserGraduate, FaChartLine } from "react-icons/fa";
-import { useEffect, useRef, useState } from "react";
-import Typewriter from "@/components/Typewriter";
+import { useUser } from "@/lib/UserContext";
 import ScrollReveal from "../components/ScrollReveal";
-
-const benefits = [
-  {
-    icon: <FaCheckCircle className="text-emerald-400 text-xl" />,
-    text: "Tuition-free or low-cost public universities",
-  },
-  {
-    icon: <FaGlobeEurope className="text-cyan-400 text-xl" />,
-    text: "English-taught programs with global recognition",
-  },
-  {
-    icon: <FaChartLine className="text-fuchsia-400 text-xl" />,
-    text: "Strong industry ties and post-study work options",
-  },
-  {
-    icon: <FaUserGraduate className="text-amber-400 text-xl" />,
-    text: "High quality of life and student-friendly cities",
-  },
-];
 
 const steps = [
   {
@@ -63,61 +42,15 @@ const testimonials = [
   },
 ];
 
-import { useUser } from "@/lib/UserContext";
 
 export default function Home() {
-  // Parallax effect for hero section
-  const heroSectionRef = useRef<HTMLDivElement>(null);
-  const heroBg1 = useRef<HTMLDivElement>(null);
-  const heroBg2 = useRef<HTMLDivElement>(null);
-  const heroBg3 = useRef<HTMLDivElement>(null);
-  const heroImgRef = useRef<HTMLImageElement>(null);
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const section = heroSectionRef.current;
-      if (!section) return;
-      const rect = section.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      const moveX = (x - centerX) / 30;
-      const moveY = (y - centerY) / 30;
-      if (heroBg1.current) heroBg1.current.style.transform = `translate(${-moveX * 2}px, ${-moveY * 2}px)`;
-      if (heroBg2.current) heroBg2.current.style.transform = `translate(${moveX * 2}px, ${moveY * 2}px)`;
-      if (heroBg3.current) heroBg3.current.style.transform = `translate(${-moveX * 1.5}px, ${moveY * 1.5}px)`;
-      if (heroImgRef.current) heroImgRef.current.style.transform = `translate(${moveX * 3}px, ${moveY * 3}px) scale(1.04)`;
-    };
-    const reset = () => {
-      if (heroBg1.current) heroBg1.current.style.transform = '';
-      if (heroBg2.current) heroBg2.current.style.transform = '';
-      if (heroBg3.current) heroBg3.current.style.transform = '';
-      if (heroImgRef.current) heroImgRef.current.style.transform = '';
-    };
-    const section = heroSectionRef.current;
-    if (section) {
-      section.addEventListener('mousemove', handleMouseMove);
-      section.addEventListener('mouseleave', reset);
-    }
-    return () => {
-      if (section) {
-        section.removeEventListener('mousemove', handleMouseMove);
-        section.removeEventListener('mouseleave', reset);
-      }
-    };
-  }, []);
-  // (removed duplicate heroImgRef and useEffect)
-  // Removed scroll-based scaling for hero image
-
-  // Removed scroll-based scaling for pexels image
-
-  const { firstName, loading } = useUser();
+  const { firstName } = useUser();
   return (
     <div className="relative overflow-hidden bg-white text-zinc-900 transition-colors duration-200 dark:bg-black dark:text-white animate-fade-in">
       {/* Animated background gradients */}
-      <div ref={heroBg1} className="pointer-events-none absolute -top-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-400/30 blur-3xl dark:bg-emerald-400/20 animate-pulse will-change-transform" />
-      <div ref={heroBg2} className="pointer-events-none absolute -right-32 top-20 h-64 w-64 rounded-full bg-cyan-400/30 blur-3xl dark:bg-cyan-400/20 animate-pulse will-change-transform" />
-      <div ref={heroBg3} className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-fuchsia-400/20 blur-3xl dark:bg-fuchsia-400/10 animate-pulse will-change-transform" />
+      <div className="pointer-events-none absolute -top-32 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-400/30 blur-3xl dark:bg-emerald-400/20 animate-pulse will-change-transform" />
+      <div className="pointer-events-none absolute -right-32 top-20 h-64 w-64 rounded-full bg-cyan-400/30 blur-3xl dark:bg-cyan-400/20 animate-pulse will-change-transform" />
+      <div className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-fuchsia-400/20 blur-3xl dark:bg-fuchsia-400/10 animate-pulse will-change-transform" />
 
       {/* Hero Section */}
       <section className="relative border-b border-zinc-200 dark:border-zinc-800">

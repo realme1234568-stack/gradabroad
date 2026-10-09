@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { exportExpensesToPDF } from './exportExpensesToPDF';
-import { useUser } from "@/lib/UserContext";
 import { Card, Button, Input, Divider } from "@mui/material";
 
 const initialExpenses = [
@@ -23,7 +22,6 @@ const initialExpenses = [
 
 export default function ExpenseCalculator() {
   const [expenses, setExpenses] = useState(initialExpenses);
-  const { email } = useUser ? useUser() : { email: null };
   const [exporting, setExporting] = useState(false);
   const [newHead, setNewHead] = useState("");
   const [newAmount, setNewAmount] = useState("");

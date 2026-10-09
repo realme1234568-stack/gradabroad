@@ -20,7 +20,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
     async function fetchUser() {
       setLoading(true);
       const { data } = await supabase.auth.getUser();
@@ -31,7 +30,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
         if (!name && user.identities && user.identities.length > 0) {
           name = user.identities[0].identity_data?.full_name || user.identities[0].identity_data?.name || "";
         }
-        let first = name.split(" ")[0] || null;
+        const first = name.split(" ")[0] || null;
         setFirstName(first ? first.charAt(0).toUpperCase() + first.slice(1) : null);
         setEmail(user.email ?? null);
       } else {
@@ -45,7 +44,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
       fetchUser();
     });
     return () => {
-      mounted = false;
       subscription.subscription.unsubscribe();
     };
   }, []);

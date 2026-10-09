@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@/lib/UserContext";
 import { supabase } from "@/lib/supabaseClient";
-import ExpenseCalculator from "../../dashboard/ExpenseCalculator";
 
 type Shortlist = {
   id: string;
@@ -24,14 +23,13 @@ const DOC_TYPES = ["Degree", "IELTS", "TOEFL", "APS Certificate"];
 export default function DashboardPage() {
   const [shortlisted, setShortlisted] = useState<Shortlist[]>([]);
   const [tracker, setTracker] = useState<Tracker[]>([]);
-  const [docs, setDocs] = useState<{ name: string; file?: File }[]>([]);
+  const [statusError, setStatusError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Fetch shortlist and tracker from Supabase
     const fetchData = async () => {
       setLoading(true);
-      // Removed user check: always load features
       const { data: shortlistedData } = await supabase
         .from("shortlists")
         .select("id, university_name, course_name, deadline, status")
@@ -39,11 +37,11 @@ export default function DashboardPage() {
       setShortlisted(shortlistedData ?? []);
       // For demo, tracker mirrors shortlist with status
       setTracker(
-        (shortlistedData ?? []).map((item: any) => ({
+        (shortlistedData ?? []).map((item: Shortlist) => ({
           id: item.id,
           university_name: item.university_name,
           course_name: item.course_name,
-          status: "Shortlisted",
+          status: item.status || "Shortlisted",
         }))
       );
       setLoading(false);
@@ -51,32 +49,19 @@ export default function DashboardPage() {
     fetchData();
   }, []);
 
-  // Remove from shortlist and tracker
-  const handleRemoveShortlist = async (id: string) => {
-    setShortlisted((prev) => prev.filter((item) => item.id !== id));
-    setTracker((prev) => prev.filter((item) => item.id !== id));
-    await supabase.from("shortlists").delete().eq("id", id);
-  };
-
   // Tracker status change
-  const handleTrackerStatus = (id: string, status: string) => {
+  const handleTrackerStatus = async (id: string, status: string) => {
+    setStatusError(null);
+    const { data, error } = await supabase.from("shortlists").update({ status }).eq("id", id).select("id");
+    if (error || !data?.length) {
+      setStatusError("Could not save application status. Please retry.");
+      return;
+    }
     setTracker((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, status } : item
       )
     );
-    // TODO: Update tracker status in Supabase
-  };
-
-  // Docs upload
-  const handleDocUpload = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setDocs((prev) => {
-        const filtered = prev.filter((d) => d.name !== name);
-        return [...filtered, { name, file }];
-      });
-    }
   };
 
   const { firstName } = useUser();
@@ -96,6 +81,7 @@ export default function DashboardPage() {
         Track your shortlisted universities, documents, and application milestones.
       </p>
 
+      {statusError && <p role="alert">{statusError}</p>}
       <div className="mt-8 grid gap-8 md:grid-cols-4">
         {/* My Shortlist - now interactive */}
         <section
@@ -201,9 +187,6 @@ export default function DashboardPage() {
                       `}</style>
                     </span>
                   </label>
-                  {docs.find((d) => d.name === doc)?.file && (
-                    <span className="text-xs text-emerald-600 truncate max-w-[120px] md:max-w-[180px] block">{docs.find((d) => d.name === doc)?.file?.name}</span>
-                  )}
                 </div>
               </div>
             ))}
@@ -211,7 +194,7 @@ export default function DashboardPage() {
         </section>
 
         {/* My Tracker */}
-                {/* My Expense Calculator Tab */}
+        {/* My Expense Calculator Tab */}
                 <a
                   href="/dashboard/expense-calculator"
                   className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-pink-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none transition hover:scale-[1.03] hover:shadow-pink-400/40"

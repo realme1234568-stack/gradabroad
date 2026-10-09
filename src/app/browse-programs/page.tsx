@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ProgramList from "@/components/ProgramList";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -88,19 +88,23 @@ export default function BrowseProgramsPage() {
     },
   ];
 
-  useEffect(() => {
-    if (selectedLevel === "bachelors") {
-      setLoadingBachelors(true);
-      supabase
-        .from("programs")
-        .select("*")
-        .eq("level", "bachelor")
-        .then(({ data }) => {
-          setBachelorPrograms(data || []);
-          setLoadingBachelors(false);
-        });
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  async function loadBachelors() {
+    setSelectedLevel("bachelors");
+    if (loadingBachelors) return;
+    setLoadingBachelors(true);
+    setLoadError(null);
+    try {
+      const { data, error } = await supabase.from("programs").select("*").eq("level", "bachelor");
+      if (error) throw error;
+      setBachelorPrograms(data ?? []);
+    } catch {
+      setLoadError("Could not load programs. Select Bachelors to try again.");
+    } finally {
+      setLoadingBachelors(false);
     }
-  }, [selectedLevel]);
+  }
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -112,7 +116,7 @@ export default function BrowseProgramsPage() {
               ? "border-emerald-500 bg-emerald-50 text-emerald-900" 
               : "border-black/10 bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white"}
           `}
-          onClick={() => setSelectedLevel("bachelors")}
+          onClick={loadBachelors}
         >
           Bachelors
         </button>
@@ -128,13 +132,15 @@ export default function BrowseProgramsPage() {
         </button>
       </div>
       {selectedLevel === "masters" ? (
-        <ProgramList programs={mastersPrograms} ignoreFilters />
+        <ProgramList programs={mastersPrograms} />
       ) : loadingBachelors ? (
         <div className="rounded-2xl border border-black/10 bg-white/60 p-8 text-center text-lg text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
           Loading bachelors programs...
         </div>
+      ) : loadError ? (
+        <p role="alert">{loadError}</p>
       ) : bachelorPrograms.length > 0 ? (
-        <ProgramList programs={bachelorPrograms} ignoreFilters />
+        <ProgramList programs={bachelorPrograms} />
       ) : (
         <div className="rounded-2xl border border-black/10 bg-white/60 p-8 text-center text-lg text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
           No bachelors programs available yet.

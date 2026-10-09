@@ -34,10 +34,10 @@ export default function CustomCursor() {
   }, []);
 
   useEffect(() => {
-    const addGrow = (e: Event) => {
+    const addGrow = () => {
       if (cursorRef.current) cursorRef.current.classList.add("cursor-grow");
     };
-    const removeGrow = (e: Event) => {
+    const removeGrow = () => {
       if (cursorRef.current) cursorRef.current.classList.remove("cursor-grow");
     };
     const selectors = "button, a, .luxury-card, .ripple-btn";

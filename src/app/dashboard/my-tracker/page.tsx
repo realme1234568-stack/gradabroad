@@ -24,6 +24,10 @@ const UNI_DOCS: string[] = ["GMAT"];
 
 
 export default function MyTrackerPage() {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
+  const [dirty, setDirty] = useState(false);
   const [tracker, setTracker] = useState<ShortlistItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,13 +49,27 @@ export default function MyTrackerPage() {
       setLoading(true);
       setError(null);
       try {
+        const { data: auth, error: authError } = await supabase.auth.getUser();
+        if (authError || !auth.user) throw new Error("Sign in required");
+        const { data: preferences, error: preferencesError } = await supabase
+          .from("tracker_preferences")
+          .select("doc_status, custom_docs, mandatory_status, custom_mandatory_docs")
+          .eq("user_id", auth.user.id)
+          .maybeSingle();
+        if (preferencesError) throw preferencesError;
+        setUserId(auth.user.id);
+        setDocStatus(preferences?.doc_status ?? {});
+        setCustomDocs(preferences?.custom_docs ?? []);
+        setMandatoryStatus(preferences?.mandatory_status ?? {});
+        setCustomMandatoryDocs(preferences?.custom_mandatory_docs ?? []);
         const { data, error } = await supabase
           .from("shortlists")
           .select("id, university_name, course_name, status, program_level")
           .order("created_at", { ascending: false });
         if (error) throw error;
         setShortlisted(data ?? []);
-      } catch (err) {
+        setTracker(data ?? []);
+      } catch {
         setError("Could not load your tracker. Please try again later.");
       } finally {
         setLoading(false);
@@ -60,35 +78,40 @@ export default function MyTrackerPage() {
     fetchShortlist();
   }, []);
 
-  // Sync tracker and docStatus with shortlisted
   useEffect(() => {
-    setTracker(shortlisted);
-    // Remove docStatus for removed unis, add for new unis
-    setDocStatus(prev => {
-      const updated: Record<string, Record<string, boolean>> = {};
-      shortlisted.forEach((item) => {
-        updated[item.id] = prev[item.id] || {};
-        [...UNI_DOCS, ...customDocs].forEach((doc) => {
-          if (typeof updated[item.id][doc] !== "boolean") updated[item.id][doc] = false;
-        });
-      });
-      return updated;
-    });
-  }, [shortlisted, customDocs]);
+    const warnBeforeLeaving = (event: BeforeUnloadEvent) => {
+      if (dirty) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    };
+    window.addEventListener("beforeunload", warnBeforeLeaving);
+    return () => window.removeEventListener("beforeunload", warnBeforeLeaving);
+  }, [dirty]);
 
-  // Initialize mandatoryStatus if empty
-  useEffect(() => {
-    setMandatoryStatus((prev) => {
-      const updated = { ...prev };
-      DEFAULT_MANDATORY_DOCS.forEach((doc) => {
-        if (typeof updated[doc.label] !== "boolean") updated[doc.label] = false;
-      });
-      customMandatoryDocs.forEach((doc) => {
-        if (typeof updated[doc] !== "boolean") updated[doc] = false;
-      });
-      return updated;
-    });
-  }, [customMandatoryDocs]);
+  async function saveChecklist() {
+    if (!userId || saving) return;
+    setSaving(true);
+    setSaveMessage(null);
+    try {
+      const { data: auth } = await supabase.auth.getUser();
+      if (auth.user?.id !== userId) throw new Error("Account changed");
+      const { error } = await supabase.from("tracker_preferences").upsert({
+        user_id: userId,
+        doc_status: docStatus,
+        custom_docs: customDocs,
+        mandatory_status: mandatoryStatus,
+        custom_mandatory_docs: customMandatoryDocs,
+      }, { onConflict: "user_id" });
+      if (error) throw error;
+      setDirty(false);
+      setSaveMessage("Checklist saved.");
+    } catch {
+      setSaveMessage("Could not save your checklist. Your changes are still here; please retry.");
+    } finally {
+      setSaving(false);
+    }
+  }
   return (
     <main
       className="max-w-7xl mx-auto p-8 min-h-screen relative"
@@ -142,7 +165,16 @@ export default function MyTrackerPage() {
               Master’s
             </button>
           </div>
-        <div className="flex flex-row gap-8 items-start">
+        <div className="mb-4 flex items-center gap-4">
+          <button type="button" onClick={saveChecklist} disabled={saving || !dirty}
+            className="rounded-lg bg-emerald-600 px-4 py-2 text-white disabled:opacity-50">
+            {saving ? "Saving…" : "Save checklist"}
+          </button>
+          <p role="status">{saveMessage ?? (dirty ? "Unsaved checklist changes" : "Checklist loaded")}</p>
+        </div>
+        <fieldset disabled={saving} className="flex flex-row gap-8 items-start border-0 p-0 min-w-0"
+          onChange={() => { setDirty(true); setSaveMessage(null); }}>
+
           {/* Mandatory Docs Checklist */}
           <div className="min-w-[270px] max-w-xs rounded-3xl border border-emerald-200 bg-white/80 dark:bg-zinc-900/95 shadow-2xl p-7 backdrop-blur-md" role="region" aria-label="Mandatory Documents Checklist"
             style={{ boxShadow: '0 8px 32px 0 rgba(34,197,94,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.04)' }}>
@@ -159,7 +191,7 @@ export default function MyTrackerPage() {
                     className="w-6 h-6 accent-emerald-500 rounded-lg border-2 border-emerald-300 focus:ring-4 focus:ring-emerald-300/40 transition-all duration-200 shadow-md group-hover:ring-2 group-hover:ring-emerald-200 bg-white dark:bg-zinc-900 focus:outline-emerald-500 focus:outline-2"
                     aria-label={`Mark ${doc.label} as complete`}
                   />
-                  <label htmlFor={`mandatory-${doc.label}`} className="text-lg font-semibold text-zinc-800 dark:text-zinc-100 cursor-pointer group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-200 focus-visible:text-emerald-700 dark:focus-visible:text-emerald-300 outline-none" tabIndex={0} onKeyDown={e => {if(e.key==='Enter'){setMandatoryStatus(prev=>({...prev,[doc.label]:!prev[doc.label]}));}}}>
+                  <label htmlFor={`mandatory-${doc.label}`} className="text-lg font-semibold text-zinc-800 dark:text-zinc-100 cursor-pointer group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-200 focus-visible:text-emerald-700 dark:focus-visible:text-emerald-300 outline-none" tabIndex={0} onKeyDown={e => {if(e.key==='Enter'){setDirty(true);setSaveMessage(null);setMandatoryStatus(prev=>({...prev,[doc.label]:!prev[doc.label]}));}}}>
                     {doc.label}
                   </label>
                 </li>
@@ -175,7 +207,7 @@ export default function MyTrackerPage() {
                     className="w-6 h-6 accent-emerald-500 rounded-lg border-2 border-emerald-300 focus:ring-4 focus:ring-emerald-300/40 transition-all duration-200 shadow-md group-hover:ring-2 group-hover:ring-emerald-200 bg-white dark:bg-zinc-900 focus:outline-emerald-500 focus:outline-2"
                     aria-label={`Mark ${doc} as complete`}
                   />
-                  <label htmlFor={`mandatory-${doc}`} className="text-lg font-semibold text-zinc-800 dark:text-zinc-100 cursor-pointer group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-200 focus-visible:text-emerald-700 dark:focus-visible:text-emerald-300 outline-none" tabIndex={0} onKeyDown={e => {if(e.key==='Enter'){setMandatoryStatus(prev=>({...prev,[doc]:!prev[doc]}));}}}>
+                  <label htmlFor={`mandatory-${doc}`} className="text-lg font-semibold text-zinc-800 dark:text-zinc-100 cursor-pointer group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-200 focus-visible:text-emerald-700 dark:focus-visible:text-emerald-300 outline-none" tabIndex={0} onKeyDown={e => {if(e.key==='Enter'){setDirty(true);setSaveMessage(null);setMandatoryStatus(prev=>({...prev,[doc]:!prev[doc]}));}}}>
                     {doc}
                   </label>
                   <button
@@ -183,6 +215,7 @@ export default function MyTrackerPage() {
                     className="ml-2 text-red-500 hover:text-white hover:bg-red-500 text-base font-bold px-1 rounded transition-all duration-150 focus:outline-emerald-500 focus:outline-2"
                     onClick={() => {
                       if(window.confirm('Are you sure you want to remove this document?')){
+                        setDirty(true); setSaveMessage(null);
                         setCustomMandatoryDocs((prev) => prev.filter((d) => d !== doc));
                         setMandatoryStatus((prev) => {
                           const updated = { ...prev };
@@ -204,10 +237,10 @@ export default function MyTrackerPage() {
                 e.preventDefault();
                 const doc = newMandatoryDoc.trim();
                 if (!doc || DEFAULT_MANDATORY_DOCS.some(d => d.label === doc) || customMandatoryDocs.includes(doc)) return;
+                setDirty(true); setSaveMessage(null);
                 setCustomMandatoryDocs(prev => [...prev, doc]);
                 setMandatoryStatus(prev => ({ ...prev, [doc]: false }));
                 setNewMandatoryDoc("");
-                alert(`Added mandatory document: ${doc}`);
               }}
             >
               <input
@@ -248,7 +281,8 @@ export default function MyTrackerPage() {
                               value={item.status}
                               onChange={async (e) => {
                                 const newStatus = e.target.value;
-                                await supabase.from("shortlists").update({ status: newStatus }).eq("id", item.id);
+                                const { error } = await supabase.from("shortlists").update({ status: newStatus }).eq("id", item.id).eq("user_id", userId!);
+                                if (error) { setSaveMessage("Could not save application status. Please retry."); return; }
                                 setTracker((prev) => prev.map((t) => t.id === item.id ? { ...t, status: newStatus } : t));
                                 setShortlisted((prev) => prev.map((t) => t.id === item.id ? { ...t, status: newStatus } : t));
                               }}
@@ -286,6 +320,7 @@ export default function MyTrackerPage() {
                           <button
                             className="ml-1 text-xs text-red-500 hover:text-red-700 font-bold px-1"
                             onClick={() => {
+                              setDirty(true); setSaveMessage(null);
                               setCustomDocs((prev) => prev.filter((d) => d !== doc));
                               setDocStatus((prev) => {
                                 const updated: Record<string, Record<string, boolean>> = {};
@@ -314,6 +349,7 @@ export default function MyTrackerPage() {
                             <button
                               className={`w-9 h-9 rounded-full border-2 border-zinc-300 dark:border-zinc-700 flex items-center justify-center transition-all duration-200 shadow-md hover:scale-110 hover:border-emerald-400 hover:ring-2 hover:ring-emerald-100 ${docStatus[item.id]?.[doc] ? 'bg-gradient-to-br from-green-300 to-emerald-400 border-green-600 dark:from-green-700 dark:to-emerald-700 dark:border-green-700 shadow-lg scale-105' : 'bg-white dark:bg-zinc-800 hover:bg-emerald-50 dark:hover:bg-zinc-700'}`}
                               onClick={() => {
+                                setDirty(true); setSaveMessage(null);
                                 setDocStatus((prev) => ({
                                   ...prev,
                                   [item.id]: {
@@ -340,6 +376,7 @@ export default function MyTrackerPage() {
                         onSubmit={e => {
                           e.preventDefault();
                           if (!newDoc.trim() || UNI_DOCS.includes(newDoc.trim()) || customDocs.includes(newDoc.trim())) return;
+                          setDirty(true); setSaveMessage(null);
                           setCustomDocs(prev => [...prev, newDoc.trim()]);
                           setDocStatus(prev => {
                             const updated = { ...prev };
@@ -382,7 +419,7 @@ export default function MyTrackerPage() {
               </table>
             </div>
           </div>
-        </div>
+        </fieldset>
         </>
       )}
     </main>

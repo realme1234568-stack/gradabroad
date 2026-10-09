@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useUser } from "@/lib/UserContext";
 import { supabase } from "@/lib/supabaseClient";
 
 type Program = {
@@ -27,20 +28,16 @@ type ProgramMeta = {
 
 type Props = {
   programs: Program[];
-  ignoreFilters?: boolean;
 };
 
-export default function ProgramList({ programs, ignoreFilters }: Props) {
+export default function ProgramList({ programs }: Props) {
   const router = useRouter();
+  const { email } = useUser();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [shortlistReady, setShortlistReady] = useState(false);
   // Use composite key for shortlist state
   const [statuses, setStatuses] = useState<Record<string, Status>>({});
   const [shortlistedKeys, setShortlistedKeys] = useState<Set<string>>(new Set());
-  const [tuitionFilter, setTuitionFilter] = useState("any");
-  const [languageFilter, setLanguageFilter] = useState("any");
-  const [gpaMax, setGpaMax] = useState<string>("");
-  const [gmatFilter, setGmatFilter] = useState("any");
-  const [applyFilter, setApplyFilter] = useState("any");
-  const [intakeFilter, setIntakeFilter] = useState("any");
 
   // Per-program meta: note, status, deadline
   const [programMeta, setProgramMeta] = useState<Record<string, ProgramMeta>>({});
@@ -53,15 +50,31 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
 
   // Fetch user's shortlist from Supabase on mount
   useEffect(() => {
+    let cancelled = false;
     const fetchShortlistAndMeta = async () => {
+      setShortlistReady(false);
+      setErrorMessage(null);
       const { data: userData } = await supabase.auth.getUser();
       const user = userData.user;
-      if (!user) return;
+      if (cancelled) return;
+      if (!user) {
+        setShortlistedKeys(new Set());
+        setProgramMeta({});
+        setStatuses({});
+        setShortlistReady(true);
+        return;
+      }
       const { data, error } = await supabase
         .from("shortlists")
         .select("course_name, university_name, note, status, deadline")
         .eq("user_id", user.id);
-      if (!error && data) {
+      if (cancelled) return;
+      if (error) {
+        setErrorMessage("Could not load your shortlist. Refresh to retry.");
+        return;
+      }
+      setShortlistReady(true);
+      if (data) {
         // Find matching program keys
         const keys = new Set(
           programs
@@ -102,9 +115,11 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
         setProgramMeta(meta);
       }
     };
-    fetchShortlistAndMeta();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [programs]);
+    fetchShortlistAndMeta().catch(() => {
+      if (!cancelled) setErrorMessage("Could not load your shortlist. Refresh to retry.");
+    });
+    return () => { cancelled = true; };
+  }, [programs, email]);
 
   // Toggle shortlist (add/remove)
   const handleShortlist = async (program: Program) => {
@@ -127,12 +142,14 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
       user_id: user.id,
       university_name: program.university_name,
       course_name: program.course_name,
+      program_level: program.level?.replace(/s$/, "") ?? null,
       deadline: null,
       status: "Shortlisted",
     });
     if (error) {
       if (error.code === "23505") {
         // Unique violation, already exists
+        setShortlistedKeys((prev) => new Set(prev).add(key));
         setStatus(key, "shortlisted");
       } else {
         setStatus(key, "error");
@@ -151,95 +168,36 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
     field: keyof ProgramMeta,
     value: string | null
   ) => {
-    setMetaLoading((prev) => ({ ...prev, [program.id]: true }));
-    const { data: userData } = await supabase.auth.getUser();
-    const user = userData.user;
-    if (!user) return;
-    const { error } = await supabase
-      .from("shortlists")
-      .update({ [field]: value })
-      .eq("user_id", user.id)
-      .eq("university_name", program.university_name)
-      .eq("course_name", program.course_name);
-    if (!error) {
-      setProgramMeta((prev) => ({
-        ...prev,
-        [program.id]: {
-          ...prev[program.id],
-          [field]: value,
-        },
-      }));
+    const key = getKey(program);
+    setMetaLoading((prev) => ({ ...prev, [key]: true }));
+    setErrorMessage(null);
+    try {
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData.user) throw new Error("Sign in to save changes.");
+      const { data, error } = await supabase
+        .from("shortlists")
+        .update({ [field]: value })
+        .eq("user_id", userData.user.id)
+        .eq("university_name", program.university_name)
+        .eq("course_name", program.course_name)
+        .select("id");
+      if (error || !data?.length) throw new Error("Save failed");
+      setProgramMeta((prev) => ({ ...prev, [key]: { ...prev[key], [field]: value } }));
+    } catch {
+      setErrorMessage("Could not save this change. Please try again.");
+    } finally {
+      setMetaLoading((prev) => ({ ...prev, [key]: false }));
     }
-    setMetaLoading((prev) => ({ ...prev, [program.id]: false }));
   };
-
-  const filteredPrograms = useMemo(() => {
-    if (ignoreFilters) return programs;
-    const normalizedGpa = gpaMax.trim() === "" ? null : Number(gpaMax);
-    return programs.filter((program) => {
-      const languageValue = (program.language ?? "").toLowerCase();
-      const tuitionValue = (program.tuition_type ?? "").toLowerCase();
-      const applyValue = (program.application_mode ?? "").toLowerCase();
-      const intakeValue = (program.intake ?? "").toLowerCase();
-      const matchesTuition =
-        tuitionFilter === "any"
-          ? true
-          : tuitionFilter === "free-low"
-            ? ["free", "low", "low cost", "low-cost"].some((value) =>
-                tuitionValue.includes(value)
-              )
-            : tuitionValue.includes(tuitionFilter);
-      const matchesLanguage =
-        languageFilter === "any"
-          ? true
-          : languageValue.includes(languageFilter);
-      const matchesGpa =
-        normalizedGpa === null
-          ? true
-          : program.gpa_requirement === null ||
-            program.gpa_requirement === undefined
-            ? true
-            : program.gpa_requirement <= normalizedGpa;
-      const matchesGmat =
-        gmatFilter === "any"
-          ? true
-          : gmatFilter === "required"
-            ? program.gmat_required === true
-            : program.gmat_required === false;
-      const matchesApply =
-        applyFilter === "any" ? true : applyValue.includes(applyFilter);
-      const matchesIntake =
-        intakeFilter === "any" ? true : intakeValue.includes(intakeFilter);
-      return (
-        matchesTuition &&
-        matchesLanguage &&
-        matchesGpa &&
-        matchesGmat &&
-        matchesApply &&
-        matchesIntake
-      );
-    });
-  }, [
-    programs,
-    tuitionFilter,
-    languageFilter,
-    gpaMax,
-    gmatFilter,
-    applyFilter,
-    intakeFilter,
-    ignoreFilters
-  ]);
 
   return (
     <div className="mt-8 space-y-6">
+      {errorMessage && <p role="alert">{errorMessage}</p>}
       <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm shadow-black/5 dark:border-white/10 dark:bg-white/5">
         <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
           <span className="rounded-full bg-black/5 px-3 py-1 dark:bg-white/10">
-            Showing {filteredPrograms.length} of {programs.length}
+            Showing {programs.length} of {programs.length}
           </span>
-        </div>
-        <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {/* ...existing code... */}
         </div>
       </section>
       <div className="grid gap-6 md:grid-cols-2">
@@ -248,7 +206,7 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
           No programs yet. Add some rows in Supabase to see them here.
         </div>
       ) : (
-        filteredPrograms.map((program) => {
+        programs.map((program) => {
           const key = getKey(program);
           const status = statuses[key] ?? "idle";
           const isLoading = status === "loading";
@@ -309,7 +267,7 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
                   onClick={() => {
                     if (!isShortlisted) handleShortlist(program);
                   }}
-                  disabled={isLoading || isShortlisted}
+                  disabled={!shortlistReady || isLoading || isShortlisted}
                   className={`inline-flex items-center gap-2 rounded-full bg-[radial-gradient(circle_at_top,_#34d399,_#22d3ee,_#0ea5e9)] px-4 py-2 text-xs font-semibold text-zinc-900 shadow-md shadow-emerald-300/40 transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70 ${isShortlisted ? 'ring-2 ring-emerald-400' : ''}`}
                 >
                   {isLoading ? (
@@ -334,8 +292,12 @@ export default function ProgramList({ programs, ignoreFilters }: Props) {
                       <textarea
                         className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
                         rows={2}
-                        value={programMeta[key]?.note || ""}
-                        onChange={(e) => handleMetaChange(program, "note", e.target.value)}
+                        defaultValue={programMeta[key]?.note || ""}
+                        onBlur={(e) => {
+                          if (e.target.value !== (programMeta[key]?.note || "")) {
+                            void handleMetaChange(program, "note", e.target.value);
+                          }
+                        }}
                         disabled={metaLoading[key]}
                         placeholder="Add your notes..."
                       />

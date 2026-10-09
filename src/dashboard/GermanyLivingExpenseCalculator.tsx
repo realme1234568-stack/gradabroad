@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { exportExpensesToPDF } from './exportExpensesToPDF';
-import { useUser } from "@/lib/UserContext";
 import { Card, Button, Input, Divider } from "@mui/material";
 
 const defaultGermanyExpenses = [
@@ -12,7 +11,6 @@ const defaultGermanyExpenses = [
 
 export default function GermanyLivingExpenseCalculator() {
   const [expenses, setExpenses] = useState(defaultGermanyExpenses);
-  const { email, firstName } = useUser ? useUser() : { email: null, firstName: null };
   const [exporting, setExporting] = useState(false);
   const [newHead, setNewHead] = useState("");
   const [newAmount, setNewAmount] = useState("");

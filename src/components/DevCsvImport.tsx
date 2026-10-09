@@ -113,7 +113,8 @@ export default function DevCsvImport() {
 
     const payload = rows.map((row) => {
       if (table === "programs") {
-        const { user_id, ...rest } = row;
+        const rest = { ...row };
+        delete rest.user_id;
         return rest;
       }
       const userId = row.user_id || user.id;

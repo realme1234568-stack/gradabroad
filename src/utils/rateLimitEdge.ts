@@ -12,7 +12,7 @@ export async function rateLimit(request: Request): Promise<NextResponse | null> 
   try {
     await rateLimiter.consume(ip);
     return null;
-  } catch (err) {
+  } catch {
     // Log rate limit hit
     console.warn(`[RateLimit] Too many requests from IP: ${ip}`);
     return NextResponse.json(
