@@ -1,37 +1,47 @@
-import { NextResponse } from "next/server";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
-import { rateLimit } from '@/utils/rateLimitEdge';
+import { NextResponse, type NextRequest } from "next/server";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { rateLimit } from "@/utils/rateLimitEdge";
 
-export async function GET(request: Request) {
-  const rateLimitResponse = await rateLimit(request);
-  if (rateLimitResponse) return rateLimitResponse;
-
+export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
-  const code = searchParams.get("code");
+  const changedCookies = new Map<string, { name: string; value: string; options: CookieOptions }>();
+  const redirect = (path: string) => {
+    const response = NextResponse.redirect(new URL(path, origin));
+    for (const { name, value, options } of changedCookies.values()) {
+      response.cookies.set(name, value, options);
+    }
+    response.headers.set("Cache-Control", "private, no-store");
+    return response;
+  };
 
-  if (code) {
-    const cookieStore = await cookies();
+  try {
+    if (await rateLimit(request)) return redirect("/auth/error?reason=rate-limited");
+    if (searchParams.has("error")) {
+      return redirect(searchParams.get("error") === "access_denied"
+        ? "/auth/error?reason=cancelled" : "/auth/error?reason=failed");
+    }
+    const code = searchParams.get("code");
+    if (!code) return redirect("/auth/error?reason=invalid-link");
+
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
       {
         cookies: {
-          get(name) {
-            return cookieStore.get(name)?.value;
-          },
-          set(name, value, options) {
-            cookieStore.set({ name, value, ...options });
-          },
-          remove(name, options) {
-            cookieStore.set({ name, value: "", ...options });
+          getAll: () => request.cookies.getAll(),
+          setAll: (cookies) => {
+            cookies.forEach(({ name, value, options }) => {
+              request.cookies.set(name, value);
+              changedCookies.set(name, { name, value, options });
+            });
           },
         },
       }
     );
-
-    await supabase.auth.exchangeCodeForSession(code);
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error || !data.session) return redirect("/auth/error?reason=invalid-link");
+    return redirect("/");
+  } catch {
+    return redirect("/auth/error?reason=unavailable");
   }
-
-  return NextResponse.redirect(origin);
 }

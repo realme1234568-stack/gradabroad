@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { normalizeProgramLevel } from "@/lib/programLevel";
 import { useUser } from "@/lib/UserContext";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -142,7 +143,7 @@ export default function ProgramList({ programs }: Props) {
       user_id: user.id,
       university_name: program.university_name,
       course_name: program.course_name,
-      program_level: program.level?.replace(/s$/, "") ?? null,
+      program_level: normalizeProgramLevel(program.level),
       deadline: null,
       status: "Shortlisted",
     });

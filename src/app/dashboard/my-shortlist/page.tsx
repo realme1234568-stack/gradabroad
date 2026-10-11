@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { getProgramLevel } from "@/lib/programLevel";
 import { supabase } from "@/lib/supabaseClient";
 
 type ShortlistItem = {
@@ -8,7 +9,7 @@ type ShortlistItem = {
   course_name: string;
   deadline: string;
   status: string;
-  program_level?: string; // 'bachelor' | 'master' | undefined
+  program_level?: string | null; // 'bachelor' | 'master' | undefined
 };
 
 export default function MyShortlistPage() {
@@ -33,26 +34,14 @@ export default function MyShortlistPage() {
     setShortlist((prev) => prev.filter((item) => item.id !== id));
   };
 
-  // Helper to infer program level if missing
-  function getLevel(item: ShortlistItem) {
-    const level = item.program_level?.toLowerCase?.();
-    if (level === "bachelor" || level === "master") return level;
-    if (item.course_name?.toLowerCase().startsWith("b.sc.")) return "bachelor";
-    if (item.course_name?.toLowerCase().startsWith("m.sc.")) return "master";
-    return undefined;
-  }
-
-  // Sort shortlist so masters always come before bachelors
-  const sortedShortlist = [...shortlist].sort((a, b) => {
-    const aLevel = getLevel(a);
-    const bLevel = getLevel(b);
-    if (aLevel === bLevel) return 0;
-    if (aLevel === "master" || !aLevel) return -1;
-    if (bLevel === "master" || !bLevel) return 1;
-    return 0;
-  });
-  const masters = sortedShortlist.filter(item => getLevel(item) === "master");
-  const bachelors = sortedShortlist.filter(item => getLevel(item) === "bachelor");
+  const groups = [
+    { level: "master", title: "Your Masters Program Shortlist" },
+    { level: "bachelor", title: "Your Bachelors Program Shortlist" },
+    { level: null, title: "Other saved programs — degree level unknown" },
+  ].map((group) => ({
+    ...group,
+    items: shortlist.filter((item) => getProgramLevel(item) === group.level),
+  }));
 
   return (
     <main className="max-w-2xl mx-auto p-6">
@@ -65,35 +54,11 @@ export default function MyShortlistPage() {
         </div>
       ) : (
         <>
-          {masters.length > 0 && (
-            <>
-              <h2 className="text-lg font-semibold mb-2">Your Masters Program Shortlist</h2>
-              <div className="space-y-4 mb-8">
-                {masters.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between border-b border-black/10 py-2 last:border-b-0 dark:border-white/10">
-                    <div>
-                      <div className="font-semibold">{item.university_name}</div>
-                      <div className="text-xs text-zinc-500">{item.course_name}</div>
-                    </div>
-                    <button
-                      className="ml-2 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-200"
-                      onClick={() => handleRemoveShortlist(item.id)}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-          {bachelors.length > 0 && (
-            <>
-              {masters.length > 0 && (
-                <hr className="my-8 border-t-2 border-emerald-200" />
-              )}
-              <h2 className="text-lg font-semibold mb-2">Your Bachelors Program Shortlist</h2>
+          {groups.filter((group) => group.items.length > 0).map((group) => (
+            <section key={group.level ?? "unknown"} className="mb-8" aria-label={group.title}>
+              <h2 className="text-lg font-semibold mb-2">{group.title}</h2>
               <div className="space-y-4">
-                {bachelors.map((item) => (
+                {group.items.map((item) => (
                   <div key={item.id} className="flex items-center justify-between border-b border-black/10 py-2 last:border-b-0 dark:border-white/10">
                     <div>
                       <div className="font-semibold">{item.university_name}</div>
@@ -108,8 +73,8 @@ export default function MyShortlistPage() {
                   </div>
                 ))}
               </div>
-            </>
-          )}
+            </section>
+          ))}
         </>
       )}
     </main>

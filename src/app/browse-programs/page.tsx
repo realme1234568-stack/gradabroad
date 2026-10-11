@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { mastersPrograms } from "@/lib/mastersPrograms";
 import ProgramList from "@/components/ProgramList";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -21,72 +22,6 @@ export default function BrowseProgramsPage() {
   const [bachelorPrograms, setBachelorPrograms] = useState<Program[]>([]);
   const [loadingBachelors, setLoadingBachelors] = useState(false);
 
-  // Hardcoded master's programs (keep as is)
-  const mastersPrograms: Program[] = [
-    {
-      id: "1",
-      university_name: "Leuphana University of Lüneburg",
-      course_name: "M.Sc. Management & Entrepreneurship",
-      level: "masters",
-      language: "English",
-    },
-    {
-      id: "2",
-      university_name: "Otto von Guericke University Magdeburg",
-      course_name: "M.Sc. International Management, Marketing & Entrepreneurship (IMME)",
-      level: "masters",
-      language: "English",
-    },
-    {
-      id: "3",
-      university_name: "Chemnitz University of Technology",
-      course_name: "M.Sc. Management & Economics",
-      level: "masters",
-      language: "English",
-    },
-    {
-      id: "4",
-      university_name: "University of Duisburg-Essen",
-      course_name: "M.Sc. Economics (Applied / Business)",
-      level: "masters",
-      language: "English",
-    },
-    {
-      id: "5",
-      university_name: "University of Siegen",
-      course_name: "M.Sc. Economics / Economic Policy",
-      level: "masters",
-      language: "English",
-    },
-    {
-      id: "6",
-      university_name: "University of Cologne",
-      course_name: "M.Sc. Economics",
-      level: "masters",
-      language: "English",
-    },
-    {
-      id: "7",
-      university_name: "University of Passau",
-      course_name: "M.Sc. International Economics & Business",
-      level: "masters",
-      language: "English",
-    },
-    {
-      id: "8",
-      university_name: "TU Berlin",
-      course_name: "IMES",
-      level: "masters",
-      language: "English",
-    },
-    {
-      id: "9",
-      university_name: "Technical University of Munich",
-      course_name: "M.Sc. Management and digital technology",
-      level: "masters",
-      language: "English",
-    },
-  ];
 
   const [loadError, setLoadError] = useState<string | null>(null);
 

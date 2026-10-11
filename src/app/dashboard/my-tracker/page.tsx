@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { FaPassport, FaCertificate, FaGlobe, FaFileAlt, FaUserGraduate } from "react-icons/fa";
+import { getProgramLevel } from "@/lib/programLevel";
 import { supabase } from "@/lib/supabaseClient";
 
 
@@ -9,7 +10,7 @@ type ShortlistItem = {
   university_name: string;
   course_name: string;
   status: string;
-  program_level?: string; // 'bachelor' | 'master' | undefined
+  program_level?: string | null; // 'bachelor' | 'master' | undefined
 };
 
 const DEFAULT_MANDATORY_DOCS: { label: string; icon: React.ReactElement }[] = [
@@ -112,6 +113,10 @@ export default function MyTrackerPage() {
       setSaving(false);
     }
   }
+  const visiblePrograms = shortlisted.filter((item) =>
+    programLevel === "all" || getProgramLevel(item) === programLevel
+  );
+  const unknownCount = shortlisted.filter((item) => getProgramLevel(item) === null).length;
   return (
     <main
       className="max-w-7xl mx-auto p-8 min-h-screen relative"
@@ -165,6 +170,9 @@ export default function MyTrackerPage() {
               Master’s
             </button>
           </div>
+        {unknownCount > 0 && (
+          <p className="mb-4 text-sm">{unknownCount} saved program(s) have an unknown degree level and appear under All.</p>
+        )}
         <div className="mb-4 flex items-center gap-4">
           <button type="button" onClick={saveChecklist} disabled={saving || !dirty}
             className="rounded-lg bg-emerald-600 px-4 py-2 text-white disabled:opacity-50">
@@ -267,13 +275,7 @@ export default function MyTrackerPage() {
                 <thead>
                   <tr>
                     <th className="p-3 border-b-2 text-left align-bottom text-lg font-bold text-zinc-700 dark:text-zinc-200">Docs</th>
-                    {shortlisted
-                      .filter(item =>
-                        programLevel === "all" ||
-                        (programLevel === "bachelor" && (item.program_level?.toLowerCase() === "bachelor")) ||
-                        (programLevel === "master" && (item.program_level?.toLowerCase() === "master"))
-                      )
-                      .map((item) => (
+                    {visiblePrograms.map((item) => (
                       <th key={item.id} className="p-3 border-b-2 text-center align-top">
                         <div className="flex flex-col items-center gap-2 min-h-[120px]">
                           <div className="w-full flex justify-center" style={{ minHeight: 0 }}>
@@ -337,13 +339,7 @@ export default function MyTrackerPage() {
                           </button>
                         )}
                       </td>
-                      {shortlisted
-                        .filter(item =>
-                          programLevel === "all" ||
-                          (programLevel === "bachelor" && (item.program_level?.toLowerCase() === "bachelor")) ||
-                          (programLevel === "master" && (item.program_level?.toLowerCase() === "master"))
-                        )
-                        .map((item) => (
+                      {visiblePrograms.map((item) => (
                         <td key={item.id + doc} className="p-3 text-center align-middle">
                           <div className="flex justify-center items-center">
                             <button
@@ -405,13 +401,7 @@ export default function MyTrackerPage() {
                         </button>
                       </form>
                     </td>
-                    {shortlisted
-                      .filter(item =>
-                        programLevel === "all" ||
-                        (programLevel === "bachelor" && (item.program_level?.toLowerCase() === "bachelor")) ||
-                        (programLevel === "master" && (item.program_level?.toLowerCase() === "master"))
-                      )
-                      .map((item) => (
+                    {visiblePrograms.map((item) => (
                       <td key={item.id + 'add-doc'} className="bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-zinc-900 dark:to-zinc-800" />
                     ))}
                   </tr>

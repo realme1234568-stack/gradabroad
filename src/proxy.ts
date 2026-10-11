@@ -1,31 +1,45 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createServerClient } from "@supabase/ssr";
+import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
 export async function proxy(request: NextRequest) {
-  // Restrict /dashboard and /application-tracker to signed-in users
   const pathname = request.nextUrl.pathname;
-  if (pathname.startsWith("/dashboard") || pathname.startsWith("/application-tracker")) {
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
-      {
-        cookies: {
-          get: (name: string) => request.cookies.get(name)?.value,
-          set: () => {},
-          remove: () => {},
-        },
-      }
-    );
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      return NextResponse.redirect(new URL("/", request.url));
+  const protectedRoute = pathname === "/dashboard" || pathname.startsWith("/dashboard/") ||
+    pathname === "/application-tracker" || pathname.startsWith("/application-tracker/");
+  if (!protectedRoute) return NextResponse.next({ request });
+
+  const changedCookies = new Map<string, { name: string; value: string; options: CookieOptions }>();
+  const finish = (response: NextResponse) => {
+    for (const { name, value, options } of changedCookies.values()) {
+      response.cookies.set(name, value, options);
     }
+    response.headers.set("Cache-Control", "private, no-store");
+    return response;
+  };
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "",
+    {
+      cookies: {
+        getAll: () => request.cookies.getAll(),
+        setAll: (cookies) => {
+          cookies.forEach(({ name, value, options }) => {
+            request.cookies.set(name, value);
+            changedCookies.set(name, { name, value, options });
+          });
+        },
+      },
+    }
+  );
+  try {
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error || !user) {
+      return finish(NextResponse.redirect(new URL("/auth/error?reason=session", request.url)));
+    }
+  } catch {
+    return finish(NextResponse.redirect(new URL("/auth/error?reason=unavailable", request.url)));
   }
-  return NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  // Build the forwarded request after refresh so Server Components see the new cookies too.
+  return finish(NextResponse.next({ request }));
 }
 
 export const config = {
