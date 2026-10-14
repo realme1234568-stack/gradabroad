@@ -6,7 +6,9 @@ const db = vi.hoisted(() => ({
   preferences: null as Record<string, unknown> | null,
   failSave: false,
   failLoad: false,
+  throwLoad: false,
   user: 'user-a',
+  status: 'Applied',
   updates: [] as Record<string, unknown>[],
 }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh() {} }) }));
@@ -15,12 +17,12 @@ vi.mock('@/lib/supabaseClient', () => ({
   supabase: {
     auth: { getUser: async () => ({ data: { user: { id: db.user } } }) },
     from(table: string) {
-      const rows = [{ id: 'saved-row', university_name: 'TU Berlin', course_name: 'IMES', status: 'Applied', note: 'Existing note', deadline: null, program_level: 'master' }];
+      const rows = [{ id: 'saved-row', university_name: 'TU Berlin', course_name: 'IMES', status: db.status, note: 'Existing note', deadline: null, program_level: 'master' }];
       const result = () => ({ data: table === 'tracker_preferences' ? db.preferences : rows, error: db.failLoad ? new Error('Unavailable') : null });
       const chain = {
         select: () => chain,
         eq: () => chain,
-        order: async () => result(),
+        order: async () => { if (db.throwLoad) throw new Error('Network unavailable'); return result(); },
         maybeSingle: async () => result(),
         then: (resolve: (value: ReturnType<typeof result>) => unknown) => Promise.resolve(result()).then(resolve),
       };
@@ -38,8 +40,13 @@ vi.mock('@/lib/supabaseClient', () => ({
 }));
 import MyTrackerPage from '@/app/dashboard/my-tracker/page';
 import ProgramList from '@/components/ProgramList';
+import Dashboard from '@/app/dashboard/page';
+import MyShortlist from '@/app/dashboard/my-shortlist/page';
+import OlderTracker from '@/app/application-tracker/page';
+import { checklistDrafts } from '@/lib/checklistDraft';
+import { normalizeApplicationStatus } from '@/lib/applicationStatus';
 
-beforeEach(() => { db.preferences = null; db.failSave = false; db.failLoad = false; db.user = 'user-a'; db.updates = []; });
+beforeEach(() => { checklistDrafts.clear(); db.preferences = null; db.failSave = false; db.failLoad = false; db.throwLoad = false; db.user = 'user-a'; db.updates = []; db.status = 'Applied'; });
 afterEach(cleanup);
 
 test('saved checklist and custom documents survive remount', async () => {
@@ -100,4 +107,70 @@ test('catalogue recognises saved programs and updates metadata using its display
   expect(db.updates).toHaveLength(1);
   fireEvent.blur(note);
   await waitFor(() => expect(db.updates).toContainEqual({ note: 'Updated note' }));
+});
+
+
+test.each(['Admit', 'Accepted', 'Interview', 'Waitlisted'])('status %s is represented consistently on every editable screen', async stored => {
+  db.status = stored;
+  const expected = normalizeApplicationStatus(stored);
+  for (const component of [
+    <ProgramList key="catalogue" programs={[{ id: 'catalogue-id', university_name: 'TU Berlin', course_name: 'IMES', level: 'masters', language: 'English' }]} />,
+    <Dashboard key="dashboard" />,
+    <MyTrackerPage key="tracker" />,
+  ]) {
+    const view = render(component);
+    const status = await screen.findByRole('combobox') as HTMLSelectElement;
+    await waitFor(() => expect(status.value).toBe(expected));
+    const values = Array.from(status.options).map(option => option.value);
+    expect(values).toEqual(stored === 'Waitlisted' ? ['Waitlisted', 'Shortlisted', 'Applied', 'Interview', 'Accepted', 'Rejected'] : ['Shortlisted', 'Applied', 'Interview', 'Accepted', 'Rejected']);
+    fireEvent.change(status, { target: { value: 'Accepted' } });
+    await waitFor(() => expect(db.updates).toContainEqual({ status: 'Accepted' }));
+    view.unmount(); db.updates = [];
+  }
+});
+
+
+test.each([['dashboard', Dashboard], ['shortlist', MyShortlist], ['older tracker', OlderTracker]])('%s explains loading failures and retries', async (_name, Page) => {
+  db.failLoad = true; render(<Page />);
+  await screen.findByRole('alert');
+  expect(screen.queryByText(/No universities shortlisted yet|No tracker entries yet/)).toBeNull();
+  db.failLoad = false;
+  fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+  await waitFor(() => expect(screen.queryByRole('alert')).toBeNull());
+  expect(screen.getAllByText('TU Berlin').length).toBeGreaterThan(0);
+});
+
+test('internal navigation can be cancelled and checklist drafts survive remount until saved', async () => {
+  const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
+  const view = render(<><a href="/dashboard">Dashboard link</a><MyTrackerPage /></>);
+  fireEvent.click(await screen.findByLabelText('Mark Passport as complete'));
+  const link = screen.getByText('Dashboard link');
+  expect(fireEvent.click(link)).toBe(false);
+  expect(confirm).toHaveBeenCalledTimes(1);
+  expect((screen.getByLabelText('Mark Passport as complete') as HTMLInputElement).checked).toBe(true);
+  view.unmount();
+  const restored = render(<MyTrackerPage />);
+  await screen.findByText('Restored your unsaved checklist changes.');
+  expect((screen.getByLabelText('Mark Passport as complete') as HTMLInputElement).checked).toBe(true);
+  fireEvent.click(screen.getByRole('button', { name: 'Save checklist' }));
+  await screen.findByText('Checklist saved.');
+  expect(checklistDrafts.size).toBe(0);
+  restored.unmount(); confirm.mockRestore();
+});
+
+test('unsaved checklist drafts are isolated by account', async () => {
+  const view = render(<MyTrackerPage />);
+  fireEvent.click(await screen.findByLabelText('Mark Passport as complete'));
+  view.unmount(); db.user = 'user-b'; render(<MyTrackerPage />);
+  expect((await screen.findByLabelText('Mark Passport as complete') as HTMLInputElement).checked).toBe(false);
+  expect(screen.queryByText('Restored your unsaved checklist changes.')).toBeNull();
+});
+
+
+test.each([Dashboard, MyShortlist, OlderTracker])('a thrown network error ends loading and offers retry', async Page => {
+  db.throwLoad = true; render(<Page />);
+  await screen.findByRole('alert');
+  db.throwLoad = false; fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+  await waitFor(() => expect(screen.queryByRole('alert')).toBeNull());
+  expect(screen.getAllByText('TU Berlin').length).toBeGreaterThan(0);
 });

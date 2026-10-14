@@ -1,4 +1,5 @@
 "use client";
+import { normalizeApplicationStatus } from "@/lib/applicationStatus";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -13,6 +14,7 @@ type TrackerItem = {
 const stageColors: Record<string, string> = {
   "Shortlisted": "bg-emerald-400/20 text-emerald-700",
   "Applied": "bg-cyan-400/20 text-cyan-700",
+  "Interview": "bg-amber-400/20 text-amber-700",
   "Accepted": "bg-green-400/20 text-green-700",
   "Rejected": "bg-rose-400/20 text-rose-700",
 };
@@ -20,19 +22,28 @@ const stageColors: Record<string, string> = {
 export default function ApplicationTrackerPage() {
   const [trackerItems, setTrackerItems] = useState<TrackerItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loadAttempt, setLoadAttempt] = useState(0);
 
   useEffect(() => {
     const fetchTracker = async () => {
       setLoading(true);
-      const { data } = await supabase
+      setLoadError(null);
+      try {
+      const { data, error: queryError } = await supabase
         .from("application_tracker")
         .select("id, university_name, course_name, status, checklist")
         .order("created_at", { ascending: false });
+      if (queryError) throw queryError;
       setTrackerItems(data ?? []);
-      setLoading(false);
+      } catch {
+        setLoadError("Could not load your application tracker. Please retry.");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchTracker();
-  }, []);
+  }, [loadAttempt]);
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-12">
@@ -46,7 +57,7 @@ export default function ApplicationTrackerPage() {
           <div className="rounded-2xl border border-dashed border-black/20 bg-white/60 p-6 text-sm text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
             Loading tracker entries...
           </div>
-        ) : trackerItems.length === 0 ? (
+        ) : loadError ? (<div role="alert" className="rounded-xl border border-red-300 p-4"><p>{loadError}</p><button type="button" className="mt-2 rounded border px-3 py-2" onClick={() => setLoadAttempt(attempt => attempt + 1)}>Retry</button></div>) : trackerItems.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-black/20 bg-white/60 p-6 text-sm text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
             No tracker entries yet. Add rows in Supabase to see them here.
           </div>
@@ -68,10 +79,10 @@ export default function ApplicationTrackerPage() {
                 </div>
                 <span
                   className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                    stageColors[item.status] ?? "bg-emerald-400/20 text-emerald-200"
+                    stageColors[normalizeApplicationStatus(item.status)] ?? "bg-emerald-400/20 text-emerald-200"
                   }`}
                 >
-                  {item.status}
+                  {normalizeApplicationStatus(item.status)}
                 </span>
               </div>
               <div className="mt-4">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getProgramLevel } from "@/lib/programLevel";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -15,23 +15,50 @@ type ShortlistItem = {
 export default function MyShortlistPage() {
   const [shortlist, setShortlist] = useState<ShortlistItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loadAttempt, setLoadAttempt] = useState(0);
+
+  const [removing, setRemoving] = useState<string | null>(null);
+  const [removeError, setRemoveError] = useState<string | null>(null);
+  const removalBusy = useRef(false);
 
   useEffect(() => {
     const fetchShortlist = async () => {
       setLoading(true);
-      const { data } = await supabase
+      setLoadError(null);
+      try {
+      const { data, error: queryError } = await supabase
         .from("shortlists")
         .select("id, university_name, course_name, deadline, status, program_level")
         .order("created_at", { ascending: false });
+      if (queryError) throw queryError;
       setShortlist(data ?? []);
-      setLoading(false);
+      } catch {
+        setLoadError("Could not load your shortlist. Please retry.");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchShortlist();
-  }, []);
+  }, [loadAttempt]);
 
   const handleRemoveShortlist = async (id: string) => {
-    await supabase.from("shortlists").delete().eq("id", id);
-    setShortlist((prev) => prev.filter((item) => item.id !== id));
+    if (removalBusy.current) return;
+    removalBusy.current = true;
+    setRemoving(id);
+    setRemoveError(null);
+    try {
+      const { data, error } = await supabase.from("shortlists").delete().eq("id", id).select("id");
+      if (error || !data?.some((row: { id: string }) => row.id === id)) {
+        throw new Error("Removal was not confirmed");
+      }
+      setShortlist((prev) => prev.filter((item) => item.id !== id));
+    } catch {
+      setRemoveError("Could not remove this program. It is still shown here; please retry.");
+    } finally {
+      removalBusy.current = false;
+      setRemoving(null);
+    }
   };
 
   const groups = [
@@ -46,9 +73,10 @@ export default function MyShortlistPage() {
   return (
     <main className="max-w-2xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">My Shortlist</h1>
+      {removeError && <p role="alert" className="mb-4 text-red-700 dark:text-red-300">{removeError}</p>}
       {loading ? (
         <div>Loading...</div>
-      ) : shortlist.length === 0 ? (
+      ) : loadError ? (<div role="alert" className="rounded-xl border border-red-300 p-4"><p>{loadError}</p><button type="button" className="mt-2 rounded border px-3 py-2" onClick={() => setLoadAttempt(attempt => attempt + 1)}>Retry</button></div>) : shortlist.length === 0 ? (
         <div className="rounded-xl border border-dashed border-black/20 bg-white/60 p-4 text-sm text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
           No universities shortlisted yet.
         </div>
@@ -66,9 +94,10 @@ export default function MyShortlistPage() {
                     </div>
                     <button
                       className="ml-2 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-200"
+                      disabled={removing !== null}
                       onClick={() => handleRemoveShortlist(item.id)}
                     >
-                      Remove
+                      {removing === item.id ? "Removing…" : "Remove"}
                     </button>
                   </div>
                 ))}

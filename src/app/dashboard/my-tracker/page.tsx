@@ -1,4 +1,7 @@
 "use client";
+import { checklistDrafts } from "@/lib/checklistDraft";
+import ApplicationStatusOptions from "@/components/ApplicationStatusOptions";
+import { normalizeApplicationStatus } from "@/lib/applicationStatus";
 import React, { useEffect, useState } from "react";
 import { FaPassport, FaCertificate, FaGlobe, FaFileAlt, FaUserGraduate } from "react-icons/fa";
 import { getProgramLevel } from "@/lib/programLevel";
@@ -31,6 +34,7 @@ export default function MyTrackerPage() {
   const [dirty, setDirty] = useState(false);
   const [tracker, setTracker] = useState<ShortlistItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [error, setError] = useState<string | null>(null);
   // docStatus: { [univId: string]: { [doc: string]: boolean } }
   const [docStatus, setDocStatus] = useState<Record<string, Record<string, boolean>>>({});
@@ -58,11 +62,16 @@ export default function MyTrackerPage() {
           .eq("user_id", auth.user.id)
           .maybeSingle();
         if (preferencesError) throw preferencesError;
+        const draft = checklistDrafts.get(auth.user.id);
         setUserId(auth.user.id);
-        setDocStatus(preferences?.doc_status ?? {});
-        setCustomDocs(preferences?.custom_docs ?? []);
-        setMandatoryStatus(preferences?.mandatory_status ?? {});
-        setCustomMandatoryDocs(preferences?.custom_mandatory_docs ?? []);
+        setDirty(!!draft);
+        setNewDoc(draft?.newDoc ?? "");
+        setNewMandatoryDoc(draft?.newMandatoryDoc ?? "");
+        setSaveMessage(draft ? "Restored your unsaved checklist changes." : null);
+        setDocStatus(draft?.docStatus ?? preferences?.doc_status ?? {});
+        setCustomDocs(draft?.customDocs ?? preferences?.custom_docs ?? []);
+        setMandatoryStatus(draft?.mandatoryStatus ?? preferences?.mandatory_status ?? {});
+        setCustomMandatoryDocs(draft?.customMandatoryDocs ?? preferences?.custom_mandatory_docs ?? []);
         const { data, error } = await supabase
           .from("shortlists")
           .select("id, university_name, course_name, status, program_level")
@@ -77,7 +86,29 @@ export default function MyTrackerPage() {
       }
     };
     fetchShortlist();
-  }, []);
+  }, [loadAttempt]);
+
+  useEffect(() => {
+    if (!userId || loading || error || !dirty) return;
+    checklistDrafts.set(userId, { docStatus, customDocs, mandatoryStatus, customMandatoryDocs, newDoc, newMandatoryDoc });
+  }, [userId, loading, error, dirty, docStatus, customDocs, mandatoryStatus, customMandatoryDocs, newDoc, newMandatoryDoc]);
+
+  useEffect(() => {
+    if (!dirty) return;
+    const guardLink = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
+      if (!(link instanceof HTMLAnchorElement) || link.hasAttribute("download") || (link.target && link.target !== "_self")) return;
+      const destination = new URL(link.href, window.location.href);
+      if (destination.pathname === window.location.pathname && destination.search === window.location.search && destination.origin === window.location.origin) return;
+      if (!window.confirm("Your checklist has unsaved changes. Leave this page? Choose Cancel to stay and save.")) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    };
+    document.addEventListener("click", guardLink, true);
+    return () => document.removeEventListener("click", guardLink, true);
+  }, [dirty]);
 
   useEffect(() => {
     const warnBeforeLeaving = (event: BeforeUnloadEvent) => {
@@ -105,6 +136,7 @@ export default function MyTrackerPage() {
         custom_mandatory_docs: customMandatoryDocs,
       }, { onConflict: "user_id" });
       if (error) throw error;
+      checklistDrafts.delete(userId);
       setDirty(false);
       setSaveMessage("Checklist saved.");
     } catch {
@@ -138,7 +170,7 @@ export default function MyTrackerPage() {
       ) : error ? (
         <div className="rounded-xl border border-rose-300 bg-rose-50 dark:bg-rose-950/60 p-6 text-lg text-rose-700 dark:text-rose-200 shadow-lg flex items-center gap-2">
           <svg className="h-6 w-6 text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" /></svg>
-          {error}
+          <div role="alert">{error}<button type="button" className="ml-3 rounded border px-3 py-2" onClick={() => setLoadAttempt(attempt => attempt + 1)}>Retry</button></div>
         </div>
       ) : shortlisted.length === 0 ? (
         <div className="rounded-xl border border-dashed border-black/20 bg-white/60 p-6 text-lg text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300 shadow-lg">
@@ -280,7 +312,7 @@ export default function MyTrackerPage() {
                         <div className="flex flex-col items-center gap-2 min-h-[120px]">
                           <div className="w-full flex justify-center" style={{ minHeight: 0 }}>
                             <select
-                              value={item.status}
+                              value={normalizeApplicationStatus(item.status)}
                               onChange={async (e) => {
                                 const newStatus = e.target.value;
                                 const { error } = await supabase.from("shortlists").update({ status: newStatus }).eq("id", item.id).eq("user_id", userId!);
@@ -292,16 +324,13 @@ export default function MyTrackerPage() {
                                 `rounded-full px-4 py-1 text-xs font-bold shadow-md outline-none transition mb-2 mt-1 border-2 ` +
                                 (item.status === "Shortlisted" ? "bg-emerald-400 text-white border-emerald-400 dark:bg-emerald-600 dark:border-emerald-600" :
                                   item.status === "Applied" ? "bg-cyan-400 text-white border-cyan-400 dark:bg-cyan-600 dark:border-cyan-600" :
-                                  item.status === "Accepted" ? "bg-green-500 text-white border-green-500 dark:bg-green-700 dark:border-green-700" :
+                                  normalizeApplicationStatus(item.status) === "Accepted" ? "bg-green-500 text-white border-green-500 dark:bg-green-700 dark:border-green-700" :
                                   item.status === "Rejected" ? "bg-rose-400 text-white border-rose-400 dark:bg-rose-600 dark:border-rose-600" :
                                   "bg-white border-zinc-300 text-zinc-900 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-100")
                               }
                               style={{ minWidth: 110, boxShadow: '0 2px 8px 0 rgba(0,0,0,0.07)' }}
                             >
-                              <option value="Shortlisted">Shortlisted</option>
-                              <option value="Applied">Applied</option>
-                              <option value="Accepted">Accepted</option>
-                              <option value="Rejected">Rejected</option>
+                              <ApplicationStatusOptions value={item.status} />
                             </select>
                           </div>
                           <div className="rounded-2xl bg-white/90 dark:bg-zinc-900/95 shadow-lg px-3 py-4 w-full flex flex-col items-center border border-zinc-200 dark:border-zinc-800" style={{ minHeight: 80 }}>

@@ -1,4 +1,6 @@
 "use client";
+import ApplicationStatusOptions from "@/components/ApplicationStatusOptions";
+import { normalizeApplicationStatus } from "@/lib/applicationStatus";
 import { useEffect, useState } from "react";
 import { useUser } from "@/lib/UserContext";
 import { supabase } from "@/lib/supabaseClient";
@@ -25,15 +27,20 @@ export default function DashboardPage() {
   const [tracker, setTracker] = useState<Tracker[]>([]);
   const [statusError, setStatusError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loadAttempt, setLoadAttempt] = useState(0);
 
   useEffect(() => {
     // Fetch shortlist and tracker from Supabase
     const fetchData = async () => {
       setLoading(true);
-      const { data: shortlistedData } = await supabase
+      setLoadError(null);
+      try {
+      const { data: shortlistedData, error: queryError } = await supabase
         .from("shortlists")
         .select("id, university_name, course_name, deadline, status")
         .order("created_at", { ascending: false });
+      if (queryError) throw queryError;
       setShortlisted(shortlistedData ?? []);
       // For demo, tracker mirrors shortlist with status
       setTracker(
@@ -44,10 +51,14 @@ export default function DashboardPage() {
           status: item.status || "Shortlisted",
         }))
       );
-      setLoading(false);
+      } catch {
+        setLoadError("Could not load your dashboard. Please retry.");
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
-  }, []);
+  }, [loadAttempt]);
 
   // Tracker status change
   const handleTrackerStatus = async (id: string, status: string) => {
@@ -96,7 +107,7 @@ export default function DashboardPage() {
           <h2 className="text-lg font-semibold mb-4">My Shortlist</h2>
           {loading ? (
             <div>Loading...</div>
-          ) : shortlisted.length === 0 ? (
+          ) : loadError ? (<div role="alert" className="rounded-xl border border-red-300 p-4"><p>{loadError}</p><button type="button" className="mt-2 rounded border px-3 py-2" onClick={() => setLoadAttempt(attempt => attempt + 1)}>Retry</button></div>) : shortlisted.length === 0 ? (
             <div className="rounded-xl border border-dashed border-black/20 bg-white/60 p-4 text-sm text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
               No shortlisted universities yet.
             </div>
@@ -211,7 +222,7 @@ export default function DashboardPage() {
           <h2 className="text-lg font-semibold mb-4">My Tracker</h2>
           {loading ? (
             <div>Loading...</div>
-          ) : tracker.length === 0 ? (
+          ) : loadError ? (<p>Application data could not be loaded. Use Retry above.</p>) : tracker.length === 0 ? (
             <div className="rounded-xl border border-dashed border-black/20 bg-white/60 p-4 text-sm text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
               No applications to track yet.
             </div>
@@ -224,15 +235,12 @@ export default function DashboardPage() {
                     <div className="text-xs text-zinc-500">{item.course_name}</div>
                   </div>
                   <select
-                    value={item.status}
+                    value={normalizeApplicationStatus(item.status)}
                     onClick={e => e.stopPropagation()}
                     onChange={(e) => handleTrackerStatus(item.id, e.target.value)}
                     className="rounded-xl border border-black/10 bg-white/80 px-2 py-1 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
                   >
-                    <option value="Shortlisted">Shortlisted</option>
-                    <option value="Applied">Applied</option>
-                    <option value="Accepted">Accepted</option>
-                    <option value="Rejected">Rejected</option>
+                    <ApplicationStatusOptions value={item.status} />
                   </select>
                 </div>
               ))}

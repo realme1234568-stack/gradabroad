@@ -1,4 +1,6 @@
 "use client";
+import ApplicationStatusOptions from "@/components/ApplicationStatusOptions";
+import { normalizeApplicationStatus } from "@/lib/applicationStatus";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -307,15 +309,11 @@ export default function ProgramList({ programs }: Props) {
                       <label className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">Status</label>
                       <select
                         className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
-                        value={programMeta[key]?.status || "Shortlisted"}
+                        value={normalizeApplicationStatus(programMeta[key]?.status)}
                         onChange={(e) => handleMetaChange(program, "status", e.target.value)}
                         disabled={metaLoading[key]}
                       >
-                        <option value="Shortlisted">Shortlisted</option>
-                        <option value="Applied">Applied</option>
-                        <option value="Interview">Interview</option>
-                        <option value="Admit">Admit</option>
-                        <option value="Rejected">Rejected</option>
+                        <ApplicationStatusOptions value={programMeta[key]?.status} />
                       </select>
                     </div>
                     <div className="flex flex-col gap-1 mt-2">

@@ -1,5 +1,19 @@
 # Deploying the readiness fixes
 
+## October 14: loading errors and checklist navigation protection
+
+- Dashboard, My Shortlist, and the older Application Tracker distinguish database/network failures from successful empty results and offer Retry. My Tracker also has a retry control for its existing load-error state.
+- Unsaved checklist changes prompt before ordinary link navigation. Cancel keeps the page and edits intact. Account-keyed browser-memory drafts restore edits after internal navigation, including Back/Forward or programmatic navigation, until successfully saved. This also preserves unsubmitted custom-document text during internal navigation.
+- Refresh/closing retains the existing browser warning. Drafts are not database saves and do not survive a full reload if the user chooses to leave despite that warning. Continue to use Save checklist for persistence.
+- Regression tests cover query errors, thrown network errors, retries, cancelled link navigation, draft restoration, successful-save cleanup, and account isolation. No Supabase migration is required. Live browser navigation testing remains pending.
+
+
+## October 14: status consistency and shortlist removal
+
+- Catalogue, dashboard, and tracker status selectors share Shortlisted, Applied, Interview, Accepted, and Rejected options. Legacy Admit values display as Accepted. Unknown saved statuses remain visible instead of leaving a mismatched selection. New selections save the shared labels. No database migration is needed.
+- My Shortlist removes an entry only after the delete response returns its ID. Database errors, network exceptions, and zero-row responses retain the entry and show a retry message. Removal controls are disabled during the request to prevent duplicate submissions.
+- Regression tests cover legacy/current/unknown status values across all three editable screens, canonical status writes, deletion failures and retries, duplicate-click protection, and confirmed removal across remounts. These tests use mocked Supabase responses; live website verification remains pending.
+
 ## October 14: profile, expenses, and mobile fixes
 
 - My Profile now loads and saves all six existing fields to a private account record. “Saved!” appears only after a successful database response. Failed saves retain edits; failed loads disable editing to prevent overwriting existing data.
@@ -31,7 +45,7 @@ This branch contains the cleanup and readiness fixes. The database migration mus
 5. Verify with two test accounts that one account cannot read or change another account's checklist. The migration enables row-level security and requires auth.uid() to match user_id.
 6. Promote only after those integration checks pass.
 
-Checklist changes are explicitly saved with Save checklist. Save failures preserve edits for retry. A browser refresh/close warning protects unsaved changes, but internal app navigation can still discard unsaved edits. Concurrent tabs use last-save-wins behavior.
+Checklist changes are explicitly saved with Save checklist. Save failures preserve edits for retry. A browser refresh/close warning protects unsaved changes, and the October 14 navigation protection above now preserves drafts during internal app navigation. Concurrent tabs use last-save-wins behavior.
 
 ## Validation completed locally
 
