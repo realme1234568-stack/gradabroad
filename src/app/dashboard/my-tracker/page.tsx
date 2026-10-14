@@ -119,7 +119,7 @@ export default function MyTrackerPage() {
   const unknownCount = shortlisted.filter((item) => getProgramLevel(item) === null).length;
   return (
     <main
-      className="max-w-7xl mx-auto p-8 min-h-screen relative"
+      className="max-w-7xl mx-auto p-3 sm:p-8 min-h-screen relative"
       style={{
         background:
           'linear-gradient(135deg, #f0f9ff 0%, #f9f7ff 40%, #ffe6fa 100%)',
@@ -147,7 +147,7 @@ export default function MyTrackerPage() {
       ) : (
         <>
           {/* Program Level Filter */}
-          <div className="mb-6 flex gap-4">
+          <div className="mb-6 flex flex-wrap gap-2 sm:gap-4">
             <button
               className={`px-4 py-2 rounded-full font-bold border-2 transition-colors duration-150 ${programLevel === "all" ? "bg-emerald-500 text-white border-emerald-500" : "bg-white border-emerald-200 text-emerald-700 hover:bg-emerald-50"}`}
               onClick={() => setProgramLevel("all")}
@@ -180,11 +180,11 @@ export default function MyTrackerPage() {
           </button>
           <p role="status">{saveMessage ?? (dirty ? "Unsaved checklist changes" : "Checklist loaded")}</p>
         </div>
-        <fieldset disabled={saving} className="flex flex-row gap-8 items-start border-0 p-0 min-w-0"
+        <fieldset disabled={saving} className="flex w-full flex-col lg:flex-row gap-6 items-start border-0 p-0 min-w-0"
           onChange={() => { setDirty(true); setSaveMessage(null); }}>
 
           {/* Mandatory Docs Checklist */}
-          <div className="min-w-[270px] max-w-xs rounded-3xl border border-emerald-200 bg-white/80 dark:bg-zinc-900/95 shadow-2xl p-7 backdrop-blur-md" role="region" aria-label="Mandatory Documents Checklist"
+          <div className="w-full min-w-0 lg:max-w-xs lg:shrink-0 rounded-3xl border border-emerald-200 bg-white/80 dark:bg-zinc-900/95 shadow-2xl p-7 backdrop-blur-md" role="region" aria-label="Mandatory Documents Checklist"
             style={{ boxShadow: '0 8px 32px 0 rgba(34,197,94,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.04)' }}>
             <h2 className="text-xl font-extrabold mb-5 text-emerald-500 dark:text-emerald-300 tracking-wide drop-shadow-sm">Mandatory Documents</h2>
             <ul className="space-y-4 mb-3" role="list">
@@ -268,8 +268,8 @@ export default function MyTrackerPage() {
             </form>
           </div>
           {/* University-wise Tracker Table */}
-          <div className="flex-1 overflow-x-auto">
-            <div className="rounded-3xl shadow-2xl border border-black/10 bg-gradient-to-br from-white via-emerald-50 to-cyan-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black p-8 animate-fade-in"
+          <div className="w-full min-w-0 flex-1 overflow-x-auto" role="region" aria-label="University document tracker" tabIndex={0}>
+            <div className="rounded-3xl shadow-2xl border border-black/10 bg-gradient-to-br from-white via-emerald-50 to-cyan-50 dark:from-zinc-900 dark:via-zinc-950 dark:to-black p-3 sm:p-8 animate-fade-in"
               style={{ boxShadow: '0 8px 32px 0 rgba(16,185,129,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.04)' }}>
               <table className="min-w-full border-separate border-spacing-y-2 align-top">
                 <thead>
