@@ -1,9 +1,13 @@
 "use client";
 
+import { signInDestination } from "@/lib/signInDestination";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-export default function AuthPanel() {
+export default function AuthPanel({ nextPath = "/" }: { nextPath?: string }) {
+  const destination = signInDestination(nextPath);
+  const callbackPath = destination === "/" ? "/auth/callback" : `/auth/callback?next=${encodeURIComponent(destination)}`;
   const [email, setEmail] = useState("");
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -37,7 +41,7 @@ export default function AuthPanel() {
     try {
       const { error } = await supabase.auth.signInWithOtp({
         email: email.trim(),
-        options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+        options: { emailRedirectTo: `${window.location.origin}${callbackPath}` },
       });
       if (error) {
         setMessage("Could not send the sign-in link. Check your email address and try again.");
@@ -72,7 +76,7 @@ export default function AuthPanel() {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: { redirectTo: `${window.location.origin}/auth/callback` },
+        options: { redirectTo: `${window.location.origin}${callbackPath}` },
       });
       if (error) setMessage("Could not start sign-in with this provider. Try another sign-in method.");
     } catch {
@@ -92,6 +96,7 @@ export default function AuthPanel() {
           <p className="text-xs text-zinc-700 dark:text-zinc-200">
             Signed in as <span className="font-semibold">{userEmail}</span>
           </p>
+          {destination !== "/" && <Link href={destination} className="block underline">Continue</Link>}
           <button
             type="button"
             onClick={handleSignOut}

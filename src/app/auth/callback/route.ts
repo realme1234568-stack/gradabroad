@@ -1,3 +1,4 @@
+import { signInDestination } from "@/lib/signInDestination";
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { rateLimit } from "@/utils/rateLimitEdge";
@@ -40,7 +41,7 @@ export async function GET(request: NextRequest) {
     );
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (error || !data.session) return redirect("/auth/error?reason=invalid-link");
-    return redirect("/");
+    return redirect(signInDestination(searchParams.get("next")));
   } catch {
     return redirect("/auth/error?reason=unavailable");
   }

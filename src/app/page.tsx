@@ -31,11 +31,6 @@ const testimonials = [
     quote: "Gradabroad made my Germany application journey so much easier! The tracker is a game changer.",
   },
   {
-    name: "Maya R.",
-    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-    quote: "Loved the clean UI and the reminders. I never missed a deadline!",
-  },
-  {
     name: "Lukas F.",
     avatar: "https://randomuser.me/api/portraits/men/65.jpg",
     quote: "The shortlist feature helped me stay organized and focused. Highly recommend!",
@@ -74,7 +69,7 @@ export default function Home() {
               with clarity.
             </h1>
             <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-xl">
-              Shortlist universities, track deadlines, manage documents, and stay ahead —
+              Shortlist universities, track deadlines, organize document checklists, and stay ahead —
               all in one powerful dashboard built for serious applicants.
             </p>
             <div className="flex flex-wrap gap-4 pt-2">

@@ -51,3 +51,16 @@ test('unknown error input uses a safe message', async () => {
   expect(screen.getByRole('alert').textContent).toBe('We could not complete sign-in. Please try again below.');
   await waitFor(() => expect(auth.getUser).toHaveBeenCalled());
 });
+
+
+test('sign-in entry explains the next step and preserves destination for OAuth and email', async () => {
+  auth.signInWithOAuth.mockResolvedValue({ error: null });
+  auth.signInWithOtp.mockResolvedValue({ error: null });
+  render(await AuthErrorPage({ searchParams: Promise.resolve({ reason: 'signin', next: '/dashboard' }) }));
+  expect(screen.getByRole('heading', { name: 'Sign in to continue' })).toBeTruthy();
+  fireEvent.click(screen.getByRole('button', { name: 'Continue with Google' }));
+  await waitFor(() => expect(auth.signInWithOAuth).toHaveBeenCalledWith({ provider: 'google', options: { redirectTo: window.location.origin + '/auth/callback?next=%2Fdashboard' } }));
+  fireEvent.change(screen.getByPlaceholderText('you@example.com'), { target: { value: 'test@example.com' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Send magic link' }));
+  await waitFor(() => expect(auth.signInWithOtp).toHaveBeenCalledWith({ email: 'test@example.com', options: { emailRedirectTo: window.location.origin + '/auth/callback?next=%2Fdashboard' } }));
+});

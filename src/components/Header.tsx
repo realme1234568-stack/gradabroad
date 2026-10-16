@@ -4,7 +4,8 @@ import Link from "next/link";
 import ThemeToggle from "@/components/ThemeToggle";
 import AuthPanel from "@/components/AuthPanel";
 import { useState, useRef, useEffect } from "react";
-import { FaCog } from "react-icons/fa";
+import { useNotifications } from "@/components/NotificationProvider";
+import { FaBell, FaCog } from "react-icons/fa";
 
 const navLinks = [
   { href: "/browse-programs", label: "Browse Programs" },
@@ -14,6 +15,7 @@ const navLinks = [
 
 
 export default function Header() {
+  const { openCenter, unread } = useNotifications();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -60,7 +62,7 @@ export default function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-3">
           <Link
             href="/dashboard"
             className="hidden sm:inline-flex rounded-full bg-[radial-gradient(circle_at_top,_#34d399,_#10b981,_#059669)] px-4 py-2 text-sm font-semibold text-zinc-900 shadow-md shadow-emerald-300/40 transition hover:scale-[1.01] dark:text-black"
@@ -81,6 +83,11 @@ export default function Header() {
               </nav>
             )}
           </div>
+          <button id="notification-bell" type="button" onClick={openCenter} aria-label={unread ? `Notifications, ${unread} unread` : "Notifications"}
+            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black/10 dark:border-white/20">
+            <FaBell aria-hidden="true" />
+            {unread > 0 && <span className="absolute -right-1 -top-1 rounded-full bg-red-600 px-1 text-[10px] text-white">{unread > 99 ? "99+" : unread}</span>}
+          </button>
           <div className="relative" ref={settingsRef}>
             <button
               ref={settingsButtonRef} type="button" aria-expanded={settingsOpen} aria-controls="account-settings"
@@ -109,6 +116,7 @@ export default function Header() {
                     Settings
                   </Link>
                 </div>
+                <button type="button" onClick={() => { setSettingsOpen(false); openCenter(); }} className="mt-3 block text-sm underline">Notifications</button>
                 <div className="mt-4 border-t border-black/10 pt-4 dark:border-white/10">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
                     Theme

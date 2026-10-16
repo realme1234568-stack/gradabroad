@@ -1,4 +1,5 @@
 "use client";
+import { useNotifications } from "@/components/NotificationProvider";
 import ApplicationStatusOptions from "@/components/ApplicationStatusOptions";
 import { normalizeApplicationStatus } from "@/lib/applicationStatus";
 
@@ -21,7 +22,7 @@ type Program = {
   intake?: string | null;
 };
 
-type Status = "idle" | "loading" | "shortlisted" | "error";
+type Status = "idle" | "loading" | "shortlisted" | "error" | "signin";
 
 type ProgramMeta = {
   note: string;
@@ -34,6 +35,7 @@ type Props = {
 };
 
 export default function ProgramList({ programs }: Props) {
+  const { notify } = useNotifications();
   const router = useRouter();
   const { email } = useUser();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -131,7 +133,8 @@ export default function ProgramList({ programs }: Props) {
     const { data: userData } = await supabase.auth.getUser();
     const user = userData.user;
     if (!user) {
-      setStatus(key, "error");
+      setStatus(key, "signin");
+      setErrorMessage("Please sign in to save programs to your shortlist.");
       return;
     }
     const isShortlisted = shortlistedKeys.has(key);
@@ -162,6 +165,7 @@ export default function ProgramList({ programs }: Props) {
     setShortlistedKeys((prev) => new Set(prev).add(key));
     setStatus(key, "shortlisted");
     setProgramMeta((prev) => ({ ...prev, [key]: { note: "", status: "Shortlisted", deadline: null } }));
+    notify(`${program.university_name} — ${program.course_name} added to your shortlist.`);
     router.refresh();
   };
 
@@ -186,6 +190,7 @@ export default function ProgramList({ programs }: Props) {
         .select("id");
       if (error || !data?.length) throw new Error("Save failed");
       setProgramMeta((prev) => ({ ...prev, [key]: { ...prev[key], [field]: value } }));
+      if (field === "status" && value !== programMeta[key]?.status) notify(`${program.university_name} — ${program.course_name}: status changed to ${normalizeApplicationStatus(value)}.`);
     } catch {
       setErrorMessage("Could not save this change. Please try again.");
     } finally {
@@ -268,13 +273,16 @@ export default function ProgramList({ programs }: Props) {
                 <button
                   type="button"
                   onClick={() => {
-                    if (!isShortlisted) handleShortlist(program);
+                    if (status === "signin") router.push("/auth/error?reason=signin&next=%2Fbrowse-programs");
+                    else if (!isShortlisted) handleShortlist(program);
                   }}
                   disabled={!shortlistReady || isLoading || isShortlisted}
                   className={`inline-flex items-center gap-2 rounded-full bg-[radial-gradient(circle_at_top,_#34d399,_#22d3ee,_#0ea5e9)] px-4 py-2 text-xs font-semibold text-zinc-900 shadow-md shadow-emerald-300/40 transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70 ${isShortlisted ? 'ring-2 ring-emerald-400' : ''}`}
                 >
                   {isLoading ? (
                     "Processing..."
+                  ) : status === "signin" ? (
+                    "Sign in to shortlist"
                   ) : status === "error" ? (
                     "Try again"
                   ) : isShortlisted ? (

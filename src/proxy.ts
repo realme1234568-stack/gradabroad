@@ -33,7 +33,10 @@ export async function proxy(request: NextRequest) {
   try {
     const { data: { user }, error } = await supabase.auth.getUser();
     if (error || !user) {
-      return finish(NextResponse.redirect(new URL("/auth/error?reason=session", request.url)));
+      const signIn = new URL("/auth/error", request.url);
+      signIn.searchParams.set("reason", error ? "session" : "signin");
+      signIn.searchParams.set("next", pathname);
+      return finish(NextResponse.redirect(signIn));
     }
   } catch {
     return finish(NextResponse.redirect(new URL("/auth/error?reason=unavailable", request.url)));

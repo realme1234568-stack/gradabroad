@@ -45,7 +45,7 @@ test('refreshed and cleared cookie chunks reach both request and browser', async
 test('invalid sessions redirect with cleanup cookies intact', async () => {
   mocks.getUser.mockImplementation(async () => { await rotate(); return { data: { user: null }, error: new Error('Expired') }; });
   const response = await proxy(req('/dashboard/my-tracker'));
-  expect(response.headers.get('location')).toBe('https://gradabroad.test/auth/error?reason=session');
+  expect(response.headers.get('location')).toBe('https://gradabroad.test/auth/error?reason=session&next=%2Fdashboard%2Fmy-tracker');
   expect(response.cookies.get('session.1')?.maxAge).toBe(0);
 });
 
@@ -91,4 +91,19 @@ test('exchange exceptions and rate limits give actionable errors', async () => {
   expect((await GET(req('/auth/callback?code=x'))).headers.get('location')).toContain('reason=unavailable');
   mocks.rateLimit.mockResolvedValue(new Response(null, { status: 429 }));
   expect((await GET(req('/auth/callback?code=x'))).headers.get('location')).toContain('reason=rate-limited');
+});
+
+
+test('signed-out Get started opens sign-in with dashboard destination', async () => {
+  mocks.getUser.mockResolvedValue({ data: { user: null }, error: null });
+  const response = await proxy(req('/dashboard'));
+  const destination = new URL(response.headers.get('location')!);
+  expect(destination.pathname).toBe('/auth/error');
+  expect(destination.searchParams.get('reason')).toBe('signin');
+  expect(destination.searchParams.get('next')).toBe('/dashboard');
+});
+test.each([['/dashboard/my-tracker', '/dashboard/my-tracker'], ['/browse-programs', '/browse-programs'], ['https://evil.example', '/'], ['//evil.example', '/']])('callback safely handles destination %s', async (next, expected) => {
+  mocks.exchange.mockResolvedValue({ data: { session: {} }, error: null });
+  const response = await GET(req('/auth/callback?code=valid&next=' + encodeURIComponent(next)));
+  expect(response.headers.get('location')).toBe('https://gradabroad.test' + expected);
 });

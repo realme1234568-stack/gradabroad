@@ -1,4 +1,5 @@
 "use client";
+import { useNotifications } from "@/components/NotificationProvider";
 import React, { useEffect, useRef, useState } from "react";
 import { getProgramLevel } from "@/lib/programLevel";
 import { supabase } from "@/lib/supabaseClient";
@@ -13,6 +14,7 @@ type ShortlistItem = {
 };
 
 export default function MyShortlistPage() {
+  const { notify } = useNotifications();
   const [shortlist, setShortlist] = useState<ShortlistItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -52,7 +54,9 @@ export default function MyShortlistPage() {
       if (error || !data?.some((row: { id: string }) => row.id === id)) {
         throw new Error("Removal was not confirmed");
       }
+      const removed = shortlist.find(item => item.id === id);
       setShortlist((prev) => prev.filter((item) => item.id !== id));
+      if (removed) notify(`${removed.university_name} — ${removed.course_name} removed from your shortlist.`);
     } catch {
       setRemoveError("Could not remove this program. It is still shown here; please retry.");
     } finally {

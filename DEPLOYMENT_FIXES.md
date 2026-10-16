@@ -1,5 +1,25 @@
 # Deploying the readiness fixes
 
+## October 16: notification center and misleading controls
+
+- Successful shortlist additions/removals and application-status changes display a queued popup for three seconds each. The persistent root provider keeps popups alive across internal page navigation. After each popup, the bell refreshes its unread count. Notifications are accessible from the header bell, Settings dropdown, and Settings page.
+- History shows the latest 100 records with timestamps and mark-as-read. Load/save failures show a retryable error. Account changes clear popups/history; requests are filtered by account and protected by database RLS.
+- Apply `supabase/migrations/20261016190000_notifications.sql` before deploying this version. It creates the notification table, owner-only select/update policies, and a transactional shortlist trigger. Clients may select their own records and update only read_at; they cannot insert, delete, or change messages/ownership. No historical notifications are backfilled.
+- The migration was applied on October 16, 2026 to the production GradAbroad Supabase project (`fshixuzamlsmhsrckzzk`) through the SQL editor in a transaction, after confirming the table and function did not already exist. Live catalog checks confirmed the enabled trigger, RLS, anonymous-read denial, client-insert/message-edit denial, read_at update permission, and owner-only read/update policies. Do not rerun this migration on that project. Its triggers and security rules were exercised in isolated PGlite/Postgres with two simulated authenticated accounts and an anonymous role: insertion/status/removal notifications, no-op and rollback behavior, own read-state updates, cross-account denial, tamper/insert/delete denial, and auth-account cascade cleanup passed. This is not a substitute for preview integration checks against Supabase.
+- Before deploying the website code: preview the code, test all three actions from every relevant screen, verify three-second popup queues, refresh and open the bell, mark as read, and check isolation with two real test accounts. Confirm notification access from the settings menu and page at mobile widths.
+- Removed the disabled upload form and replaced it with an honest document-checklist link. Homepage/settings no longer promise file management or email reminders; the testimonial mentioning reminders was removed rather than rewritten. Uploads remain unavailable. No file buckets, file permissions, or existing documents were changed.
+- These source changes remain local until explicitly committed/pushed. Live provider and browser testing remain pending.
+
+
+## October 16: checklist indicators, unified tracker, and sign-in guidance
+
+- Checklist dirty state is now set by actual checkbox changes and document add/remove actions. Application-status changes and typing an unsubmitted document name do not enable Save checklist or trigger checklist navigation warnings.
+- `/application-tracker` renders the same tracker as `/dashboard/my-tracker`, using `shortlists` and `tracker_preferences`. The old `application_tracker` table is left untouched; its separate rows are no longer displayed by this route. No records are deleted or migrated.
+- Signed-out protected-page visits show the sign-in controls with an explanation and retain a validated destination through OAuth/email login. Legacy callback links without a destination still return home. Only known local routes are accepted as return destinations.
+- Signed-out shortlist attempts explain that sign-in is required and offer a Sign in to shortlist action returning to the catalogue after authentication. The user still chooses the program after login; no automatic shortlist insertion is performed.
+- No database migration is needed. Live provider redirect configuration and signed-in browser flows still require verification on a preview deployment.
+
+
 ## October 14: loading errors and checklist navigation protection
 
 - Dashboard, My Shortlist, and the older Application Tracker distinguish database/network failures from successful empty results and offer Retry. My Tracker also has a retry control for its existing load-error state.

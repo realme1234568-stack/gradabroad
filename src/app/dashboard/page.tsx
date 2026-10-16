@@ -1,4 +1,5 @@
 "use client";
+import { useNotifications } from "@/components/NotificationProvider";
 import ApplicationStatusOptions from "@/components/ApplicationStatusOptions";
 import { normalizeApplicationStatus } from "@/lib/applicationStatus";
 import { useEffect, useState } from "react";
@@ -20,9 +21,10 @@ type Tracker = {
   status: string;
 };
 
-const DOC_TYPES = ["Degree", "IELTS", "TOEFL", "APS Certificate"];
+
 
 export default function DashboardPage() {
+  const { notify } = useNotifications();
   const [shortlisted, setShortlisted] = useState<Shortlist[]>([]);
   const [tracker, setTracker] = useState<Tracker[]>([]);
   const [statusError, setStatusError] = useState<string | null>(null);
@@ -68,6 +70,8 @@ export default function DashboardPage() {
       setStatusError("Could not save application status. Please retry.");
       return;
     }
+    const changed = tracker.find(item => item.id === id);
+    if (changed && changed.status !== status) notify(`${changed.university_name} — ${changed.course_name}: status changed to ${status}.`);
     setTracker((prev) =>
       prev.map((item) =>
         item.id === id ? { ...item, status } : item
@@ -89,7 +93,7 @@ export default function DashboardPage() {
       )}
       <h1 className="text-3xl font-semibold">Your Dashboard</h1>
       <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-        Track your shortlisted universities, documents, and application milestones.
+        Track your shortlisted universities, document checklists, and application milestones.
       </p>
 
       {statusError && <p role="alert">{statusError}</p>}
@@ -135,73 +139,10 @@ export default function DashboardPage() {
           )}
         </section>
 
-        {/* My Docs */}
-        <section className="rounded-2xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-cyan-200/30 dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none">
-          <h2 className="text-lg font-semibold mb-4">My Docs</h2>
-          <div className="space-y-3">
-            {DOC_TYPES.map((doc) => (
-              <div key={doc} className="flex flex-col md:flex-row md:items-center gap-2 w-full">
-                <span className="text-xs font-semibold md:text-base md:font-bold break-words w-full md:w-32">{doc}</span>
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-2 w-full">
-                  <label className="relative w-full md:w-auto overflow-hidden" style={{display:'inline-block'}}>
-                    <input
-                      type="file"
-                      accept="application/pdf,image/*"
-                      style={{
-                        position: 'absolute',
-                        left: 0,
-                        top: 0,
-                        width: '100%',
-                        height: '100%',
-                        opacity: 0,
-                        cursor: 'not-allowed',
-                        zIndex: 2,
-                      }}
-                      disabled
-                      title="Document upload is temporarily disabled."
-                    />
-                    <span
-                      className="block bg-white border border-black/20 rounded text-center cursor-not-allowed text-xs md:text-sm text-zinc-800 dark:text-white select-none opacity-60"
-                      style={{
-                        position: 'relative',
-                        zIndex: 1,
-                        fontSize: '12.5px',
-                        fontWeight: 700,
-                        padding: '4px 0',
-                        width: 120,
-                        background: '#fff',
-                        border: '1.5px solid #888',
-                        boxShadow: '0 1px 4px rgba(0,0,0,0.10)',
-                        transition: 'background 0.2s, color 0.2s',
-                        overflow: 'hidden',
-                        whiteSpace: 'nowrap',
-                        textOverflow: 'ellipsis',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        letterSpacing: 0.1,
-                      }}
-                    >
-                      Choose File
-                      <span className="ml-2 text-xs text-red-500">(Uploads disabled)</span>
-                      <style jsx>{`
-                        label input[type='file'] + span {
-                          transition: background 0.2s, color 0.2s;
-                        }
-                        @media (prefers-color-scheme: dark) {
-                          label input[type='file'] + span {
-                            background: #23272f !important;
-                            color: #fff !important;
-                            border: 1.5px solid #fff2 !important;
-                          }
-                        }
-                      `}</style>
-                    </span>
-                  </label>
-                </div>
-              </div>
-            ))}
-          </div>
+        <section className="rounded-2xl border border-black/10 p-6 dark:border-white/10">
+          <h2 className="text-lg font-semibold">Document checklist</h2>
+          <p className="mt-2 text-sm">Track which documents you have prepared in My Tracker. File uploads and document storage are not available.</p>
+          <a href="/dashboard/my-tracker" className="mt-3 inline-block underline">Open document checklist</a>
         </section>
 
         {/* My Tracker */}

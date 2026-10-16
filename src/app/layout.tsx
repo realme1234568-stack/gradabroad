@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import NotificationProvider from "@/components/NotificationProvider";
 import Header from "@/components/Header";
 import ThemeProvider from "@/components/ThemeProvider";
 import { UserProvider } from "@/lib/UserContext";
@@ -42,10 +43,12 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <UserProvider>
+            <NotificationProvider>
             <Header />
             <main className="min-h-screen bg-white dark:bg-black">
               {children}
             </main>
+            </NotificationProvider>
           </UserProvider>
         </ThemeProvider>
       </body>

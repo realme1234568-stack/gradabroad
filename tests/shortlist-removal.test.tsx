@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-const db = vi.hoisted(() => ({ mode: 'success', calls: 0, rows: [] as { id: string; university_name: string; course_name: string }[] }));
+const db = vi.hoisted(() => ({ notify: vi.fn(), mode: 'success', calls: 0, rows: [] as { id: string; university_name: string; course_name: string }[] }));
+vi.mock('@/components/NotificationProvider', () => ({ useNotifications: () => ({ notify: db.notify }) }));
 vi.mock('@/lib/supabaseClient', () => ({ supabase: { from: () => ({
   select: () => ({ order: async () => ({ data: db.rows }) }),
   delete: () => { db.calls++; return { eq: () => ({ select: async () => {
@@ -11,17 +12,19 @@ vi.mock('@/lib/supabaseClient', () => ({ supabase: { from: () => ({
   } }) }; },
 }) } }));
 import MyShortlist from '@/app/dashboard/my-shortlist/page';
-beforeEach(() => { db.mode = 'success'; db.calls = 0; db.rows = [{ id: 'saved', university_name: 'TU Berlin', course_name: 'IMES' }]; });
+beforeEach(() => { db.notify.mockReset(); db.mode = 'success'; db.calls = 0; db.rows = [{ id: 'saved', university_name: 'TU Berlin', course_name: 'IMES' }]; });
 afterEach(cleanup);
 test.each(['error', 'empty', 'throw'])('failed deletion (%s) keeps the entry and allows retry', async mode => {
   db.mode = mode; render(<MyShortlist />);
   fireEvent.click(await screen.findByRole('button', { name: 'Remove' }));
   await screen.findByRole('alert');
   expect(screen.getByText('TU Berlin')).toBeTruthy();
+  expect(db.notify).not.toHaveBeenCalled();
   expect((screen.getByRole('button', { name: 'Remove' }) as HTMLButtonElement).disabled).toBe(false);
   db.mode = 'success'; fireEvent.click(screen.getByRole('button', { name: 'Remove' }));
   await screen.findByText('No universities shortlisted yet.');
   expect(screen.queryByRole('alert')).toBeNull();
+  expect(db.notify).toHaveBeenCalledWith('TU Berlin — IMES removed from your shortlist.');
 });
 test('confirmed deletion stays removed after reload', async () => {
   const view = render(<MyShortlist />);

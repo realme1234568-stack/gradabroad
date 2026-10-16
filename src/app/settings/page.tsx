@@ -1,6 +1,9 @@
+"use client";
+import { useNotifications } from "@/components/NotificationProvider";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export default function SettingsPage() {
+  const { openCenter } = useNotifications();
   return (
     <div className="mx-auto w-full max-w-4xl px-6 py-12">
       <h1 className="text-3xl font-semibold">Settings</h1>
@@ -26,10 +29,10 @@ export default function SettingsPage() {
               Notifications
             </p>
             <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-300">
-              Email reminders for deadlines and document updates.
+              View shortlist additions, removals, and application status updates.
             </p>
-            <button className="mt-4 rounded-full bg-[radial-gradient(circle_at_top,_#a855f7,_#8b5cf6,_#6366f1)] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-purple-300/40 transition hover:scale-[1.01]">
-              Manage notifications
+            <button type="button" onClick={openCenter} className="mt-4 rounded-full bg-[radial-gradient(circle_at_top,_#a855f7,_#8b5cf6,_#6366f1)] px-4 py-2 text-xs font-semibold text-white shadow-md shadow-purple-300/40 transition hover:scale-[1.01]">
+              View notifications
             </button>
           </div>
         </div>

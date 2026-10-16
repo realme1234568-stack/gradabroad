@@ -3,19 +3,21 @@ import { afterEach, beforeEach, expect, test, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 const db = vi.hoisted(() => ({
+  notify: vi.fn(),
   preferences: null as Record<string, unknown> | null,
   failSave: false,
   failLoad: false,
   throwLoad: false,
-  user: 'user-a',
+  user: 'user-a' as string | null,
   status: 'Applied',
   updates: [] as Record<string, unknown>[],
 }));
+vi.mock('@/components/NotificationProvider', () => ({ useNotifications: () => ({ notify: db.notify }) }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh() {} }) }));
 vi.mock('@/lib/UserContext', () => ({ useUser: () => ({ email: 'test@example.com' }) }));
 vi.mock('@/lib/supabaseClient', () => ({
   supabase: {
-    auth: { getUser: async () => ({ data: { user: { id: db.user } } }) },
+    auth: { getUser: async () => ({ data: { user: db.user ? { id: db.user } : null } }) },
     from(table: string) {
       const rows = [{ id: 'saved-row', university_name: 'TU Berlin', course_name: 'IMES', status: db.status, note: 'Existing note', deadline: null, program_level: 'master' }];
       const result = () => ({ data: table === 'tracker_preferences' ? db.preferences : rows, error: db.failLoad ? new Error('Unavailable') : null });
@@ -46,7 +48,7 @@ import OlderTracker from '@/app/application-tracker/page';
 import { checklistDrafts } from '@/lib/checklistDraft';
 import { normalizeApplicationStatus } from '@/lib/applicationStatus';
 
-beforeEach(() => { checklistDrafts.clear(); db.preferences = null; db.failSave = false; db.failLoad = false; db.throwLoad = false; db.user = 'user-a'; db.updates = []; db.status = 'Applied'; });
+beforeEach(() => { db.notify.mockReset(); checklistDrafts.clear(); db.preferences = null; db.failSave = false; db.failLoad = false; db.throwLoad = false; db.user = 'user-a'; db.updates = []; db.status = 'Applied'; });
 afterEach(cleanup);
 
 test('saved checklist and custom documents survive remount', async () => {
@@ -102,6 +104,7 @@ test('catalogue recognises saved programs and updates metadata using its display
   fireEvent.change(status, { target: { value: 'Interview' } });
   await waitFor(() => expect(status.value).toBe('Interview'));
   expect(db.updates).toContainEqual({ status: 'Interview' });
+  expect(db.notify).toHaveBeenCalledWith('TU Berlin — IMES: status changed to Interview.');
   const note = screen.getByPlaceholderText('Add your notes...');
   fireEvent.change(note, { target: { value: 'Updated note' } });
   expect(db.updates).toHaveLength(1);
@@ -173,4 +176,38 @@ test.each([Dashboard, MyShortlist, OlderTracker])('a thrown network error ends l
   db.throwLoad = false; fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
   await waitFor(() => expect(screen.queryByRole('alert')).toBeNull());
   expect(screen.getAllByText('TU Berlin').length).toBeGreaterThan(0);
+});
+
+
+test('typing document names and changing application status do not dirty the checklist', async () => {
+  render(<MyTrackerPage />);
+  await screen.findByLabelText('Mark Passport as complete');
+  const save = screen.getByRole('button', { name: 'Save checklist' }) as HTMLButtonElement;
+  fireEvent.change(screen.getByPlaceholderText('Add document...'), { target: { value: 'Visa' } });
+  expect(save.disabled).toBe(true);
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Interview' } });
+  await waitFor(() => expect(db.updates).toContainEqual({ status: 'Interview' }));
+  expect(save.disabled).toBe(true);
+  expect(checklistDrafts.size).toBe(0);
+  fireEvent.submit(screen.getByPlaceholderText('Add document...').closest('form')!);
+  expect(save.disabled).toBe(false);
+  fireEvent.click(save); await screen.findByText('Checklist saved.');
+  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Accepted' } });
+  await waitFor(() => expect(db.updates).toContainEqual({ status: 'Accepted' }));
+  expect(save.disabled).toBe(true);
+});
+
+test('both tracker URLs render the same component', () => {
+  expect(OlderTracker).toBe(MyTrackerPage);
+});
+
+test('signed-out shortlisting offers sign-in instead of a generic retry', async () => {
+  db.user = null;
+  render(<ProgramList programs={[{ id: 'catalogue-id', university_name: 'TU Berlin', course_name: 'IMES', level: 'masters', language: 'English' }]} />);
+  const button = await screen.findByRole('button', { name: 'Add to shortlist' });
+  await waitFor(() => expect((button as HTMLButtonElement).disabled).toBe(false));
+  fireEvent.click(button);
+  await screen.findByText('Please sign in to save programs to your shortlist.');
+  expect(screen.getByRole('button', { name: 'Sign in to shortlist' })).toBeTruthy();
+  expect(screen.queryByRole('button', { name: 'Try again' })).toBeNull();
 });

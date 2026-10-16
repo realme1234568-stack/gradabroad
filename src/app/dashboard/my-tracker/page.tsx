@@ -1,4 +1,5 @@
 "use client";
+import { useNotifications } from "@/components/NotificationProvider";
 import { checklistDrafts } from "@/lib/checklistDraft";
 import ApplicationStatusOptions from "@/components/ApplicationStatusOptions";
 import { normalizeApplicationStatus } from "@/lib/applicationStatus";
@@ -28,6 +29,7 @@ const UNI_DOCS: string[] = ["GMAT"];
 
 
 export default function MyTrackerPage() {
+  const { notify } = useNotifications();
   const [userId, setUserId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
@@ -212,8 +214,7 @@ export default function MyTrackerPage() {
           </button>
           <p role="status">{saveMessage ?? (dirty ? "Unsaved checklist changes" : "Checklist loaded")}</p>
         </div>
-        <fieldset disabled={saving} className="flex w-full flex-col lg:flex-row gap-6 items-start border-0 p-0 min-w-0"
-          onChange={() => { setDirty(true); setSaveMessage(null); }}>
+        <fieldset disabled={saving} className="flex w-full flex-col lg:flex-row gap-6 items-start border-0 p-0 min-w-0">
 
           {/* Mandatory Docs Checklist */}
           <div className="w-full min-w-0 lg:max-w-xs lg:shrink-0 rounded-3xl border border-emerald-200 bg-white/80 dark:bg-zinc-900/95 shadow-2xl p-7 backdrop-blur-md" role="region" aria-label="Mandatory Documents Checklist"
@@ -227,7 +228,7 @@ export default function MyTrackerPage() {
                     type="checkbox"
                     id={`mandatory-${doc.label}`}
                     checked={!!mandatoryStatus[doc.label]}
-                    onChange={() => setMandatoryStatus((prev) => ({ ...prev, [doc.label]: !prev[doc.label] }))}
+                    onChange={() => { setDirty(true); setSaveMessage(null); setMandatoryStatus((prev) => ({ ...prev, [doc.label]: !prev[doc.label] })); }}
                     className="w-6 h-6 accent-emerald-500 rounded-lg border-2 border-emerald-300 focus:ring-4 focus:ring-emerald-300/40 transition-all duration-200 shadow-md group-hover:ring-2 group-hover:ring-emerald-200 bg-white dark:bg-zinc-900 focus:outline-emerald-500 focus:outline-2"
                     aria-label={`Mark ${doc.label} as complete`}
                   />
@@ -243,7 +244,7 @@ export default function MyTrackerPage() {
                     type="checkbox"
                     id={`mandatory-${doc}`}
                     checked={!!mandatoryStatus[doc]}
-                    onChange={() => setMandatoryStatus((prev) => ({ ...prev, [doc]: !prev[doc] }))}
+                    onChange={() => { setDirty(true); setSaveMessage(null); setMandatoryStatus((prev) => ({ ...prev, [doc]: !prev[doc] })); }}
                     className="w-6 h-6 accent-emerald-500 rounded-lg border-2 border-emerald-300 focus:ring-4 focus:ring-emerald-300/40 transition-all duration-200 shadow-md group-hover:ring-2 group-hover:ring-emerald-200 bg-white dark:bg-zinc-900 focus:outline-emerald-500 focus:outline-2"
                     aria-label={`Mark ${doc} as complete`}
                   />
@@ -315,8 +316,9 @@ export default function MyTrackerPage() {
                               value={normalizeApplicationStatus(item.status)}
                               onChange={async (e) => {
                                 const newStatus = e.target.value;
-                                const { error } = await supabase.from("shortlists").update({ status: newStatus }).eq("id", item.id).eq("user_id", userId!);
-                                if (error) { setSaveMessage("Could not save application status. Please retry."); return; }
+                                const { data, error } = await supabase.from("shortlists").update({ status: newStatus }).eq("id", item.id).eq("user_id", userId!).select("id");
+                                if (error || !data?.length) { setSaveMessage("Could not save application status. Please retry."); return; }
+                                if (newStatus !== item.status) notify(`${item.university_name} — ${item.course_name}: status changed to ${newStatus}.`);
                                 setTracker((prev) => prev.map((t) => t.id === item.id ? { ...t, status: newStatus } : t));
                                 setShortlisted((prev) => prev.map((t) => t.id === item.id ? { ...t, status: newStatus } : t));
                               }}
