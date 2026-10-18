@@ -1,3 +1,11 @@
+## Homepage redesign — October 18, 2026
+
+Rebuilt the public landing page with a dark charcoal/mint visual system and Germany-first messaging. Includes a lightweight animated SVG journey illustration, scroll entrances, interactive sample shortlist/checklist/budget tabs, native FAQ disclosures, and responsive layouts. Motion can be paused and respects reduced-motion preferences. The header adopts the homepage palette while preserving its existing navigation, account, and notification controls.
+
+Removed stock-photo testimonials and placeholder social links. Examples are explicitly labeled; the FAQ accurately states that applications are submitted through universities, document uploads are unavailable, and notifications are in-app. No database changes or new dependencies are needed.
+
+Validation: lint, all 86 existing tests, and the production build passed (build used placeholder Supabase public values). Local Chrome checks covered desktop and narrow phone layouts (effective CSS widths 433px and 355px with the browser's current zoom), no horizontal overflow, mobile navigation, preview tabs, checklist progress, motion pause, FAQ expansion, and an empty browser error log. Live authentication/database workflows were not retested for this presentation-only change. Vercel deployment and live-site verification remain separate from these local checks.
+
 # Deploying the readiness fixes
 
 ## October 16: notification center and misleading controls
