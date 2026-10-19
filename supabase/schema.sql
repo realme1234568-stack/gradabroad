@@ -106,6 +106,7 @@ create table public.account_data (
 );
 alter table public.account_data enable row level security;
 revoke all on public.account_data from anon;
+revoke truncate, references, trigger on public.account_data from authenticated;
 grant select, insert, update, delete on public.account_data to authenticated;
 create policy "Account data belongs to its user" on public.account_data
   for all to authenticated
