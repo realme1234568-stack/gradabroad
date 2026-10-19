@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-export type AccountDataKind = "profile" | "expenses-inr" | "expenses-eur" | "budget-inr" | "budget-eur";
+export type AccountDataKind = "profile" | "expenses-inr" | "expenses-eur" | "budget-inr" | "budget-eur" | "journey";
 
 // Each feature has its own row, so saving expenses cannot overwrite a profile.
 export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: (value: unknown) => value is T) {
@@ -12,6 +12,7 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+  const [hasRecord, setHasRecord] = useState(false);
   const userId = useRef<string | null>(null);
   const generation = useRef(0);
   const busy = useRef(false);
@@ -23,6 +24,7 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
       const current = ++generation.current;
       setLoading(true);
       setReady(false);
+      setHasRecord(false);
       setError(null);
       setValue(defaults);
       setBaseline(defaults);
@@ -37,6 +39,7 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
         if (!validate(loaded)) throw new Error("Your saved data could not be read. Please contact support.");
         if (!active || current !== generation.current) return;
         userId.current = owner;
+        setHasRecord(Boolean(data));
         setValue(loaded);
         setBaseline(loaded);
         setReady(true);
@@ -52,6 +55,9 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
       // Invalidate in-flight saves immediately; do not call Auth inside its callback.
       userId.current = null;
       generation.current++;
+      setValue(defaults);
+      setBaseline(defaults);
+      setHasRecord(false);
       setReady(false);
       setLoading(true);
       clearTimeout(timer);
@@ -82,6 +88,7 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
       }, { onConflict: "user_id,kind" }).select("kind").single();
       if (saveError || !data) throw new Error("Could not save. Your changes have not been saved; please retry.");
       if (current !== generation.current) return false;
+      setHasRecord(true);
       setValue(next);
       setBaseline(next);
       return true;
@@ -93,5 +100,5 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
       setSaving(false);
     }
   }
-  return { ownerId: userId.current, value, setValue, save, loading, saving, error, ready, dirty: JSON.stringify(value) !== JSON.stringify(baseline) };
+  return { hasRecord, reset: () => setValue(baseline), ownerId: userId.current, value, setValue, save, loading, saving, error, ready, dirty: JSON.stringify(value) !== JSON.stringify(baseline) };
 }

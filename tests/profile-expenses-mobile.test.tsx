@@ -43,7 +43,9 @@ test('profile save persists all fields, reloads, and permits clearing fields', a
   fireEvent.change(screen.getByLabelText('Which program are you interested in?'), { target: { value: 'masters' } });
   fireEvent.click(screen.getByRole('button', { name: 'Save Changes' }));
   await screen.findByText('Saved!');
-  view.unmount(); render(<Profile />); await waitReady('First Name');
+  view.unmount(); render(<Profile />);
+  fireEvent.click(await screen.findByRole('button', {name: 'Edit profile'}));
+  await waitReady('First Name');
   expect((screen.getByLabelText('First Name') as HTMLInputElement).value).toBe('Ada');
   expect((screen.getByLabelText('Which program are you interested in?') as HTMLSelectElement).value).toBe('masters');
   fireEvent.change(screen.getByLabelText('First Name'), { target: { value: '' } });
@@ -212,4 +214,49 @@ test('removal cannot shift another expense while its edit is open', async () => 
   const rows=db.rows.get('one:expenses-eur') as {head:string;amount:number}[];
   expect(rows[4]).toEqual({head:'Expense 4',amount:4});
   expect(rows[5]).toMatchObject({head:'Expense 5',amount:25.5});
+});
+
+test('expanded profile becomes a resume after save, reloads, and cancels edits', async () => {
+  const view=render(<Profile/>);await waitReady('First Name');
+  fireEvent.change(screen.getByLabelText('First Name'),{target:{value:'Mira'}});
+  fireEvent.change(screen.getByLabelText('Email address'),{target:{value:'mira@example.com'}});
+  fireEvent.change(screen.getByLabelText('Date of birth'),{target:{value:'2000-04-15'}});
+  fireEvent.change(screen.getByLabelText('Postal code / PIN code'),{target:{value:'SW1A 1AA'}});
+  fireEvent.change(screen.getByLabelText('Class 12 grading system'),{target:{value:'percentage'}});
+  fireEvent.change(screen.getByLabelText('Class 12 marks / CGPA'),{target:{value:'92.5'}});
+  fireEvent.click(screen.getByRole('button',{name:'Save Changes'}));
+  await screen.findByRole('button',{name:'Edit profile'});
+  expect(screen.queryByLabelText('First Name')).toBeNull();
+  expect(screen.getByText('SW1A 1AA')).toBeTruthy();
+  expect(screen.getAllByText('mira@example.com').length).toBeGreaterThan(0);
+  expect(db.rows.get('one:profile')).toMatchObject({email:'mira@example.com',dateOfBirth:'2000-04-15',class12Score:'92.5'});
+  view.unmount();render(<Profile/>);
+  fireEvent.click(await screen.findByRole('button',{name:'Edit profile'}));
+  expect((screen.getByLabelText('Email address') as HTMLInputElement).value).toBe('mira@example.com');
+  fireEvent.change(screen.getByLabelText('First Name'),{target:{value:'Unsaved'}});
+  fireEvent.click(screen.getByRole('button',{name:'Cancel'}));
+  expect(screen.queryByText('Unsaved')).toBeNull();
+  fireEvent.click(screen.getByRole('button',{name:'Edit profile'}));
+  expect((screen.getByLabelText('First Name') as HTMLInputElement).value).toBe('Mira');
+});
+
+test('legacy six-field profiles open in resume view and keep their details when extended', async () => {
+  db.rows.set('one:profile',{firstName:'Legacy',lastName:'Student',programInterest:'masters',qualification:'graduate',englishTest:'ielts',aptitudeTest:'gre'});
+  render(<Profile/>);
+  fireEvent.click(await screen.findByRole('button',{name:'Edit profile'}));
+  expect((screen.getByLabelText('Have you taken any English tests?') as HTMLSelectElement).value).toBe('ielts');
+  fireEvent.change(screen.getByLabelText('City'),{target:{value:'Berlin'}});
+  fireEvent.click(screen.getByRole('button',{name:'Save Changes'}));
+  await screen.findByRole('button',{name:'Edit profile'});
+  expect(db.rows.get('one:profile')).toMatchObject({firstName:'Legacy',englishTest:'ielts',city:'Berlin'});
+});
+
+test('invalid GPA scale keeps profile in edit mode without saving', async () => {
+  render(<Profile/>);await waitReady('First Name');
+  fireEvent.change(screen.getByLabelText('Graduation grading system'),{target:{value:'cgpa'}});
+  fireEvent.change(screen.getByLabelText('Graduation CGPA / percentage'),{target:{value:'8.5'}});
+  fireEvent.click(screen.getByRole('button',{name:'Save Changes'}));
+  await screen.findByRole('alert');
+  expect(db.rows.has('one:profile')).toBe(false);
+  expect(screen.getByLabelText('Graduation CGPA / percentage')).toBeTruthy();
 });

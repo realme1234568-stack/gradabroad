@@ -99,6 +99,12 @@ export default function DashboardPage() {
 
       {statusError && <p role="alert">{statusError}</p>}
       <div className="dashboard-grid mt-8 grid gap-6">
+        <a href="/dashboard/my-journey" className="rounded-xl border border-line bg-surface p-6">
+          <p className="page-eyebrow">ONE STEP CLOSER TO GERMANY</p>
+          <h2 className="text-lg font-semibold">My Journey <span aria-hidden="true">↗</span></h2>
+          <p className="mt-3 text-sm text-muted">From your passport to your first flight. Complete milestones, unlock the next step, and watch your journey come to life.</p>
+          <span className="mt-5 inline-block text-sm text-accent-ink">Open your journey →</span>
+        </a>
         {/* My Shortlist - now interactive */}
         <section
           className="relative rounded-xl border bg-surface p-6 flex flex-col transition-all duration-200 cursor-pointer group border-line shadow-sm hover:scale-[1.03] focus:scale-[1.03] hover:shadow-[0_0_24px_0_rgba(34,211,238,0.18),0_1.5px_8px_0_rgba(16,185,129,0.10)] focus:shadow-[0_0_24px_0_rgba(34,211,238,0.18),0_1.5px_8px_0_rgba(16,185,129,0.10)]"

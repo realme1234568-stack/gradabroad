@@ -1,0 +1,498 @@
+.pageHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.pageHeading h1 {
+  font-size: clamp(32px, 4vw, 46px);
+  font-weight: 500;
+  letter-spacing: -1.5px;
+  line-height: 1.15;
+}
+.pageHeading p {
+  color: var(--app-muted);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-top: 12px;
+}
+.page button {
+  padding: 11px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.page button:disabled {
+  opacity: 0.5;
+}
+.privacy {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--app-muted);
+  font-size: 11px;
+  margin: 22px 0 34px;
+  line-height: 1.6;
+}
+.privacy svg {
+  width: 14px;
+  flex-shrink: 0;
+  color: var(--app-accent-ink);
+}
+.success {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--app-accent-soft);
+  color: var(--app-accent-ink) !important;
+  border-radius: 8px;
+  margin-bottom: 22px;
+}
+.error {
+  padding: 14px;
+  border: 1px solid #b26c60;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  line-height: 1.6;
+  font-size: 13px;
+}
+.editorIntro {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  border-top: 1px solid var(--app-line);
+  padding-top: 30px;
+}
+.editorIntro > div > span,
+.resumeAside > span {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: var(--app-accent-ink);
+}
+.editorIntro h2 {
+  font-size: 26px;
+  margin-top: 12px;
+}
+.editorIntro p {
+  font-size: 13px;
+  color: var(--app-muted);
+  line-height: 1.7;
+  max-width: 600px;
+  margin-top: 10px;
+}
+.fieldCount {
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--app-accent-ink);
+  padding: 10px 14px;
+  border: 1px solid var(--app-line);
+  border-radius: 7px;
+}
+.sectionNav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 26px 0;
+}
+.sectionNav a {
+  font-size: 10px;
+  color: var(--app-muted);
+  padding: 9px 12px;
+  border: 1px solid var(--app-line);
+  border-radius: 6px;
+}
+.sectionNav a span {
+  margin-right: 6px;
+  color: var(--app-accent-ink);
+}
+.sectionNav a:hover {
+  background: var(--app-surface);
+  color: var(--app-ink);
+}
+.form {
+  display: grid;
+  gap: 24px;
+}
+.formSection {
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  padding: 0 30px 30px;
+  border-radius: 12px;
+  min-width: 0;
+  scroll-margin-top: 110px;
+}
+.formSection legend {
+  float: left;
+  width: 100%;
+  padding: 28px 0 0;
+  font-size: 20px;
+  letter-spacing: -0.4px;
+  font-weight: 500;
+}
+.formSection legend span,
+.resumeSection h3 > span {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--app-accent-ink);
+  margin-right: 14px;
+  vertical-align: middle;
+}
+.sectionDescription {
+  clear: both;
+  padding-top: 8px;
+  font-size: 12px;
+  color: var(--app-muted);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.fields > div {
+  min-width: 0;
+}
+.fields label {
+  display: block;
+  font-size: 12px;
+  color: var(--app-muted);
+  margin-bottom: 9px;
+}
+.fields :is(input, select, textarea) {
+  width: 100%;
+  padding: 11px 12px;
+  font-size: 14px;
+  border: 1px solid var(--app-line);
+  min-width: 0;
+  min-height: 44px;
+}
+.fields textarea {
+  resize: vertical;
+  line-height: 1.7;
+}
+.hint {
+  font-size: 10px;
+  color: var(--app-muted);
+  line-height: 1.6;
+  margin-top: 7px;
+}
+.wide {
+  grid-column: 1/-1;
+}
+.dob {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+.dob input {
+  flex: 1;
+}
+.dob output {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  min-width: 85px;
+  padding: 8px 12px;
+  border: 1px solid var(--app-line);
+  border-radius: 7px;
+  background: var(--app-accent-soft);
+}
+.dob output span {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--app-muted);
+}
+.dob output strong {
+  font-size: 13px;
+  color: var(--app-accent-ink);
+  font-weight: 500;
+}
+.saveBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 10px;
+}
+.saveBar strong {
+  font-size: 13px;
+  font-weight: 500;
+}
+.saveBar p {
+  font-size: 11px;
+  color: var(--app-muted);
+  margin-top: 7px;
+}
+.saveBar > div:last-child {
+  display: flex;
+  gap: 10px;
+}
+.secondary {
+  border: 1px solid var(--app-line);
+  border-radius: 7px;
+}
+.resume {
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.identity {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  padding: 40px;
+  background: radial-gradient(ellipse at top right, #87cfa715, transparent 65%);
+  border-bottom: 1px solid var(--app-line);
+}
+.monogram {
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--app-line);
+  border-radius: 18px;
+  background: var(--app-accent-soft);
+  color: var(--app-accent-ink);
+  font-size: 30px;
+  letter-spacing: -1px;
+  flex-shrink: 0;
+}
+.identity p {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--app-muted);
+}
+.identity h2 {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 500;
+  line-height: 1.2;
+  margin: 9px 0;
+  overflow-wrap: anywhere;
+}
+.identity > div:last-child {
+  min-width: 0;
+}
+.identity > div > span {
+  font-size: 14px;
+  color: var(--app-accent-ink);
+}
+.contactLine {
+  display: flex;
+  gap: 8px 18px;
+  flex-wrap: wrap;
+  margin-top: 17px;
+  font-size: 12px;
+  color: var(--app-muted);
+  overflow-wrap: anywhere;
+}
+.resumeBody {
+  display: grid;
+  grid-template-columns: 230px 1fr;
+}
+.resumeAside {
+  padding: 32px 25px;
+  background: var(--app-bg);
+  border-right: 1px solid var(--app-line);
+}
+.resumeAside > strong {
+  display: block;
+  font-size: 27px;
+  font-weight: 500;
+  letter-spacing: -1px;
+  margin-top: 15px;
+}
+.resumeAside p {
+  color: var(--app-muted);
+  font-size: 11px;
+  line-height: 1.8;
+  margin-top: 10px;
+}
+.resumeAside nav {
+  display: grid;
+  gap: 14px;
+  margin: 30px 0;
+  font-size: 11px;
+  color: var(--app-muted);
+}
+.resumeAside nav a:hover {
+  color: var(--app-accent-ink);
+}
+.resumeSections {
+  padding: 0 35px;
+}
+.resumeSection {
+  padding: 30px 0;
+  border-bottom: 1px solid var(--app-line);
+}
+.resumeSection:last-child {
+  border: 0;
+}
+.resumeSection h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 25px;
+}
+.resumeSection dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+.resumeSection dl > div {
+  min-width: 0;
+}
+.resumeSection dt {
+  font-size: 10px;
+  color: var(--app-muted);
+  margin-bottom: 8px;
+}
+.resumeSection dd {
+  font-size: 13px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.resumeSection dd a {
+  color: var(--app-accent-ink);
+}
+.resumeSection dd svg {
+  display: inline;
+  width: 13px;
+  height: 13px;
+}
+.emptySection {
+  font-size: 12px;
+  color: var(--app-muted);
+  line-height: 1.8;
+}
+.ageBadge {
+  display: inline-block;
+  font-size: 10px;
+  margin-left: 10px;
+  padding: 2px 8px;
+  background: var(--app-accent-soft);
+  color: var(--app-accent-ink);
+  border-radius: 5px;
+}
+.gradeSuffix {
+  color: var(--app-muted);
+}
+@media (max-width: 800px) {
+  .resumeBody {
+    grid-template-columns: 1fr;
+  }
+  .resumeAside {
+    border-right: 0;
+    border-bottom: 1px solid var(--app-line);
+    padding: 20px 25px;
+  }
+  .resumeAside nav {
+    display: none;
+  }
+  .resumeAside > strong {
+    font-size: 22px;
+  }
+  .identity {
+    padding: 28px;
+  }
+  .resumeSections {
+    padding: 0 25px;
+  }
+}
+@media (max-width: 600px) {
+  .pageHeading {
+    align-items: start;
+    gap: 14px;
+  }
+  .pageHeading button {
+    padding: 9px 12px;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .pageHeading button svg {
+    display: none;
+  }
+  .editorIntro {
+    flex-direction: column;
+    align-items: start;
+    gap: 16px;
+  }
+  .editorIntro h2 {
+    font-size: 23px;
+  }
+  .formSection {
+    padding: 0 18px 22px;
+  }
+  .formSection legend {
+    font-size: 18px;
+    padding-top: 23px;
+  }
+  .fields {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .sectionNav {
+    gap: 6px;
+  }
+  .sectionNav a {
+    font-size: 9px;
+    padding: 8px;
+  }
+  .saveBar {
+    align-items: start;
+    flex-direction: column;
+    padding: 20px;
+  }
+  .saveBar > div:last-child {
+    width: 100%;
+  }
+  .saveBar button {
+    flex: 1;
+  }
+  .identity {
+    padding: 24px 20px;
+    gap: 16px;
+    align-items: start;
+  }
+  .monogram {
+    height: 55px;
+    width: 55px;
+    font-size: 20px;
+    border-radius: 12px;
+  }
+  .identity h2 {
+    font-size: 27px;
+  }
+  .identity > div > span {
+    font-size: 12px;
+  }
+  .contactLine {
+    flex-direction: column;
+    gap: 7px;
+    font-size: 11px;
+  }
+  .resumeSection dl {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .resumeSections {
+    padding: 0 20px;
+  }
+  .privacy {
+    align-items: start;
+  }
+  .dob output {
+    min-width: 82px;
+  }
+}
