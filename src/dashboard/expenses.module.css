@@ -1,0 +1,357 @@
+.card {
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--app-surface);
+  border: 1px solid var(--app-line);
+  border-radius: 16px;
+  overflow: hidden;
+  padding: 28px;
+  box-shadow: 0 20px 60px #00000012;
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  min-height: 62px;
+}
+.heading p {
+  font-size: 11px;
+  color: var(--app-muted);
+  margin-bottom: 8px;
+}
+.heading h2 {
+  font-size: 23px !important;
+  letter-spacing: -0.7px;
+}
+.currency {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--app-line);
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 11px;
+  color: var(--app-accent-ink);
+}
+.currency svg {
+  width: 17px;
+}
+.total {
+  margin-top: 22px;
+  padding: 22px;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse at top right, #77cb9820, transparent 75%),
+    var(--app-bg);
+}
+.total > span {
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--app-muted);
+}
+.total > strong {
+  display: block;
+  font-size: clamp(29px, 3vw, 40px);
+  font-weight: 500;
+  letter-spacing: -1px;
+  color: var(--app-accent-ink);
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+.total p {
+  font-size: 11px;
+  color: var(--app-muted);
+}
+.status {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--app-muted);
+  min-height: 66px;
+  padding: 12px 0;
+}
+.status [role="alert"] {
+  margin-top: 6px;
+}
+.budget {
+  padding: 18px;
+  background: var(--app-bg);
+  border: 1px solid var(--app-line);
+  border-radius: 10px;
+  margin-bottom: 25px;
+  min-height: 230px;
+}
+.sectionLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--app-muted);
+  margin-bottom: 14px;
+}
+.sectionLabel > span:last-child {
+  letter-spacing: 0;
+  font-size: 10px;
+}
+.budgetForm {
+  display: flex;
+  gap: 10px;
+  align-items: end;
+}
+.card label {
+  display: grid;
+  gap: 7px;
+  font-size: 11px;
+  color: var(--app-muted);
+  min-width: 0;
+}
+.card input,
+.card select {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--app-line);
+  padding: 10px;
+  font-size: 13px;
+}
+.budgetForm label {
+  flex: 1;
+}
+.card button {
+  font-size: 12px;
+  padding: 10px 12px;
+  border-radius: 7px;
+  white-space: nowrap;
+}
+.card button:disabled {
+  opacity: 0.5;
+}
+.budgetSummary {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--app-muted);
+}
+.budgetSummary strong {
+  color: var(--app-accent-ink);
+}
+.budgetSummary strong[data-over="true"] {
+  color: #ee8e7e;
+}
+.track {
+  height: 5px;
+  background: var(--app-line);
+  border-radius: 9px;
+  overflow: hidden;
+}
+.track > span {
+  display: block;
+  height: 100%;
+  background: var(--app-accent-ink);
+  border-radius: inherit;
+  transition: width 0.25s;
+}
+.track > span[data-over="true"] {
+  background: #ee8e7e;
+}
+.hint {
+  font-size: 10px !important;
+  color: var(--app-muted);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+.filter {
+  margin-bottom: 14px;
+}
+.expenseFields {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+}
+.list {
+  height: 360px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: var(--app-line) transparent;
+  padding-right: 5px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 14px 10px;
+  border-bottom: 1px solid var(--app-line);
+}
+.rowName {
+  flex: 1;
+  min-width: 0;
+}
+.rowName strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.rowName span {
+  display: block;
+  font-size: 10px;
+  color: var(--app-muted);
+  margin-top: 5px;
+}
+.rowActions {
+  text-align: right;
+  flex-shrink: 0;
+}
+.rowActions > strong {
+  font-size: 14px;
+  color: var(--app-accent-ink);
+  font-weight: 500;
+}
+.rowActions button {
+  font-size: 10px;
+  padding: 4px 6px;
+  color: var(--app-muted);
+  margin-top: 5px;
+  border: 1px solid var(--app-line);
+  margin-left: 4px;
+}
+.rowActions button:hover {
+  color: var(--app-accent-ink);
+  border-color: var(--app-accent-ink);
+}
+.editForm {
+  width: 100%;
+  display: grid;
+  gap: 8px;
+}
+.editForm > div {
+  display: flex;
+  gap: 8px;
+}
+.addForm {
+  display: grid;
+  gap: 12px;
+  background: var(--app-bg);
+  border: 1px solid var(--app-line);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 18px;
+}
+.addColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.addForm > button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.addForm svg {
+  width: 16px;
+}
+.breakdown {
+  margin-top: 26px;
+}
+.breakdownRows {
+  height: 225px;
+  overflow-y: auto;
+  scrollbar-color: var(--app-line) transparent;
+  padding-right: 5px;
+}
+.breakdownRows > div {
+  margin-bottom: 14px;
+}
+.breakdownRows > div > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  margin-bottom: 7px;
+}
+.breakdownRows strong {
+  font-weight: 500;
+  color: var(--app-accent-ink);
+}
+.breakdownRows small {
+  display: block;
+  font-size: 10px;
+  color: var(--app-muted);
+  margin-top: 4px;
+}
+.footer {
+  margin-top: auto;
+  padding-top: 22px;
+}
+.footer p {
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--app-muted);
+  min-height: 54px;
+  margin-bottom: 16px;
+}
+.footer button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.empty {
+  font-size: 13px;
+  color: var(--app-muted);
+  padding: 30px 0;
+  text-align: center;
+}
+@media (max-width: 700px) {
+  .card {
+    padding: 18px;
+  }
+  .heading h2 {
+    font-size: 21px !important;
+  }
+  .heading {
+    min-height: 64px;
+  }
+  .currency {
+    padding: 6px;
+  }
+  .budget {
+    padding: 14px;
+  }
+  .budgetForm {
+    gap: 7px;
+  }
+  .budgetForm button {
+    padding: 10px;
+  }
+  .row {
+    gap: 8px;
+    padding-inline: 0;
+  }
+  .rowActions {
+    max-width: 42%;
+  }
+  .rowActions > strong {
+    overflow-wrap: anywhere;
+  }
+  .addColumns {
+    grid-template-columns: 1fr;
+  }
+  .footer p {
+    min-height: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .track > span {
+    transition: none;
+  }
+}

@@ -19,7 +19,8 @@ export default async function AuthErrorPage({ searchParams }: {
   const message = typeof reason === "string" && Object.hasOwn(messages, reason)
     ? messages[reason] : messages.failed;
   return (
-    <main className="mx-auto max-w-md px-6 py-12">
+    <main className="app-page mx-auto max-w-md px-6 py-12">
+      <p className="page-eyebrow">WELCOME TO GRADABROAD</p>
       <h1 className="text-2xl font-semibold">{reason === "signin" ? "Sign in to continue" : "Sign-in needs attention"}</h1>
       <p role="alert" className="my-6 text-sm">{message}</p>
       <AuthPanel nextPath={signInDestination(next)} />

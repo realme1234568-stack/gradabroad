@@ -466,6 +466,17 @@
   color: var(--muted);
   line-height: 1.8;
 }
+.workspaceZoom > .workspace {
+  transform: scale(var(--workspace-scale, 1));
+  opacity: var(--workspace-opacity, 1);
+  transform-origin: center top;
+}
+@media (prefers-reduced-motion: reduce) {
+  .workspaceZoom > .workspace {
+    transform: none;
+    opacity: 1;
+  }
+}
 .workspace {
   border: 1px solid #ffffff20;
   border-radius: 12px;
@@ -723,7 +734,7 @@
   font-size: 10px;
   color: #74867a;
   text-align: center;
-  margin-top: 18px !important;
+  margin-top: 32px !important;
 }
 .panelTransition {
   animation: panelIn 0.35s ease-out;

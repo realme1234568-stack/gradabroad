@@ -59,7 +59,7 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b border-black/10 bg-white/70 backdrop-blur dark:border-white/10 dark:bg-black/70 ${isHome ? landingStyles.homeHeader : ""}`}
+      className={`site-header sticky top-0 z-50 border-b border-line backdrop-blur ${isHome ? landingStyles.homeHeader : ""}`}
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-3 sm:px-6 py-4">
         <Link
@@ -68,12 +68,12 @@ export default function Header() {
         >
           <span className="font-bold">GradAbroad</span>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm font-medium text-zinc-700 dark:text-zinc-200 lg:flex">
+        <nav className="hidden items-center gap-6 text-sm font-medium text-ink lg:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="transition hover:text-zinc-900 dark:hover:text-white"
+              className="transition hover:text-ink"
             >
               {link.label}
             </Link>
@@ -82,7 +82,7 @@ export default function Header() {
         <div className="flex items-center gap-1 sm:gap-3">
           <Link
             href="/dashboard"
-            className="hidden sm:inline-flex rounded-full bg-[radial-gradient(circle_at_top,_#34d399,_#10b981,_#059669)] px-4 py-2 text-sm font-semibold text-zinc-900 shadow-md shadow-emerald-300/40 transition hover:scale-[1.01] dark:text-black"
+            className="hidden sm:inline-flex rounded-full ga-primary px-4 py-2 text-sm font-semibold text-ink shadow-sm transition hover:scale-[1.01]"
           >
             Get started
           </Link>
@@ -105,14 +105,14 @@ export default function Header() {
               <nav
                 id="mobile-navigation"
                 aria-label="Mobile navigation"
-                className="absolute right-0 mt-3 w-56 max-w-[calc(100vw-2rem)] rounded-xl border border-black/10 bg-white p-2 shadow-xl dark:border-white/20 dark:bg-zinc-950"
+                className="absolute right-0 mt-3 w-56 max-w-[calc(100vw-2rem)] rounded-xl border border-line bg-surface p-2 shadow-sm"
               >
                 {navLinks.map((link) => (
                   <Link
                     key={link.href}
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="block rounded-lg px-3 py-3 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                    className="block rounded-lg px-3 py-3 text-sm hover:bg-surface"
                   >
                     {link.label}
                   </Link>
@@ -127,7 +127,7 @@ export default function Header() {
             aria-label={
               unread ? `Notifications, ${unread} unread` : "Notifications"
             }
-            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-black/10 dark:border-white/20"
+            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line"
           >
             <FaBell aria-hidden="true" />
             {unread > 0 && (
@@ -143,7 +143,7 @@ export default function Header() {
               aria-expanded={settingsOpen}
               aria-controls="account-settings"
               aria-label="Open settings"
-              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-black/10 bg-black/5 text-zinc-900 transition hover:border-black/40 dark:border-white/20 dark:bg-white/5 dark:text-white dark:hover:border-white/50 focus:outline-none focus:ring-2 focus:ring-emerald-400"
+              className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-line bg-surface text-ink transition hover:border-line focus:outline-none focus:ring-2 focus:ring-accent-ink"
               onClick={() => {
                 setSettingsOpen((open) => !open);
                 setMenuOpen(false);
@@ -154,23 +154,23 @@ export default function Header() {
             {settingsOpen && (
               <div
                 id="account-settings"
-                className="absolute right-0 mt-3 w-56 max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-2xl border border-black/10 bg-white/95 p-4 shadow-xl dark:border-white/10 dark:bg-zinc-950/95 z-50"
+                className="absolute right-0 mt-3 w-56 max-h-[calc(100dvh-6rem)] overflow-y-auto rounded-xl border border-line bg-surface p-4 shadow-sm z-50"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">
                   Settings
                 </p>
                 <div className="mt-3 flex flex-col gap-2 text-sm">
                   <Link
                     href="/my-profile"
                     onClick={() => setSettingsOpen(false)}
-                    className="text-zinc-900 hover:text-emerald-600 dark:text-white dark:hover:text-emerald-200"
+                    className="text-ink hover:text-accent-ink"
                   >
                     My profile
                   </Link>
                   <Link
                     href="/settings"
                     onClick={() => setSettingsOpen(false)}
-                    className="text-zinc-900 hover:text-emerald-600 dark:text-white dark:hover:text-emerald-200"
+                    className="text-ink hover:text-accent-ink"
                   >
                     Settings
                   </Link>
@@ -185,15 +185,15 @@ export default function Header() {
                 >
                   Notifications
                 </button>
-                <div className="mt-4 border-t border-black/10 pt-4 dark:border-white/10">
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+                <div className="mt-4 border-t border-line pt-4">
+                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">
                     Theme
                   </p>
                   <div className="mt-2">
                     <ThemeToggle />
                   </div>
                 </div>
-                <div className="mt-4 border-t border-black/10 pt-4 dark:border-white/10">
+                <div className="mt-4 border-t border-line pt-4">
                   <AuthPanel />
                 </div>
               </div>

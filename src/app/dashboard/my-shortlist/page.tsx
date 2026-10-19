@@ -75,13 +75,14 @@ export default function MyShortlistPage() {
   }));
 
   return (
-    <main className="max-w-2xl mx-auto p-6">
+    <main className="app-page max-w-4xl mx-auto p-6">
+      <p className="page-eyebrow">YOUR NEXT CHAPTER</p>
       <h1 className="text-2xl font-bold mb-6">My Shortlist</h1>
       {removeError && <p role="alert" className="mb-4 text-red-700 dark:text-red-300">{removeError}</p>}
       {loading ? (
         <div>Loading...</div>
       ) : loadError ? (<div role="alert" className="rounded-xl border border-red-300 p-4"><p>{loadError}</p><button type="button" className="mt-2 rounded border px-3 py-2" onClick={() => setLoadAttempt(attempt => attempt + 1)}>Retry</button></div>) : shortlist.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-black/20 bg-white/60 p-4 text-sm text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
+        <div className="rounded-xl border border-dashed border-line bg-surface p-4 text-sm text-muted">
           No universities shortlisted yet.
         </div>
       ) : (
@@ -91,10 +92,10 @@ export default function MyShortlistPage() {
               <h2 className="text-lg font-semibold mb-2">{group.title}</h2>
               <div className="space-y-4">
                 {group.items.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between border-b border-black/10 py-2 last:border-b-0 dark:border-white/10">
+                  <div key={item.id} className="shortlist-entry flex items-center justify-between">
                     <div>
                       <div className="font-semibold">{item.university_name}</div>
-                      <div className="text-xs text-zinc-500">{item.course_name}</div>
+                      <div className="text-xs text-muted">{item.course_name}</div>
                     </div>
                     <button
                       className="ml-2 rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 hover:bg-red-200"

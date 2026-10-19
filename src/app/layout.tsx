@@ -39,13 +39,13 @@ export default function RootLayout({
         <meta name="twitter:image" content="/gradabroad.png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-white text-zinc-900 antialiased dark:bg-black dark:text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <UserProvider>
             <NotificationProvider>
             <Header />
-            <main className="min-h-screen bg-white dark:bg-black">
+            <main className="app-main">
               {children}
             </main>
             </NotificationProvider>

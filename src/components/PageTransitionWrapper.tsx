@@ -8,7 +8,7 @@ export default function PageTransitionWrapper({ children }: { children: React.Re
     <AnimatePresence mode="wait">
       <motion.main
         key={pathname}
-        className="min-h-screen bg-white dark:bg-black"
+        className="min-h-screen bg-surface"
         initial={{ opacity: 0, y: 32 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -32 }}

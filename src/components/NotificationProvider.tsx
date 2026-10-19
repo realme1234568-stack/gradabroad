@@ -110,12 +110,12 @@ export default function NotificationProvider({ children }: { children: React.Rea
     unread: items.filter(item => !item.read_at).length,
   }}>
     {children}
-    {toast && <div role="status" aria-live="polite" className="fixed bottom-5 right-4 z-[100] max-w-[calc(100vw-2rem)] w-80 rounded-2xl border border-emerald-300 bg-white p-4 text-zinc-900 shadow-xl dark:bg-zinc-900 dark:text-white">
+    {toast && <div role="status" aria-live="polite" className="fixed bottom-5 right-4 z-[100] max-w-[calc(100vw-2rem)] w-80 rounded-xl border border-line bg-surface p-4 text-ink shadow-sm">
       <p className="font-semibold">New notification</p><p className="mt-1 text-sm">{toast.message}</p>
     </div>}
     <dialog ref={dialog} aria-labelledby="notification-title" onCancel={event => { event.preventDefault(); close(); }}
       onClick={event => { if (event.target === dialog.current) close(); }}
-      className="fixed inset-0 m-auto max-h-[80dvh] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-2xl border border-zinc-300 bg-white p-5 text-zinc-900 shadow-xl backdrop:bg-black/40 dark:bg-zinc-950 dark:text-white">
+      className="notification-center fixed inset-0 m-auto max-h-[80dvh] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-xl border border-line bg-surface p-5 text-ink shadow-sm backdrop:bg-surface">
       <div className="flex items-center justify-between gap-4"><h2 id="notification-title" className="text-xl font-semibold">Notifications</h2><button type="button" onClick={close} className="rounded border px-3 py-2">Close</button></div>
       {!owner.current ? <p className="mt-4">Sign in to view your notifications.</p> : <>
         <p className="mt-2 text-sm">Your latest 100 shortlist and application updates.</p>
@@ -125,7 +125,7 @@ export default function NotificationProvider({ children }: { children: React.Rea
         {!!items.length && <button type="button" disabled={saving || loading || !items.some(item => !item.read_at)} onClick={markRead} className="my-3 rounded border px-3 py-2 disabled:opacity-50">{saving ? "Saving…" : "Mark all as read"}</button>}
         <ul className="divide-y divide-zinc-200">{items.map(item => <li key={item.id} className="py-3">
           <p className={item.read_at ? "text-sm" : "text-sm font-semibold"}>{!item.read_at && <span aria-label="Unread">● </span>}{item.message}</p>
-          <time className="text-xs text-zinc-500" dateTime={item.created_at}>{new Date(item.created_at).toLocaleString()}</time>
+          <time className="text-xs text-muted" dateTime={item.created_at}>{new Date(item.created_at).toLocaleString()}</time>
         </li>)}</ul>
       </>}
     </dialog>

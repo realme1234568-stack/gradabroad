@@ -42,25 +42,29 @@ export default function BrowseProgramsPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-6 py-12">
+    <div className="app-page mx-auto w-full max-w-6xl px-6 py-12">
+      <p className="page-eyebrow">FIND YOUR DIRECTION</p>
       <h1 className="text-3xl font-semibold mb-6">Browse Programs</h1>
-      <div className="flex gap-8 mb-8">
+      <p className="text-muted">Find your next chapter in Germany. Explore programs and build your personal shortlist.</p>
+      <div className="degree-tabs">
         <button
-          className={`flex-1 rounded-2xl p-8 text-2xl font-bold border-2 transition-all 
-            ${selectedLevel === "bachelors" 
-              ? "border-emerald-500 bg-emerald-50 text-emerald-900" 
-              : "border-black/10 bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white"}
+          className={`flex-1 rounded-xl p-8 text-2xl font-bold border-2 transition-all
+            ${selectedLevel === "bachelors"
+              ? "border-accent-ink bg-accent-soft text-accent-ink"
+              : "border-line bg-surface text-ink bg-surface text-ink"}
           `}
+          aria-pressed={selectedLevel === "bachelors"}
           onClick={loadBachelors}
         >
           Bachelors
         </button>
         <button
-          className={`flex-1 rounded-2xl p-8 text-2xl font-bold border-2 transition-all 
-            ${selectedLevel === "masters" 
-              ? "border-emerald-500 bg-emerald-50 text-emerald-900" 
-              : "border-black/10 bg-white text-zinc-900 dark:bg-zinc-900 dark:text-white"}
+          className={`flex-1 rounded-xl p-8 text-2xl font-bold border-2 transition-all
+            ${selectedLevel === "masters"
+              ? "border-accent-ink bg-accent-soft text-accent-ink"
+              : "border-line bg-surface text-ink bg-surface text-ink"}
           `}
+          aria-pressed={selectedLevel === "masters"}
           onClick={() => setSelectedLevel("masters")}
         >
           Masters
@@ -69,7 +73,7 @@ export default function BrowseProgramsPage() {
       {selectedLevel === "masters" ? (
         <ProgramList programs={mastersPrograms} />
       ) : loadingBachelors ? (
-        <div className="rounded-2xl border border-black/10 bg-white/60 p-8 text-center text-lg text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
+        <div className="rounded-xl border border-line bg-surface p-8 text-center text-lg text-muted">
           Loading bachelors programs...
         </div>
       ) : loadError ? (
@@ -77,7 +81,7 @@ export default function BrowseProgramsPage() {
       ) : bachelorPrograms.length > 0 ? (
         <ProgramList programs={bachelorPrograms} />
       ) : (
-        <div className="rounded-2xl border border-black/10 bg-white/60 p-8 text-center text-lg text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
+        <div className="rounded-xl border border-line bg-surface p-8 text-center text-lg text-muted">
           No bachelors programs available yet.
         </div>
       )}

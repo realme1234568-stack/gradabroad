@@ -98,10 +98,10 @@ create policy "Users manage their own checklist" on public.tracker_preferences
 -- Private per-user storage for the existing profile and two calculators.
 create table public.account_data (
   user_id uuid not null references auth.users(id) on delete cascade,
-  kind text not null check (kind in ('profile', 'expenses-inr', 'expenses-eur')),
+  kind text not null check (kind in ('profile', 'expenses-inr', 'expenses-eur', 'budget-inr', 'budget-eur')),
   data jsonb not null,
   primary key (user_id, kind),
-  check ((kind = 'profile' and jsonb_typeof(data) = 'object') or
+  check ((kind in ('profile', 'budget-inr', 'budget-eur') and jsonb_typeof(data) = 'object') or
          (kind in ('expenses-inr', 'expenses-eur') and jsonb_typeof(data) = 'array'))
 );
 alter table public.account_data enable row level security;

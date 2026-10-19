@@ -201,16 +201,16 @@ export default function ProgramList({ programs }: Props) {
   return (
     <div className="mt-8 space-y-6">
       {errorMessage && <p role="alert">{errorMessage}</p>}
-      <section className="rounded-2xl border border-black/10 bg-white/70 p-4 shadow-sm shadow-black/5 dark:border-white/10 dark:bg-white/5">
-        <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-zinc-600 dark:text-zinc-300">
-          <span className="rounded-full bg-black/5 px-3 py-1 dark:bg-white/10">
+      <section className="rounded-xl border border-line bg-surface p-4 shadow-sm">
+        <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-muted">
+          <span className="rounded-full bg-surface px-3 py-1">
             Showing {programs.length} of {programs.length}
           </span>
         </div>
       </section>
       <div className="grid gap-6 md:grid-cols-2">
         {programs.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-black/20 bg-white/60 p-6 text-sm text-zinc-600 dark:border-white/20 dark:bg-black/40 dark:text-zinc-300">
+        <div className="rounded-xl border border-dashed border-line bg-surface p-6 text-sm text-muted">
           No programs yet. Add some rows in Supabase to see them here.
         </div>
       ) : (
@@ -223,48 +223,48 @@ export default function ProgramList({ programs }: Props) {
           return (
             <div
               key={key}
-              className="group relative overflow-hidden rounded-2xl border border-black/10 bg-gradient-to-br from-white via-emerald-50 to-cyan-50 p-6 shadow-lg shadow-emerald-200/30 dark:border-white/10 dark:from-zinc-900 dark:via-zinc-950 dark:to-black dark:shadow-none"
+              className="group relative overflow-hidden rounded-xl border border-line bg-surface p-6 shadow-sm dark:shadow-none"
             >
-              <div className="pointer-events-none absolute -right-16 -top-16 h-32 w-32 rounded-full bg-emerald-400/20 blur-2xl transition group-hover:scale-110" />
+              <div className="pointer-events-none absolute -right-16 -top-16 h-32 w-32 rounded-full bg-accent/10 blur-2xl transition group-hover:scale-110" />
               <h2 className="text-lg font-semibold">{program.course_name}</h2>
-              <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+              <p className="mt-1 text-sm text-muted">
                 {program.university_name}
               </p>
-              <div className="mt-4 flex flex-wrap gap-3 text-xs text-zinc-600 dark:text-zinc-300">
+              <div className="mt-4 flex flex-wrap gap-3 text-xs text-muted">
                 {program.level ? (
-                  <span className="rounded-full bg-black/5 px-3 py-1 dark:bg-white/10">
+                  <span className="rounded-full bg-surface px-3 py-1">
                     {program.level}
                   </span>
                 ) : null}
                 {program.language ? (
-                  <span className="rounded-full bg-black/5 px-3 py-1 dark:bg-white/10">
+                  <span className="rounded-full bg-surface px-3 py-1">
                     {program.language}
                   </span>
                 ) : null}
                 {program.tuition_type ? (
-                  <span className="rounded-full bg-black/5 px-3 py-1 dark:bg-white/10">
+                  <span className="rounded-full bg-surface px-3 py-1">
                     Tuition: {program.tuition_type}
                   </span>
                 ) : null}
                 {program.gpa_requirement !== null &&
                 program.gpa_requirement !== undefined ? (
-                  <span className="rounded-full bg-black/5 px-3 py-1 dark:bg-white/10">
+                  <span className="rounded-full bg-surface px-3 py-1">
                     GPA ≤ {program.gpa_requirement}
                   </span>
                 ) : null}
                 {program.gmat_required !== null &&
                 program.gmat_required !== undefined ? (
-                  <span className="rounded-full bg-black/5 px-3 py-1 dark:bg-white/10">
+                  <span className="rounded-full bg-surface px-3 py-1">
                     GMAT {program.gmat_required ? "Required" : "Not required"}
                   </span>
                 ) : null}
                 {program.application_mode ? (
-                  <span className="rounded-full bg-black/5 px-3 py-1 dark:bg-white/10">
+                  <span className="rounded-full bg-surface px-3 py-1">
                     {program.application_mode}
                   </span>
                 ) : null}
                 {program.intake ? (
-                  <span className="rounded-full bg-black/5 px-3 py-1 dark:bg-white/10">
+                  <span className="rounded-full bg-surface px-3 py-1">
                     {program.intake} intake
                   </span>
                 ) : null}
@@ -277,7 +277,7 @@ export default function ProgramList({ programs }: Props) {
                     else if (!isShortlisted) handleShortlist(program);
                   }}
                   disabled={!shortlistReady || isLoading || isShortlisted}
-                  className={`inline-flex items-center gap-2 rounded-full bg-[radial-gradient(circle_at_top,_#34d399,_#22d3ee,_#0ea5e9)] px-4 py-2 text-xs font-semibold text-zinc-900 shadow-md shadow-emerald-300/40 transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70 ${isShortlisted ? 'ring-2 ring-emerald-400' : ''}`}
+                  className={`inline-flex items-center gap-2 rounded-full ga-primary px-4 py-2 text-xs font-semibold text-ink shadow-sm  transition hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70 ${isShortlisted ? 'ring-2 ring-accent-ink' : ''}`}
                 >
                   {isLoading ? (
                     "Processing..."
@@ -286,7 +286,7 @@ export default function ProgramList({ programs }: Props) {
                   ) : status === "error" ? (
                     "Try again"
                   ) : isShortlisted ? (
-                    <span className="inline-flex items-center gap-2 text-emerald-600 font-semibold">
+                    <span className="inline-flex items-center gap-2 text-accent-ink font-semibold">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                       </svg>
@@ -299,9 +299,9 @@ export default function ProgramList({ programs }: Props) {
                 {isShortlisted && (
                   <>
                     <div className="flex flex-col gap-1 mt-2">
-                      <label className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">Note</label>
+                      <label className="text-xs font-semibold text-muted">Note</label>
                       <textarea
-                        className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
+                        className="rounded-xl border border-line bg-surface px-3 py-2 text-xs text-ink shadow-sm outline-none transition focus:border-accent-ink"
                         rows={2}
                         defaultValue={programMeta[key]?.note || ""}
                         onBlur={(e) => {
@@ -314,9 +314,9 @@ export default function ProgramList({ programs }: Props) {
                       />
                     </div>
                     <div className="flex flex-col gap-1 mt-2">
-                      <label className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">Status</label>
+                      <label className="text-xs font-semibold text-muted">Status</label>
                       <select
-                        className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
+                        className="rounded-xl border border-line bg-surface px-3 py-2 text-xs text-ink shadow-sm outline-none transition focus:border-accent-ink"
                         value={normalizeApplicationStatus(programMeta[key]?.status)}
                         onChange={(e) => handleMetaChange(program, "status", e.target.value)}
                         disabled={metaLoading[key]}
@@ -325,10 +325,10 @@ export default function ProgramList({ programs }: Props) {
                       </select>
                     </div>
                     <div className="flex flex-col gap-1 mt-2">
-                      <label className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">Deadline</label>
+                      <label className="text-xs font-semibold text-muted">Deadline</label>
                       <input
                         type="date"
-                        className="rounded-xl border border-black/10 bg-white/80 px-3 py-2 text-xs text-zinc-900 shadow-sm outline-none transition focus:border-emerald-400 dark:border-white/10 dark:bg-zinc-900 dark:text-white"
+                        className="rounded-xl border border-line bg-surface px-3 py-2 text-xs text-ink shadow-sm outline-none transition focus:border-accent-ink"
                         value={programMeta[key]?.deadline || ""}
                         onChange={(e) => handleMetaChange(program, "deadline", e.target.value)}
                         disabled={metaLoading[key]}

@@ -153,3 +153,63 @@ test('removing a custom expense persists across remount', async () => {
   expect(screen.queryByText('Expense 4')).toBeNull();
   expect(screen.getByText('4 €')).toBeTruthy();
 });
+
+test('budget target persists separately by currency and calculates decimal remainder', async () => {
+  db.rows.set('one:expenses-eur', [{head:'Rent',amount:400.25}]);
+  const view=render(<Expenses/>); await waitReady('Expense name');
+  await waitFor(()=>expect((screen.getByLabelText('Budget target') as HTMLInputElement).disabled).toBe(false));
+  fireEvent.change(screen.getByLabelText('Budget target'),{target:{value:'500.50'}});
+  expect(screen.getByText('€100.25')).toBeTruthy();
+  fireEvent.click(screen.getByRole('button',{name:'Save target'}));
+  await waitFor(()=>expect(db.rows.get('one:budget-eur')).toEqual({amount:'500.50'}));
+  view.unmount(); const next=render(<Expenses/>); await waitReady('Expense name');
+  await waitFor(()=>expect((screen.getByLabelText('Budget target') as HTMLInputElement).value).toBe('500.50'));
+  next.unmount();render(<IndiaExpenses/>);await waitReady('Expense name');
+  expect((screen.getByLabelText('Budget target') as HTMLInputElement).value).toBe('');
+  expect(db.rows.get('one:expenses-eur')).toEqual([{head:'Rent',amount:400.25}]);
+});
+
+test('budget failure preserves draft and permits retry; zero and clearing are valid', async () => {
+  render(<Expenses/>);await waitReady('Expense name');
+  await waitFor(()=>expect((screen.getByLabelText('Budget target') as HTMLInputElement).disabled).toBe(false));
+  fireEvent.change(screen.getByLabelText('Budget target'),{target:{value:'0'}});
+  expect(screen.getByText('Over budget')).toBeTruthy();
+  db.failSave=true;fireEvent.click(screen.getByRole('button',{name:'Save target'}));
+  await screen.findByRole('alert');expect(db.rows.has('one:budget-eur')).toBe(false);
+  expect((screen.getByLabelText('Budget target') as HTMLInputElement).value).toBe('0');
+  db.failSave=false;fireEvent.click(screen.getByRole('button',{name:'Save target'}));
+  await waitFor(()=>expect(db.rows.get('one:budget-eur')).toEqual({amount:'0'}));
+  fireEvent.change(screen.getByLabelText('Budget target'),{target:{value:''}});
+  fireEvent.click(screen.getByRole('button',{name:'Save target'}));
+  await waitFor(()=>expect(db.rows.get('one:budget-eur')).toEqual({amount:''}));
+});
+
+test('editing a filtered row saves the original expense index and category', async () => {
+  render(<Expenses/>);await waitReady('Expense name');
+  fireEvent.change(screen.getByLabelText('Filter by category'),{target:{value:'Transport'}});
+  fireEvent.click(screen.getByRole('button',{name:'Edit'}));
+  expect((screen.getByLabelText('Edit expense name') as HTMLInputElement).value).toBe('Transport');
+  fireEvent.change(screen.getByLabelText('Edit expense amount'),{target:{value:'125.25'}});
+  fireEvent.change(screen.getByLabelText('Edit expense category'),{target:{value:'Travel'}});
+  fireEvent.click(screen.getByRole('button',{name:'Save expense'}));
+  await waitFor(()=>expect(screen.queryByLabelText('Edit expense amount')).toBeNull());
+  const rows=db.rows.get('one:expenses-eur') as {head:string;amount:number;category?:string}[];
+  expect(rows[0]).toEqual({head:'Rent',amount:400});
+  expect(rows[2]).toEqual({head:'Transport',amount:125.25,category:'Travel'});
+  expect(screen.getByText('No expenses in this category.')).toBeTruthy();
+  expect(screen.getByText('825.25 €')).toBeTruthy();
+});
+
+test('removal cannot shift another expense while its edit is open', async () => {
+  db.rows.set('one:expenses-eur', Array.from({length:6},(_,i)=>({head:`Expense ${i}`,amount:i})));
+  render(<Expenses/>);await waitReady('Expense name');
+  fireEvent.click(screen.getAllByRole('button',{name:'Edit'})[5]);
+  expect((screen.getByRole('button',{name:'Remove'}) as HTMLButtonElement).disabled).toBe(true);
+  expect((screen.getByLabelText('Filter by category') as HTMLSelectElement).disabled).toBe(true);
+  fireEvent.change(screen.getByLabelText('Edit expense amount'),{target:{value:'25.50'}});
+  fireEvent.click(screen.getByRole('button',{name:'Save expense'}));
+  await waitFor(()=>expect(screen.queryByLabelText('Edit expense amount')).toBeNull());
+  const rows=db.rows.get('one:expenses-eur') as {head:string;amount:number}[];
+  expect(rows[4]).toEqual({head:'Expense 4',amount:4});
+  expect(rows[5]).toMatchObject({head:'Expense 5',amount:25.5});
+});

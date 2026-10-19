@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-export type AccountDataKind = "profile" | "expenses-inr" | "expenses-eur";
+export type AccountDataKind = "profile" | "expenses-inr" | "expenses-eur" | "budget-inr" | "budget-eur";
 
 // Each feature has its own row, so saving expenses cannot overwrite a profile.
 export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: (value: unknown) => value is T) {
@@ -93,5 +93,5 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
       setSaving(false);
     }
   }
-  return { value, setValue, save, loading, saving, error, ready, dirty: JSON.stringify(value) !== JSON.stringify(baseline) };
+  return { ownerId: userId.current, value, setValue, save, loading, saving, error, ready, dirty: JSON.stringify(value) !== JSON.stringify(baseline) };
 }

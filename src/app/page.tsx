@@ -42,6 +42,63 @@ const faq = [
   ],
 ];
 
+function ScrollWorkspace({ paused }: { paused: boolean }) {
+  const frame = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const element = frame.current;
+    if (!element || paused) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let pendingFrame = 0;
+
+    function update() {
+      pendingFrame = 0;
+      if (!element) return;
+      if (reducedMotion.matches) {
+        element.style.setProperty("--workspace-scale", "1");
+        element.style.setProperty("--workspace-opacity", "1");
+        return;
+      }
+      // Measure the unscaled wrapper so the animation cannot feed back into itself.
+      const top = element.getBoundingClientRect().top;
+      const progress = Math.min(
+        1,
+        Math.max(
+          0,
+          (window.innerHeight * 0.9 - top) / (window.innerHeight * 0.75),
+        ),
+      );
+      const maximum = window.innerWidth <= 700 ? 1 : 1.04;
+      element.style.setProperty(
+        "--workspace-scale",
+        String(0.86 + progress * (maximum - 0.86)),
+      );
+      element.style.setProperty("--workspace-opacity", String(0.4 + progress * 0.6));
+    }
+
+    function scheduleUpdate() {
+      if (!pendingFrame) pendingFrame = window.requestAnimationFrame(update);
+    }
+
+    update();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+    reducedMotion.addEventListener("change", scheduleUpdate);
+    return () => {
+      window.cancelAnimationFrame(pendingFrame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+      reducedMotion.removeEventListener("change", scheduleUpdate);
+    };
+  }, [paused]);
+
+  return (
+    <div ref={frame} className={s.workspaceZoom}>
+      <ProductPreview />
+    </div>
+  );
+}
+
 function ProductPreview() {
   const [view, setView] = useState<View>("Shortlist");
   const [checked, setChecked] = useState([true, true, false, false]);
@@ -442,7 +499,7 @@ export default function Home() {
             for how your plan takes shape.
           </p>
         </div>
-        <ProductPreview />
+        <ScrollWorkspace paused={paused} />
         <p className={s.previewCaption}>
           An illustrative look at the tools inside GradAbroad. Your workspace
           starts with your choices.

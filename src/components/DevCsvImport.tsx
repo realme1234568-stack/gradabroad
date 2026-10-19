@@ -137,20 +137,20 @@ export default function DevCsvImport() {
   };
 
   return (
-    <div className="rounded-3xl border border-black/10 bg-white/80 p-6 shadow-xl shadow-emerald-200/30 backdrop-blur dark:border-white/10 dark:bg-zinc-950/70 dark:shadow-none">
+    <div className="rounded-xl border border-line bg-surface p-6 shadow-sm backdrop-blur dark:shadow-none">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500 dark:text-zinc-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">
             Target table
           </p>
-          <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-300">
+          <p className="mt-1 text-sm text-muted">
             Columns: {schemaHints[table]}
           </p>
         </div>
         <select
           value={table}
           onChange={(event) => setTable(event.target.value as TableOption)}
-          className="rounded-xl border border-black/10 bg-white px-3 py-2 text-sm text-zinc-900 dark:border-white/10 dark:bg-black/60 dark:text-white"
+          className="rounded-xl border border-line bg-surface px-3 py-2 text-sm text-ink"
         >
           <option value="programs">programs</option>
           <option value="shortlists">shortlists</option>
@@ -166,32 +166,32 @@ export default function DevCsvImport() {
             const file = event.target.files?.[0];
             if (file) void handleFile(file);
           }}
-          className="text-sm text-zinc-600 file:mr-4 file:rounded-full file:border-0 file:bg-[radial-gradient(circle_at_top,_#34d399,_#22d3ee,_#0ea5e9)] file:px-4 file:py-2 file:text-xs file:font-semibold file:text-zinc-900 dark:text-zinc-300"
+          className="text-sm text-muted file:mr-4 file:rounded-full file:border-0 file:ga-primary file:px-4 file:py-2 file:text-xs file:font-semibold file:text-ink"
         />
         <textarea
           value={csvText}
           onChange={(event) => setCsvText(event.target.value)}
           placeholder="Paste CSV here"
           rows={8}
-          className="rounded-2xl border border-black/10 bg-white px-4 py-3 text-sm text-zinc-900 dark:border-white/10 dark:bg-black/60 dark:text-white"
+          className="rounded-xl border border-line bg-surface px-4 py-3 text-sm text-ink"
         />
       </div>
 
-      <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-zinc-500 dark:text-zinc-400">
+      <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-muted">
         <span>{fileName ? `Loaded: ${fileName}` : "No file loaded"}</span>
         <span>Headers: {headers.join(", ") || "(none)"}</span>
         <span>Rows: {rows.length}</span>
       </div>
 
       {status ? (
-        <p className="mt-4 text-sm text-zinc-700 dark:text-zinc-200">{status}</p>
+        <p className="mt-4 text-sm text-ink">{status}</p>
       ) : null}
 
       <button
         type="button"
         onClick={handleImport}
         disabled={loading}
-        className="mt-6 rounded-full bg-[radial-gradient(circle_at_top,_#34d399,_#22d3ee,_#0ea5e9)] px-5 py-2 text-xs font-semibold text-zinc-900 shadow-md shadow-emerald-200/40 transition hover:scale-[1.01] disabled:opacity-60"
+        className="mt-6 rounded-full ga-primary px-5 py-2 text-xs font-semibold text-ink shadow-sm transition hover:scale-[1.01] disabled:opacity-60"
       >
         Import CSV
       </button>
