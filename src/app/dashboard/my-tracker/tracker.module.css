@@ -1,0 +1,27 @@
+/* The viewport owns the surface and border, including beyond the first screenful. */
+.tableViewport {
+  overflow-x: auto;
+  isolation: isolate;
+  border: 1px solid var(--app-line);
+  border-radius: 12px;
+  background: var(--app-surface);
+  scrollbar-color: var(--app-line) var(--app-surface);
+}
+.tableContent {
+  width: max-content;
+  min-width: 100%;
+}
+.table {
+  width: 100%;
+  background: transparent;
+}
+.table :is(th, td) {
+  background: transparent;
+}
+.table th:not(:first-child) {
+  width: 190px;
+  max-width: 210px;
+}
+.table :is(th, td):first-child {
+  min-width: 170px;
+}

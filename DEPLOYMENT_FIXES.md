@@ -1,3 +1,9 @@
+## Tracker background consistency — October 19, 2026
+
+Removed the leftover surface background from the tracker title and conflicting table-row backgrounds. The horizontal scroll viewport now owns the panel surface, border and clipping, while an intrinsic-width inner container covers the entire table. Document-label cells retain native table-cell layout instead of flex, preventing broken row geometry. Checklist/table panels share the same surface; checked controls keep their mint state. The legacy application-tracker URL reuses the same component. No data or authentication behavior changed.
+
+Validation: lint, 90 tests, production build and diff checks passed. Populated visual verification in a local signed-in browser remains pending. Vercel deployment remains separate from these local checks. No Supabase update is required.
+
 ## Calculator improvements — October 19, 2026
 
 Both calculators now share one component and equal-width/equal-height cards, matching summary panels, scrollable expense lists, and aligned controls. Added separate INR/EUR budget targets, remaining/over-budget balances, editable expense categories, category filtering, and category spending breakdowns. Existing expense arrays remain compatible; older entries receive an inferred category until explicitly edited. Totals and breakdowns include all expenses even when the list is filtered. Targets require Save target; expense add/edit actions continue saving independently. The INR preparation plan and EUR monthly plan remain separate and are not converted or combined.

@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react";
 import { FaPassport, FaCertificate, FaGlobe, FaFileAlt, FaUserGraduate } from "react-icons/fa";
 import { getProgramLevel } from "@/lib/programLevel";
 import { supabase } from "@/lib/supabaseClient";
+import styles from "./tracker.module.css";
 
 
 type ShortlistItem = {
@@ -156,7 +157,7 @@ export default function MyTrackerPage() {
       className="app-page max-w-7xl mx-auto p-3 sm:p-8 min-h-screen relative"
     >
       <p className="page-eyebrow">ONE STEP AT A TIME</p>
-      <h1 className="text-3xl font-extrabold mb-8 tracking-tight bg-surface text-ink">My Tracker</h1>
+      <h1 className="text-3xl font-extrabold mb-8 tracking-tight text-ink">My Tracker</h1>
       {loading ? (
         <div className="flex items-center gap-2 text-lg font-semibold animate-pulse" role="status" aria-live="polite">
           <svg className="animate-spin h-6 w-6 text-accent-ink" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
@@ -210,12 +211,11 @@ export default function MyTrackerPage() {
         <fieldset disabled={saving} className="flex w-full flex-col lg:flex-row gap-6 items-start border-0 p-0 min-w-0">
 
           {/* Mandatory Docs Checklist */}
-          <div className="w-full min-w-0 lg:max-w-xs lg:shrink-0 rounded-xl border border-line bg-surface shadow-sm p-7 backdrop-blur-md" role="region" aria-label="Mandatory Documents Checklist"
-            style={{ boxShadow: '0 8px 32px 0 rgba(34,197,94,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.04)' }}>
+          <div className="w-full min-w-0 lg:max-w-xs lg:shrink-0 rounded-xl border border-line bg-surface p-7" role="region" aria-label="Mandatory Documents Checklist">
             <h2 className="text-xl font-extrabold mb-5 text-accent-ink tracking-wide drop-shadow-sm">Mandatory Documents</h2>
             <ul className="space-y-4 mb-3" role="list">
               {DEFAULT_MANDATORY_DOCS.map((doc) => (
-                <li key={doc.label} className="flex items-center gap-4 group transition-all duration-150 hover:bg-accent-soft hover:bg-surface rounded-xl px-2 py-1" role="listitem">
+                <li key={doc.label} className="flex items-center gap-4 group transition-all duration-150 hover:bg-accent-soft rounded-xl px-2 py-1" role="listitem">
                   <span className="transition-transform group-hover:scale-110">{doc.icon}</span>
                   <input
                     type="checkbox"
@@ -231,7 +231,7 @@ export default function MyTrackerPage() {
                 </li>
               ))}
               {customMandatoryDocs.map((doc) => (
-                <li key={doc} className="flex items-center gap-4 group transition-all duration-150 hover:bg-accent-soft hover:bg-surface rounded-xl px-2 py-1" role="listitem">
+                <li key={doc} className="flex items-center gap-4 group transition-all duration-150 hover:bg-accent-soft rounded-xl px-2 py-1" role="listitem">
                   <span className="transition-transform group-hover:scale-110 text-xl">📄</span>
                   <input
                     type="checkbox"
@@ -282,7 +282,7 @@ export default function MyTrackerPage() {
                 value={newMandatoryDoc}
                 onChange={e => setNewMandatoryDoc(e.target.value)}
                 placeholder="Add document..."
-                className="flex-1 rounded-lg border border-line px-3 py-1 text-base bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-accent-ink"
+                className="min-w-0 flex-1 rounded-lg border border-line px-3 py-1 text-base bg-surface text-ink focus:outline-none focus:ring-2 focus:ring-accent-ink"
                 maxLength={32}
               />
               <button
@@ -294,15 +294,14 @@ export default function MyTrackerPage() {
             </form>
           </div>
           {/* University-wise Tracker Table */}
-          <div className="w-full min-w-0 flex-1 overflow-x-auto" role="region" aria-label="University document tracker" tabIndex={0}>
-            <div className="rounded-xl shadow-sm border border-line bg-surface p-3 sm:p-8 animate-fade-in"
-              style={{ boxShadow: '0 8px 32px 0 rgba(16,185,129,0.10), 0 1.5px 8px 0 rgba(0,0,0,0.04)' }}>
-              <table className="min-w-full border-separate border-spacing-y-2 align-top">
+          <div className={`${styles.tableViewport} w-full min-w-0 flex-1`} role="region" aria-label="University document tracker" tabIndex={0}>
+            <div className={`${styles.tableContent} p-3 sm:p-8`}>
+              <table className={`${styles.table} border-separate border-spacing-y-2 align-top`}>
                 <thead>
                   <tr>
-                    <th className="p-3 border-b-2 text-left align-bottom text-lg font-bold text-ink">Docs</th>
+                    <th className="p-3 border-b border-line text-left align-bottom text-lg font-bold text-ink">Docs</th>
                     {visiblePrograms.map((item) => (
-                      <th key={item.id} className="p-3 border-b-2 text-center align-top">
+                      <th key={item.id} className="p-3 border-b border-line text-center align-top">
                         <div className="flex flex-col items-center gap-2 min-h-[120px]">
                           <div className="w-full flex justify-center" style={{ minHeight: 0 }}>
                             <select
@@ -338,9 +337,9 @@ export default function MyTrackerPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[...UNI_DOCS, ...customDocs].map((doc, i) => (
-                    <tr key={doc} className={i % 2 === 0 ? 'bg-surface bg-surface' : 'bg-accent-soft bg-surface'}>
-                      <td className="p-3 font-semibold text-right align-middle flex items-center gap-2 text-ink text-base">
+                  {[...UNI_DOCS, ...customDocs].map((doc) => (
+                    <tr key={doc}>
+                      <td className="p-3 font-semibold text-left align-middle text-ink text-base">
                         {doc}
                         {customDocs.includes(doc) && (
                           <button
@@ -367,7 +366,7 @@ export default function MyTrackerPage() {
                         <td key={item.id + doc} className="p-3 text-center align-middle">
                           <div className="flex justify-center items-center">
                             <button
-                              className={`w-9 h-9 rounded-full border-2 border-line border-line flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 hover:border-accent-ink hover:ring-2 hover:ring-accent-ink ${docStatus[item.id]?.[doc] ? 'bg-surface   border-accent-ink   border-accent-ink shadow-sm scale-105' : 'bg-surface bg-surface hover:bg-accent-soft hover:bg-surface'}`}
+                              className={`w-9 h-9 rounded-full border-2 border-line border-line flex items-center justify-center transition-all duration-200 shadow-sm hover:scale-110 hover:border-accent-ink hover:ring-2 hover:ring-accent-ink ${docStatus[item.id]?.[doc] ? 'bg-accent-soft border-accent-ink scale-105' : 'bg-transparent hover:bg-accent-soft'}`}
                               onClick={() => {
                                 setDirty(true); setSaveMessage(null);
                                 setDocStatus((prev) => ({
@@ -391,7 +390,7 @@ export default function MyTrackerPage() {
                   ))}
                   {/* Add new doc row */}
                   <tr>
-                    <td className="p-3 font-semibold text-right align-middle bg-surface">
+                    <td className="p-3 font-semibold text-left align-middle">
                       <form
                         onSubmit={e => {
                           e.preventDefault();
@@ -426,7 +425,7 @@ export default function MyTrackerPage() {
                       </form>
                     </td>
                     {visiblePrograms.map((item) => (
-                      <td key={item.id + 'add-doc'} className="bg-surface" />
+                      <td key={item.id + 'add-doc'} />
                     ))}
                   </tr>
                 </tbody>
