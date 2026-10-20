@@ -8,6 +8,7 @@ import AuthPanel from "@/components/AuthPanel";
 import { useState, useRef, useEffect } from "react";
 import { useNotifications } from "@/components/NotificationProvider";
 import { FaBell, FaCog } from "react-icons/fa";
+import { useOwnerAccess } from "@/lib/useOwnerAccess";
 
 const navLinks = [
   { href: "/browse-programs", label: "Browse Programs" },
@@ -17,6 +18,7 @@ const navLinks = [
 
 export default function Header() {
   const isHome = usePathname() === "/";
+  const owner = useOwnerAccess();
   const { openCenter, unread } = useNotifications();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -160,6 +162,7 @@ export default function Header() {
                   Settings
                 </p>
                 <div className="mt-3 flex flex-col gap-2 text-sm">
+                  {owner && <Link href="/admin" onClick={() => setSettingsOpen(false)} className="text-accent-ink">Owner dashboard ↗</Link>}
                   <Link
                     href="/my-profile"
                     onClick={() => setSettingsOpen(false)}

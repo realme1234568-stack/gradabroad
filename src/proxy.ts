@@ -4,7 +4,8 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const protectedRoute = pathname === "/dashboard" || pathname.startsWith("/dashboard/") ||
-    pathname === "/application-tracker" || pathname.startsWith("/application-tracker/");
+    pathname === "/application-tracker" || pathname.startsWith("/application-tracker/") ||
+    pathname === "/admin" || pathname.startsWith("/admin/");
   if (!protectedRoute) return NextResponse.next({ request });
 
   const changedCookies = new Map<string, { name: string; value: string; options: CookieOptions }>();
