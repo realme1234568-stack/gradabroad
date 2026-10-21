@@ -1,3 +1,4 @@
+import { LEGAL_PENDING_COOKIE, LEGAL_VERSION } from "@/lib/legal";
 import { signInDestination } from "@/lib/signInDestination";
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
@@ -11,6 +12,7 @@ export async function GET(request: NextRequest) {
     for (const { name, value, options } of changedCookies.values()) {
       response.cookies.set(name, value, options);
     }
+    response.cookies.set(LEGAL_PENDING_COOKIE, "", { path: "/auth/callback", maxAge: 0, httpOnly: true, sameSite: "lax", secure: request.nextUrl.protocol === "https:" });
     response.headers.set("Cache-Control", "private, no-store");
     return response;
   };
@@ -41,7 +43,19 @@ export async function GET(request: NextRequest) {
     );
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (error || !data.session) return redirect("/auth/error?reason=invalid-link");
-    return redirect(signInDestination(searchParams.get("next")));
+    const destination = signInDestination(searchParams.get("next"));
+    // Never attach a pre-login acknowledgement to a user ID supplied by the browser.
+    const { data: verified, error: verifyError } = await supabase.auth.getUser();
+    if (verifyError || !verified.user) return redirect("/auth/error?reason=session");
+    const agreementPath = `/legal/accept?next=${encodeURIComponent(destination)}`;
+    const { data: accepted, error: checkError } = await supabase.rpc("has_accepted_legal", { p_version: LEGAL_VERSION });
+    if (checkError) return redirect(agreementPath);
+    if (accepted !== true) {
+      if (request.cookies.get(LEGAL_PENDING_COOKIE)?.value !== LEGAL_VERSION) return redirect(agreementPath);
+      const { data: saved, error: saveError } = await supabase.rpc("accept_legal", { p_version: LEGAL_VERSION, p_source: "prelogin" });
+      if (saveError || saved !== true) return redirect(agreementPath);
+    }
+    return redirect(destination);
   } catch {
     return redirect("/auth/error?reason=unavailable");
   }

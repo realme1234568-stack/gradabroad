@@ -162,6 +162,9 @@ export default function Header() {
                   Settings
                 </p>
                 <div className="mt-3 flex flex-col gap-2 text-sm">
+                  <Link href="/contact" onClick={() => setSettingsOpen(false)}>Contact Us</Link>
+                  <Link href="/privacy" onClick={() => setSettingsOpen(false)}>Privacy Policy</Link>
+                  <Link href="/terms" onClick={() => setSettingsOpen(false)}>Terms & Conditions</Link>
                   {owner && <Link href="/admin" onClick={() => setSettingsOpen(false)} className="text-accent-ink">Owner dashboard ↗</Link>}
                   <Link
                     href="/my-profile"

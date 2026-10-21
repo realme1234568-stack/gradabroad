@@ -1,3 +1,4 @@
+import { LEGAL_VERSION } from "@/lib/legal";
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
@@ -5,6 +6,7 @@ export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const protectedRoute = pathname === "/dashboard" || pathname.startsWith("/dashboard/") ||
     pathname === "/application-tracker" || pathname.startsWith("/application-tracker/") ||
+    pathname === "/my-profile" || pathname === "/settings" ||
     pathname === "/admin" || pathname.startsWith("/admin/");
   if (!protectedRoute) return NextResponse.next({ request });
 
@@ -38,6 +40,12 @@ export async function proxy(request: NextRequest) {
       signIn.searchParams.set("reason", error ? "session" : "signin");
       signIn.searchParams.set("next", pathname);
       return finish(NextResponse.redirect(signIn));
+    }
+    const { data: accepted, error: legalError } = await supabase.rpc("has_accepted_legal", { p_version: LEGAL_VERSION });
+    if (legalError || accepted !== true) {
+      const agreement = new URL("/legal/accept", request.url);
+      agreement.searchParams.set("next", pathname);
+      return finish(NextResponse.redirect(agreement));
     }
   } catch {
     return finish(NextResponse.redirect(new URL("/auth/error?reason=unavailable", request.url)));

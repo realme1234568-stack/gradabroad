@@ -5,6 +5,7 @@ vi.mock('@/lib/supabaseClient', () => ({ supabase: { auth: {
   ...auth,
   onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
 } } }));
+vi.mock('@/components/LegalConsentProvider', () => ({ useLegalConsent: () => async () => true }));
 import AuthPanel from '@/components/AuthPanel';
 import AuthErrorPage from '@/app/auth/error/page';
 beforeEach(() => { vi.resetAllMocks(); auth.getUser.mockResolvedValue({ data: { user: null } }); });

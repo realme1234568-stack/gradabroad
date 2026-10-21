@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NotificationProvider from "@/components/NotificationProvider";
 import Header from "@/components/Header";
+import LegalConsentProvider from "@/components/LegalConsentProvider";
 import ThemeProvider from "@/components/ThemeProvider";
 import { UserProvider } from "@/lib/UserContext";
 
@@ -44,10 +45,12 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <UserProvider>
             <NotificationProvider>
+            <LegalConsentProvider>
             <Header />
             <main className="app-main">
               {children}
             </main>
+            </LegalConsentProvider>
             </NotificationProvider>
           </UserProvider>
         </ThemeProvider>

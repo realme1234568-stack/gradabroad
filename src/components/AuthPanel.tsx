@@ -1,11 +1,13 @@
 "use client";
 
+import { useLegalConsent } from "./LegalConsentProvider";
 import { signInDestination } from "@/lib/signInDestination";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function AuthPanel({ nextPath = "/" }: { nextPath?: string }) {
+  const requestConsent = useLegalConsent();
   const destination = signInDestination(nextPath);
   const callbackPath = destination === "/" ? "/auth/callback" : `/auth/callback?next=${encodeURIComponent(destination)}`;
   const [email, setEmail] = useState("");
@@ -35,7 +37,8 @@ export default function AuthPanel({ nextPath = "/" }: { nextPath?: string }) {
   }, []);
 
   const handleSignIn = async () => {
-    if (!email) return;
+    if (!email || loading) return;
+    if (!await requestConsent()) return;
     setLoading(true);
     setMessage(null);
     try {
@@ -71,6 +74,7 @@ export default function AuthPanel({ nextPath = "/" }: { nextPath?: string }) {
   };
 
   const handleOAuthSignIn = async (provider: "google" | "github") => {
+    if (loading || !await requestConsent()) return;
     setLoading(true);
     setMessage(null);
     try {

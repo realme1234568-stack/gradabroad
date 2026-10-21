@@ -162,3 +162,13 @@ The owner requested committing and pushing the completed work. Because the check
 - Increased all explicit font sizes of 10px or smaller to 12px across the application, including miniature homepage labels and notification badges. Adjusted the mobile workspace preview header to fit the larger text. Existing 11px text is unchanged.
 - Validation: 165 tests, lint, production build and whitespace checks passed. Source scan found no remaining explicit pixel declarations at 10px or below. Local Chrome desktop/mobile checks covered popup appearance, keyboard selection/dismissal, filtering, and homepage preview layout without horizontal overflow.
 - Release: the user approved committing and pushing this styling update to `main`. No Supabase changes are needed. Deployment readiness must be checked separately after the push.
+
+## 21 October 2026 — first-sign-in terms, privacy and support
+
+Added substantial public Terms & Conditions and Privacy Policy pages reflecting the existing product, a theme-matched first-sign-in dialog with separate unchecked acknowledgements, account-bound version/time receipts, fail-closed callback/protected-page checks, and an onboarding recovery/sign-out flow. Settings and the homepage footer link to the policies and Contact Us. The owner supplied **gradabroad.online@gmail.com** as the official support/privacy email and New Delhi, India as the location. Full legal operator/address and operational legal details still require review; no absolute liability waiver or security guarantee is promised.
+
+Applied the additive private receipt migration to production Supabase and checked its RLS and permissions without accepting terms for a real user. Website code remains local and uncommitted/undeployed. See `supabase/LEGAL_ACCEPTANCE.md` for exact behaviour, the new-device/account limitations, deployment order, primary references and outstanding legal/production checks. The unrelated pending document-isolation test was preserved.
+
+Validation for this change: 180 automated tests passed; lint, production build and whitespace checks passed. Local desktop/phone browser inspection covered popup layout, policy switching, cancellation and the shared Settings entry/contact page. No live user accepted these new terms during testing; the production login/returning-account check remains pending deployment.
+
+Release approval: the owner requested committing and pushing the legal-acknowledgement and Contact Us changes to `main`. Supabase is already updated; production deployment and the live returning/new-account flow remain to be verified after this push.

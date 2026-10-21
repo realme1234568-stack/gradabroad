@@ -4,7 +4,7 @@ import { NextRequest } from 'next/server';
 import type { CookieMethodsServer } from '@supabase/ssr';
 
 const mocks = vi.hoisted(() => ({
-  create: vi.fn(), getUser: vi.fn(), exchange: vi.fn(), rateLimit: vi.fn(),
+  create: vi.fn(), getUser: vi.fn(), exchange: vi.fn(), rateLimit: vi.fn(), rpc: vi.fn(),
 }));
 vi.mock('@supabase/ssr', () => ({ createServerClient: mocks.create }));
 vi.mock('@/utils/rateLimitEdge', () => ({ rateLimit: mocks.rateLimit }));
@@ -15,9 +15,11 @@ beforeEach(() => {
   vi.resetAllMocks();
   mocks.create.mockImplementation((_url, _key, options) => {
     cookies = options.cookies;
-    return { auth: { getUser: mocks.getUser, exchangeCodeForSession: mocks.exchange } };
+    return { auth: { getUser: mocks.getUser, exchangeCodeForSession: mocks.exchange }, rpc: mocks.rpc };
   });
   mocks.rateLimit.mockResolvedValue(null);
+  mocks.getUser.mockResolvedValue({ data: { user: { id: "user" } }, error: null });
+  mocks.rpc.mockResolvedValue({ data: true, error: null });
 });
 const req = (path: string) => new NextRequest(`https://gradabroad.test${path}`, {
   headers: { cookie: 'session.0=old; session.1=obsolete' },
@@ -106,4 +108,34 @@ test.each([['/dashboard/my-tracker', '/dashboard/my-tracker'], ['/browse-program
   mocks.exchange.mockResolvedValue({ data: { session: {} }, error: null });
   const response = await GET(req('/auth/callback?code=valid&next=' + encodeURIComponent(next)));
   expect(response.headers.get('location')).toBe('https://gradabroad.test' + expected);
+});
+
+
+test('callback requires a saved account receipt or a first-login acknowledgement', async () => {
+  mocks.exchange.mockResolvedValue({data:{session:{}},error:null});
+  mocks.rpc.mockResolvedValue({data:false,error:null});
+  const response=await GET(req('/auth/callback?code=valid&next=%2Fdashboard'));
+  expect(response.headers.get('location')).toBe('https://gradabroad.test/legal/accept?next=%2Fdashboard');
+  expect(mocks.rpc).not.toHaveBeenCalledWith('accept_legal',expect.anything());
+});
+test('prelogin receipt is saved only after verified authentication and cleared on redirect', async () => {
+  mocks.exchange.mockResolvedValue({data:{session:{}},error:null});
+  mocks.rpc.mockImplementation(name=>Promise.resolve({data:name==='accept_legal',error:null}));
+  const response=await GET(new NextRequest('https://gradabroad.test/auth/callback?code=valid', {headers:{cookie:'ga_legal_pending=2026-10-21'}}));
+  expect(mocks.rpc).toHaveBeenCalledWith('accept_legal',{p_version:'2026-10-21',p_source:'prelogin'});
+  expect(response.headers.get('location')).toBe('https://gradabroad.test/');
+  expect(response.cookies.get('ga_legal_pending')?.maxAge).toBe(0);
+});
+test('receipt save failures and protected-route receipt failures fail closed without losing cookies', async () => {
+  mocks.exchange.mockImplementation(async()=>{await rotate();return {data:{session:{}},error:null};});
+  mocks.rpc.mockResolvedValue({data:null,error:new Error('DB unavailable')});
+  const response=await GET(req('/auth/callback?code=valid'));
+  expect(response.headers.get('location')).toContain('/legal/accept');
+  expect(response.cookies.get('session.0')?.value).toBe('new');
+  const guarded=await proxy(req('/dashboard/my-tracker'));
+  expect(guarded.headers.get('location')).toContain('/legal/accept?next=%2Fdashboard%2Fmy-tracker');
+});
+test('public policies and agreement page never redirect into an acceptance loop', async () => {
+  for(const path of ['/terms','/privacy','/contact','/legal/accept']) await proxy(req(path));
+  expect(mocks.create).not.toHaveBeenCalled();
 });

@@ -672,6 +672,9 @@ export default function Home() {
           <Link href="/browse-programs">Programs</Link>
           <Link href="/dashboard">Workspace</Link>
           <a href="#how-it-works">How it works</a>
+          <Link href="/privacy">Privacy</Link>
+          <Link href="/terms">Terms</Link>
+          <Link href="/contact">Contact us</Link>
         </nav>
         <span>Plan thoughtfully. Go further.</span>
       </footer>
