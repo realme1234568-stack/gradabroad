@@ -6,19 +6,19 @@
 .heading h1 span { color: var(--app-accent-ink); }
 .heading p:not(:global(.page-eyebrow)) { color: var(--app-muted); font-size: 15px; line-height: 1.8; }
 .destination { width: 228px; padding: 26px; border: 1px solid var(--app-line); border-radius: 14px; background: radial-gradient(ellipse at right bottom, var(--app-accent-soft), transparent 85%); }
-.destination > span { font-size: 9px; letter-spacing: 2px; color: var(--app-muted); }
+.destination > span { font-size: 12px; letter-spacing: 2px; color: var(--app-muted); }
 .destination > div { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--app-accent-ink); }
 .destination i { width: 7px; height: 7px; background: var(--app-accent-ink); border-radius: 50%; }
 .destinationLine { flex: 1; border-top: 1px dashed var(--app-accent-ink); }
 .destination svg { font-size: 22px; animation: hoverFlight 5s ease-in-out infinite; }
 .destination strong { display: flex; align-items: center; justify-content: space-between; font-size: 19px; font-weight: 500; }
-.destination strong span { font-size: 10px; padding: 5px 7px; border: 1px solid var(--app-line); border-radius: 4px; color: var(--app-accent-ink); }
+.destination strong span { font-size: 12px; padding: 5px 7px; border: 1px solid var(--app-line); border-radius: 4px; color: var(--app-accent-ink); }
 .overview { display: grid; grid-template-columns: 1.9fr 1fr; gap: 18px; margin-bottom: 35px; }
 .next, .progressCard { border: 1px solid var(--app-line); background: var(--app-surface); border-radius: 14px; padding: 28px; }
 .next { display: flex; align-items: center; gap: 20px; background: radial-gradient(ellipse at top left, var(--app-accent-soft), transparent 65%), var(--app-surface); }
 .nextIcon { width: 54px; height: 54px; flex: 0 0 54px; border: 1px solid var(--app-line); background: var(--app-accent-soft); color: var(--app-accent-ink); display: grid; place-items: center; border-radius: 50%; font-size: 23px; }
 .nextCopy { flex: 1; }
-.nextCopy :global(.page-eyebrow) { font-size: 8px; letter-spacing: 1.4px; margin-bottom: 10px; }
+.nextCopy :global(.page-eyebrow) { font-size: 12px; letter-spacing: 1.4px; margin-bottom: 10px; }
 .nextCopy h2 { font-size: 23px; margin-bottom: 9px; }
 .nextCopy > p:last-child { font-size: 12px; line-height: 1.6; color: var(--app-muted); }
 .primary { display: inline-flex; align-items: center; justify-content: center; gap: 14px; padding: 12px 15px; font-size: 12px; font-weight: 500; flex-shrink: 0; }
@@ -27,27 +27,27 @@
 .progressNumber span { max-width: 100px; font-size: 11px; color: var(--app-muted); letter-spacing: 0; line-height: 1.5; }
 .progressBar { height: 4px; background: var(--app-raised); margin: 20px 0 12px; border-radius: 10px; overflow: hidden; }
 .progressBar i { display: block; height: 100%; background: var(--app-accent-ink); border-radius: inherit; transition: width .8s ease; }
-.progressCard > p { font-size: 10px; color: var(--app-muted); }
+.progressCard > p { font-size: 12px; color: var(--app-muted); }
 .route { min-width: 0; border: 1px solid var(--app-line); border-radius: 16px; background: linear-gradient(180deg, var(--app-surface), var(--app-bg)); overflow: hidden; }
 .routeHeading { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 30px 30px 0; }
-.routeHeading :global(.page-eyebrow) { font-size: 9px; margin-bottom: 10px; }
+.routeHeading :global(.page-eyebrow) { font-size: 12px; margin-bottom: 10px; }
 .routeHeading h2 { font-size: 25px; }
 .routeControls { display: flex; align-items: center; gap: 8px; }
 .routeControls button { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--app-line); border-radius: 50%; color: var(--app-muted); background: var(--app-bg); }
 .routeControls button:hover { border-color: var(--app-accent-ink); color: var(--app-accent-ink); }
-.routeControls .jump { width: auto; border-radius: 6px; padding: 0 12px; font-size: 10px; }
+.routeControls .jump { width: auto; border-radius: 6px; padding: 0 12px; font-size: 12px; }
 .routeHint { padding: 14px 30px 0; font-size: 11px; color: var(--app-muted); line-height: 1.7; }
 .viewport { overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: var(--app-line) transparent; }
 .track { position: relative; display: flex; width: max-content; list-style: none; margin: 0; padding: 85px 40px 45px; }
 .stage { position: relative; width: 168px; flex: 0 0 168px; display: flex; align-items: center; flex-direction: column; text-align: center; color: var(--app-muted); }
-.phase { text-transform: uppercase; font-size: 8px; letter-spacing: 1.6px; margin-bottom: 24px; color: var(--app-muted); }
+.phase { text-transform: uppercase; font-size: 12px; letter-spacing: 1.6px; margin-bottom: 24px; color: var(--app-muted); }
 .nodeArea { position: relative; z-index: 2; }
 .node { position: relative; display: grid; place-items: center; width: 80px; height: 80px; background: var(--app-surface); border: 1px solid var(--app-line); color: var(--app-muted); border-radius: 50%; font-size: 26px; transition: border-color .3s, box-shadow .3s, transform .3s; }
 .node:hover, .node:focus-visible { transform: translateY(-3px); border-color: var(--app-accent-ink); }
-.badge { display: grid; place-items: center; position: absolute; right: -1px; bottom: -1px; width: 23px; height: 23px; border: 2px solid var(--app-surface); border-radius: 50%; background: var(--app-raised); color: var(--app-muted); font-size: 10px; }
-.stepNumber { font-size: 9px; letter-spacing: 1px; margin-top: 23px; margin-bottom: 8px; }
+.badge { display: grid; place-items: center; position: absolute; right: -1px; bottom: -1px; width: 23px; height: 23px; border: 2px solid var(--app-surface); border-radius: 50%; background: var(--app-raised); color: var(--app-muted); font-size: 12px; }
+.stepNumber { font-size: 12px; letter-spacing: 1px; margin-top: 23px; margin-bottom: 8px; }
 .stage h3 { font-size: 12px; max-width: 145px; line-height: 1.5; margin-bottom: 7px; }
-.stateLabel { font-size: 9px; }
+.stateLabel { font-size: 12px; }
 .stage[data-state="locked"] .node > svg { opacity: .38; }
 .stage[data-state="locked"] h3 { opacity: .65; }
 .stage[data-state="completed"] .node { border-color: color-mix(in srgb, var(--app-accent-ink) 50%, var(--app-line)); color: var(--app-accent-ink); background: var(--app-accent-soft); }
@@ -66,7 +66,7 @@
 .nodeArea:hover .tooltip, .nodeArea:focus-within .tooltip { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
 .finish .node { font-size: 31px; }
 .planeReady > svg { animation: hoverFlight 3s ease-in-out infinite; }
-.routeFooter { border-top: 1px solid var(--app-line); padding: 20px 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: 10px; color: var(--app-muted); }
+.routeFooter { border-top: 1px solid var(--app-line); padding: 20px 30px; display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: 12px; color: var(--app-muted); }
 .legend { display: flex; gap: 16px; }
 .legend span { display: flex; align-items: center; gap: 6px; }
 .legend i { width: 6px; height: 6px; border: 1px solid var(--app-muted); border-radius: 50%; }
@@ -94,7 +94,7 @@
 .close { position: absolute; top: 16px; right: 16px; padding: 8px; color: var(--app-muted); border-radius: 50%; }
 .close:hover { background: var(--app-raised); }
 .dialogIcon { width: 56px; height: 56px; display: grid; place-items: center; border: 1px solid var(--app-line); border-radius: 50%; background: var(--app-accent-soft); color: var(--app-accent-ink); font-size: 24px; margin-bottom: 25px; }
-.dialog :global(.page-eyebrow) { font-size: 9px; margin-bottom: 11px; }
+.dialog :global(.page-eyebrow) { font-size: 12px; margin-bottom: 11px; }
 .dialog h2 { font-size: 28px; line-height: 1.2; letter-spacing: -1px; font-weight: 500; margin-bottom: 15px; }
 .dialog > p:not(:global(.page-eyebrow), .error) { font-size: 13px; color: var(--app-muted); line-height: 1.8; }
 .checks { margin: 22px 0; display: grid; gap: 12px; }
@@ -111,8 +111,8 @@
 @keyframes arrival { 0% { box-shadow: 0 0 0 0 transparent; } 55% { box-shadow: 0 0 0 16px color-mix(in srgb, var(--app-accent-ink) 20%, transparent), 0 0 70px color-mix(in srgb, var(--app-accent-ink) 60%, transparent); } 100% { box-shadow: 0 0 0 7px color-mix(in srgb, var(--app-accent-ink) 8%, transparent), 0 0 30px color-mix(in srgb, var(--app-accent-ink) 20%, transparent); } }
 @keyframes hoverFlight { 0%, 100% { transform: translate(0, 0) rotate(-7deg); } 50% { transform: translate(3px, -4px) rotate(-7deg); } }
 @media (max-width: 1050px) { .next { flex-wrap: wrap; } .next .primary { margin-left: 74px; } .overview { grid-template-columns: 1.5fr 1fr; } }
-@media (max-width: 700px) { .page { padding-left: 20px; padding-right: 20px; } .back { margin-bottom: 28px; } .heading { margin-bottom: 28px; } .heading h1 { letter-spacing: -2px; } .heading p:not(:global(.page-eyebrow)) { font-size: 13px; } .heading :global(.page-eyebrow) { font-size: 8px; } .destination { display: none; } .overview { grid-template-columns: 1fr; gap: 12px; margin-bottom: 22px; } .next, .progressCard { padding: 22px; } .next { gap: 14px; } .nextCopy h2 { font-size: 21px; } .next .primary { margin-left: 0; width: 100%; } .progressNumber { font-size: 28px; } .progressNumber span { max-width: none; } .progressBar { margin: 15px 0 10px; } .routeHeading { flex-wrap: wrap; padding: 24px 20px 0; gap: 18px; } .routeHeading h2 { font-size: 22px; } .routeControls { width: 100%; } .routeControls .jump { margin-right: auto; } .routeHint { padding: 14px 20px 0; font-size: 10px; } .track { padding-left: 20px; padding-right: 20px; } .stage { width: 150px; flex-basis: 150px; } .connector { width: 70px; } .routeFooter { flex-wrap: wrap; gap: 12px; padding: 18px 20px; font-size: 9px; } .notes { grid-template-columns: 1fr; gap: 12px; margin-top: 14px; } .dialog { padding: 28px 22px; } .dialog h2 { font-size: 25px; } }
+@media (max-width: 700px) { .page { padding-left: 20px; padding-right: 20px; } .back { margin-bottom: 28px; } .heading { margin-bottom: 28px; } .heading h1 { letter-spacing: -2px; } .heading p:not(:global(.page-eyebrow)) { font-size: 13px; } .heading :global(.page-eyebrow) { font-size: 12px; } .destination { display: none; } .overview { grid-template-columns: 1fr; gap: 12px; margin-bottom: 22px; } .next, .progressCard { padding: 22px; } .next { gap: 14px; } .nextCopy h2 { font-size: 21px; } .next .primary { margin-left: 0; width: 100%; } .progressNumber { font-size: 28px; } .progressNumber span { max-width: none; } .progressBar { margin: 15px 0 10px; } .routeHeading { flex-wrap: wrap; padding: 24px 20px 0; gap: 18px; } .routeHeading h2 { font-size: 22px; } .routeControls { width: 100%; } .routeControls .jump { margin-right: auto; } .routeHint { padding: 14px 20px 0; font-size: 12px; } .track { padding-left: 20px; padding-right: 20px; } .stage { width: 150px; flex-basis: 150px; } .connector { width: 70px; } .routeFooter { flex-wrap: wrap; gap: 12px; padding: 18px 20px; font-size: 12px; } .notes { grid-template-columns: 1fr; gap: 12px; margin-top: 14px; } .dialog { padding: 28px 22px; } .dialog h2 { font-size: 25px; } }
 @media (prefers-reduced-motion: reduce) { .page *, .dialog * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } .connector[data-beam] i { display: none; } }
-.motionToggle { display: inline-flex; align-items: center; gap: 6px; padding: 5px; color: var(--app-muted); font-size: 10px; }
+.motionToggle { display: inline-flex; align-items: center; gap: 6px; padding: 5px; color: var(--app-muted); font-size: 12px; }
 .motionToggle:hover { color: var(--app-accent-ink); }
 .page[data-motion-paused] * { animation: none !important; }

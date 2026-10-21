@@ -62,7 +62,7 @@
   color: #89968e;
 }
 .eyebrow {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 1.7px;
   color: #a9b8ae;
@@ -224,7 +224,7 @@
   align-items: center;
   gap: 8px;
   color: #7f9185;
-  font-size: 10px;
+  font-size: 12px;
   margin-top: 20px !important;
 }
 .heroNote svg {
@@ -240,7 +240,7 @@
   justify-content: space-between;
   align-items: center;
   color: #718077;
-  font-size: 9px;
+  font-size: 12px;
   letter-spacing: 1.3px;
 }
 .heroBottom a {
@@ -256,7 +256,7 @@
   align-items: center;
   gap: 7px;
   letter-spacing: 0;
-  font-size: 10px;
+  font-size: 12px;
   color: #a3b1a7;
 }
 .heroBottom button svg {
@@ -326,7 +326,7 @@
 }
 .destinationCard > span:nth-child(2) {
   display: grid;
-  font-size: 10px;
+  font-size: 12px;
   color: #97a69b;
   line-height: 1.5;
 }
@@ -394,14 +394,14 @@
   bottom: 0;
   right: 10%;
   font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 1px;
   color: #a8c4b1;
 }
 .coordinates span {
   display: block;
   margin-top: 5px;
-  font-size: 7px;
+  font-size: 12px;
   color: #5a7163;
   letter-spacing: 2px;
 }
@@ -493,7 +493,7 @@
   padding: 16px 22px;
   background: #1b241e;
   border-bottom: 1px solid var(--line);
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: 1.6px;
   color: #96a99c;
 }
@@ -509,7 +509,7 @@
 }
 .demoLabel {
   letter-spacing: 0 !important;
-  font-size: 10px;
+  font-size: 12px;
   color: #a4b8ab;
 }
 .workspaceBody {
@@ -537,7 +537,7 @@
   color: var(--mint);
 }
 .previewSidebar > p {
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: 1.4px;
   color: #657c6e;
   margin: 40px 12px 12px;
@@ -587,7 +587,7 @@
 }
 .previewDestination > span:last-child {
   color: #728e7d;
-  font-size: 9px;
+  font-size: 12px;
 }
 .previewMain {
   padding: 33px 36px 19px;
@@ -600,7 +600,7 @@
   margin-bottom: 23px;
 }
 .previewHeading p {
-  font-size: 7px;
+  font-size: 12px;
   letter-spacing: 1.4px;
   color: #809888;
   margin-bottom: 6px;
@@ -619,7 +619,7 @@
   border: 1px solid #c1f3d533;
   border-radius: 50%;
   color: #b9d7c3;
-  font-size: 7px;
+  font-size: 12px;
   font-weight: 600;
   background: #25352a;
 }
@@ -636,7 +636,7 @@
   padding: 14px;
 }
 .previewStats span {
-  font-size: 9px;
+  font-size: 12px;
   color: #829b8b;
   display: block;
 }
@@ -647,13 +647,13 @@
 }
 .previewStats strong > span {
   display: inline;
-  font-size: 9px;
+  font-size: 12px;
 }
 .tableLabel {
   display: flex;
   justify-content: space-between;
   color: #718b7b;
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: 1px;
   margin-bottom: 8px;
 }
@@ -676,7 +676,7 @@
   border: 1px solid #ffffff15;
   background: #1d2821;
   color: #9dbba7;
-  font-size: 9px;
+  font-size: 12px;
 }
 .programRow > div {
   display: grid;
@@ -687,7 +687,7 @@
   font-weight: 500;
 }
 .programRow > div > span {
-  font-size: 9px;
+  font-size: 12px;
   color: #75917f;
 }
 .programRow > svg {
@@ -700,7 +700,7 @@
 .applied {
   margin-left: auto;
   border-radius: 4px;
-  font-size: 8px;
+  font-size: 12px;
   padding: 3px 7px;
   border: 1px solid #ffffff10;
   color: #9ea99f;
@@ -716,7 +716,7 @@
   align-items: center;
   justify-content: space-between;
   color: #66816f;
-  font-size: 8px;
+  font-size: 12px;
   margin-top: 20px;
   border-top: 1px solid var(--line);
   padding-top: 12px;
@@ -731,7 +731,7 @@
   width: 4px;
 }
 .previewCaption {
-  font-size: 10px;
+  font-size: 12px;
   color: #74867a;
   text-align: center;
   margin-top: 32px !important;
@@ -781,11 +781,11 @@
 }
 .demoChecklist label > span:last-child {
   margin-left: auto;
-  font-size: 9px;
+  font-size: 12px;
   color: #81998a;
 }
 .demoHint {
-  font-size: 9px;
+  font-size: 12px;
   color: #7e9787;
   margin-top: 16px !important;
 }
@@ -793,7 +793,7 @@
   margin: 24px 0;
 }
 .budgetTotal > span {
-  font-size: 10px;
+  font-size: 12px;
   color: #859c8d;
 }
 .budgetTotal strong {
@@ -812,7 +812,7 @@
   align-items: center;
   gap: 20px;
   margin: 15px 0;
-  font-size: 10px;
+  font-size: 12px;
 }
 .budgetRow > span {
   width: 64px;
@@ -920,7 +920,7 @@
   background: #141c17;
 }
 .detailGrid .eyebrow {
-  font-size: 8px;
+  font-size: 12px;
   letter-spacing: 1.3px;
 }
 .detailGrid h2 {
@@ -995,15 +995,15 @@
   gap: 3px;
 }
 .activityExample strong {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
 }
 .activityExample > div > span {
-  font-size: 9px;
+  font-size: 12px;
   color: #829c8a;
 }
 .activityExample > span:last-child {
-  font-size: 8px;
+  font-size: 12px;
   color: #8da794;
   margin-left: auto;
 }
@@ -1013,7 +1013,7 @@
 }
 .exampleCaption {
   display: block;
-  font-size: 8px;
+  font-size: 12px;
   color: #657e6d;
   text-align: right;
   margin-top: 7px;
@@ -1081,7 +1081,7 @@
 }
 .finalSection .eyebrow {
   justify-content: center;
-  font-size: 9px;
+  font-size: 12px;
 }
 .finalSection h2 {
   font-size: clamp(48px, 6vw, 76px);
@@ -1136,7 +1136,7 @@
   color: var(--mint);
 }
 .footer p {
-  font-size: 10px;
+  font-size: 12px;
   color: #728479;
   margin-top: 7px;
 }
@@ -1150,7 +1150,7 @@
   color: white;
 }
 .footer > span {
-  font-size: 9px;
+  font-size: 12px;
   color: #6c8072;
 }
 .landing [data-reveal][data-visible="true"] {
@@ -1236,7 +1236,7 @@
     letter-spacing: -3.5px;
   }
   .hero .eyebrow {
-    font-size: 8px;
+    font-size: 12px;
     letter-spacing: 1px;
   }
   .journey {
@@ -1264,7 +1264,7 @@
     gap: 15px;
   }
   .secondary {
-    font-size: 10px;
+    font-size: 12px;
   }
   .primary {
     padding: 12px 15px;
@@ -1317,7 +1317,7 @@
     margin: 22px 0;
   }
   .hero .eyebrow {
-    font-size: 8px;
+    font-size: 12px;
     letter-spacing: 1px;
   }
   .heroDescription {
@@ -1337,7 +1337,7 @@
     font-size: 12px;
   }
   .heroNote {
-    font-size: 9px;
+    font-size: 12px;
   }
   .journey {
     width: 82%;
@@ -1356,11 +1356,11 @@
     padding: 12px 15px;
   }
   .coordinates {
-    font-size: 8px;
+    font-size: 12px;
     bottom: 1%;
   }
   .coordinates span {
-    font-size: 6px;
+    font-size: 12px;
   }
   .heroBottom {
     bottom: 24px;
@@ -1376,7 +1376,7 @@
     padding-block: 22px;
   }
   .capabilityStrip span {
-    font-size: 10px;
+    font-size: 12px;
     gap: 9px;
   }
   .capabilityStrip svg {
@@ -1390,7 +1390,7 @@
     margin-bottom: 29px;
   }
   .sectionHeading .eyebrow {
-    font-size: 8px;
+    font-size: 12px;
     letter-spacing: 1.2px;
     margin-bottom: 17px;
   }
@@ -1408,12 +1408,23 @@
     min-height: unset;
   }
   .windowBar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px 12px;
     padding: 13px 14px;
-    font-size: 6px;
+    font-size: 12px;
     letter-spacing: 1px;
   }
   .demoLabel {
-    font-size: 8px;
+    font-size: 12px;
+    grid-column: 1 / -1;
+    justify-self: end;
+  }
+  .windowBar > span:nth-child(2) {
+    min-width: 0;
+    text-align: right;
+    overflow-wrap: anywhere;
+    line-height: 1.5;
   }
   .previewSidebar {
     padding: 13px;
@@ -1433,7 +1444,7 @@
     flex: 1;
     justify-content: center;
     padding: 9px 5px;
-    font-size: 10px;
+    font-size: 12px;
     gap: 7px;
   }
   .previewTabs svg {
@@ -1453,14 +1464,14 @@
     padding: 10px 8px;
   }
   .previewStats > div > span {
-    font-size: 8px;
+    font-size: 12px;
     min-height: 24px;
   }
   .previewStats strong {
     font-size: 22px;
   }
   .previewStats strong > span {
-    font-size: 7px;
+    font-size: 12px;
   }
   .programRow {
     gap: 9px;
@@ -1469,7 +1480,7 @@
     margin-left: 0;
   }
   .previewCaption {
-    font-size: 9px;
+    font-size: 12px;
     max-width: 290px;
     margin-inline: auto !important;
   }
@@ -1530,7 +1541,7 @@
     font-size: 34px;
   }
   .faq .eyebrow {
-    font-size: 8px;
+    font-size: 12px;
   }
   .faqList summary {
     font-size: 13px;
@@ -1542,7 +1553,7 @@
     padding: 65px 0;
   }
   .finalSection .eyebrow {
-    font-size: 7px;
+    font-size: 12px;
     letter-spacing: 1px;
   }
   .finalSection h2 {
@@ -1572,7 +1583,7 @@
     width: calc(100% - 32px);
   }
   .hero .eyebrow {
-    font-size: 7px;
+    font-size: 12px;
   }
   .hero h1 {
     font-size: 46px;
@@ -1581,7 +1592,7 @@
     gap: 15px;
   }
   .secondary {
-    font-size: 10px;
+    font-size: 12px;
   }
   .primary {
     gap: 9px;
@@ -1592,10 +1603,10 @@
     gap: 8px;
   }
   .activityExample strong {
-    font-size: 9px;
+    font-size: 12px;
   }
   .activityExample > div > span {
-    font-size: 8px;
+    font-size: 12px;
   }
   .detailGrid article {
     padding: 23px;
@@ -1604,10 +1615,10 @@
     gap: 4px;
   }
   .windowBar > span:nth-child(2) {
-    font-size: 5px;
+    font-size: 12px;
   }
   .demoLabel {
-    font-size: 7px;
+    font-size: 12px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -65,7 +65,7 @@ body {
   font-weight: 500;
 }
 .page-eyebrow {
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--app-accent-ink);
@@ -97,6 +97,139 @@ body {
 .app-page option {
   background: var(--app-surface);
   color: var(--app-ink);
+}
+
+/* Keep native select semantics, labels, form events and keyboard handling.
+   Browsers supporting customizable selects also theme the popup itself. */
+select:not([multiple]):not([size]) {
+  appearance: none;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  min-block-size: 44px;
+  padding: 10px 38px 10px 14px;
+  border: 1px solid var(--app-line);
+  border-radius: 9px;
+  background-color: var(--app-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' stroke='%237a9b87' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  color: var(--app-ink);
+  font-family: inherit;
+  line-height: 1.5;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+select:not([multiple]):not([size]):hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--app-accent-ink) 55%, var(--app-line));
+}
+select:not([multiple]):not([size]):focus-visible,
+select:not([multiple]):not([size]):open {
+  border-color: var(--app-accent-ink);
+  outline: 2px solid color-mix(in srgb, var(--app-accent-ink) 28%, transparent);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--app-accent-ink) 6%, transparent);
+}
+select:disabled {
+  opacity: .55;
+}
+@supports (appearance: base-select) {
+  select:not([multiple]):not([size]),
+  select:not([multiple]):not([size])::picker(select) {
+    appearance: base-select;
+  }
+  select:not([multiple]):not([size]) {
+    background-image: none;
+    padding-inline-end: 14px;
+    align-items: center;
+    gap: 12px;
+  }
+  select:not([multiple]):not([size])::picker-icon {
+    content: "";
+    inline-size: 8px;
+    block-size: 8px;
+    border-inline-end: 1.5px solid var(--app-accent-ink);
+    border-block-end: 1.5px solid var(--app-accent-ink);
+    margin-inline-start: auto;
+    margin-inline-end: 3px;
+    flex-shrink: 0;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 160ms ease;
+  }
+  select:not([multiple]):not([size]):open::picker-icon {
+    transform: translateY(2px) rotate(225deg);
+  }
+  select:not([multiple]):not([size])::picker(select) {
+    margin-block-start: 8px;
+    padding: 6px;
+    border: 1px solid var(--app-line);
+    border-radius: 12px;
+    background: var(--app-surface);
+    color: var(--app-ink);
+    box-shadow: 0 16px 48px #0004, 0 2px 8px #0002;
+    font-family: inherit;
+    font-size: max(14px, 1em);
+    line-height: 1.5;
+    min-inline-size: anchor-size(width);
+    max-inline-size: min(30rem, calc(100vw - 24px));
+    max-block-size: min(360px, 55dvh);
+    overflow: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: var(--app-line) var(--app-surface);
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 140ms ease, transform 140ms ease, display 140ms allow-discrete, overlay 140ms allow-discrete;
+  }
+  select:not([multiple]):not([size]):open::picker(select) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  @starting-style {
+    select:not([multiple]):not([size]):open::picker(select) {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+  select:not([multiple]):not([size]) option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-block-size: 42px;
+    padding: 10px 12px;
+    margin-block: 2px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--app-ink);
+    white-space: normal;
+    overflow-wrap: anywhere;
+    cursor: pointer;
+  }
+  select:not([multiple]):not([size]) option:is(:hover, :focus-visible) {
+    outline: none;
+    background: var(--app-accent-soft);
+    color: var(--app-accent-ink);
+  }
+  select:not([multiple]):not([size]) option:checked {
+    border-color: color-mix(in srgb, var(--app-accent-ink) 24%, transparent);
+    background: var(--app-accent-soft);
+    color: var(--app-accent-ink);
+    font-weight: 500;
+  }
+  select:not([multiple]):not([size]) option::checkmark {
+    color: var(--app-accent-ink);
+    font-size: 12px;
+  }
+  select:not([multiple]):not([size]) option:disabled {
+    opacity: .5;
+    cursor: not-allowed;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  select:not([multiple]):not([size]),
+  select:not([multiple]):not([size])::picker-icon,
+  select:not([multiple]):not([size])::picker(select) {
+    transition: none;
+  }
 }
 :is(button, a, summary, [role="button"]):focus-visible {
   outline: 2px solid var(--app-accent-ink);
@@ -148,6 +281,18 @@ button.bg-accent:hover:not(:disabled) {
   background: var(--app-surface);
   border-color: var(--app-line);
   box-shadow: 0 16px 50px #0003;
+}
+#account-settings a,
+#mobile-navigation a {
+  display: block;
+  border-radius: 7px;
+  padding: 9px 10px;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+#account-settings a:is(:hover, :focus-visible),
+#mobile-navigation a:is(:hover, :focus-visible) {
+  background: var(--app-accent-soft);
+  color: var(--app-accent-ink);
 }
 .theme-options {
   display: flex;

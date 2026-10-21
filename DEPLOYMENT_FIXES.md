@@ -154,3 +154,11 @@ Built the private document library, authenticated file endpoints, server validat
 ## 21 October 2026 — combined release preparation
 
 The owner requested committing and pushing the completed work. Because the checkout also contains the detailed programme catalogue, applied its schema and seed migrations before pushing to `main`. The preflight found 19 existing programme rows, 17 saved applications, and no name conflicts with the import. Existing rows and saved applications were preserved. The document migration was already applied. Validation before release: 165 tests, lint, production build, seed/JSON consistency, clean whitespace checks, and zero reported production dependency vulnerabilities. Real signed-in production document upload/download/deletion remains to be tested after deployment.
+
+
+## 21 October 2026 — dropdown and small-text polish
+
+- Added shared theme-aware select styling, comfortable option spacing, mint selection/hover states, keyboard focus rings, and a subtle opening transition. Browsers supporting customizable native selects use the themed popup; other browsers retain their functional system popup. Reduced-motion preferences are respected. Settings/mobile navigation links also have clearer hover and focus states.
+- Increased all explicit font sizes of 10px or smaller to 12px across the application, including miniature homepage labels and notification badges. Adjusted the mobile workspace preview header to fit the larger text. Existing 11px text is unchanged.
+- Validation: 165 tests, lint, production build and whitespace checks passed. Source scan found no remaining explicit pixel declarations at 10px or below. Local Chrome desktop/mobile checks covered popup appearance, keyboard selection/dismissal, filtering, and homepage preview layout without horizontal overflow.
+- Release: the user approved committing and pushing this styling update to `main`. No Supabase changes are needed. Deployment readiness must be checked separately after the push.

@@ -133,7 +133,7 @@ export default function Header() {
           >
             <FaBell aria-hidden="true" />
             {unread > 0 && (
-              <span className="absolute -right-1 -top-1 rounded-full bg-red-600 px-1 text-[10px] text-white">
+              <span className="absolute -right-1 -top-1 min-w-5 rounded-full bg-red-600 px-1 text-center text-[12px] leading-5 text-white ring-2 ring-background">
                 {unread > 99 ? "99+" : unread}
               </span>
             )}

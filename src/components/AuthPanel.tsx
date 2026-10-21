@@ -128,7 +128,7 @@ export default function AuthPanel({ nextPath = "/" }: { nextPath?: string }) {
           </div>
           <div className="flex items-center gap-2">
             <div className="h-px flex-1 bg-surface" />
-            <span className="text-[10px] uppercase tracking-[0.2em] text-muted">
+            <span className="text-[12px] uppercase tracking-[0.2em] text-muted">
               or
             </span>
             <div className="h-px flex-1 bg-surface" />
