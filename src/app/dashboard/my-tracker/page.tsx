@@ -213,6 +213,7 @@ export default function MyTrackerPage() {
           {/* Mandatory Docs Checklist */}
           <div className="w-full min-w-0 lg:max-w-xs lg:shrink-0 rounded-xl border border-line bg-surface p-7" role="region" aria-label="Mandatory Documents Checklist">
             <h2 className="text-xl font-extrabold mb-5 text-accent-ink tracking-wide drop-shadow-sm">Mandatory Documents</h2>
+            <a href="/dashboard/your-documents" className="mb-5 inline-block text-sm underline text-accent-ink">Open Your Documents ↗</a>
             <ul className="space-y-4 mb-3" role="list">
               {DEFAULT_MANDATORY_DOCS.map((doc) => (
                 <li key={doc.label} className="flex items-center gap-4 group transition-all duration-150 hover:bg-accent-soft rounded-xl px-2 py-1" role="listitem">

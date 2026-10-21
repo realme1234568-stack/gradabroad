@@ -13,6 +13,7 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
   const [error, setError] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
   const [hasRecord, setHasRecord] = useState(false);
+  const [ownerId, setOwnerId] = useState<string | null>(null);
   const userId = useRef<string | null>(null);
   const generation = useRef(0);
   const busy = useRef(false);
@@ -39,6 +40,7 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
         if (!validate(loaded)) throw new Error("Your saved data could not be read. Please contact support.");
         if (!active || current !== generation.current) return;
         userId.current = owner;
+        setOwnerId(owner);
         setHasRecord(Boolean(data));
         setValue(loaded);
         setBaseline(loaded);
@@ -54,6 +56,7 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
       if (session?.user.id === userId.current) return;
       // Invalidate in-flight saves immediately; do not call Auth inside its callback.
       userId.current = null;
+      setOwnerId(null);
       generation.current++;
       setValue(defaults);
       setBaseline(defaults);
@@ -100,5 +103,5 @@ export function useAccountData<T>(kind: AccountDataKind, defaults: T, validate: 
       setSaving(false);
     }
   }
-  return { hasRecord, reset: () => setValue(baseline), ownerId: userId.current, value, setValue, save, loading, saving, error, ready, dirty: JSON.stringify(value) !== JSON.stringify(baseline) };
+  return { hasRecord, reset: () => setValue(baseline), ownerId, value, setValue, save, loading, saving, error, ready, dirty: JSON.stringify(value) !== JSON.stringify(baseline) };
 }

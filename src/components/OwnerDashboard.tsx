@@ -30,6 +30,7 @@ import {
   type ProgramDraft,
 } from "@/lib/owner";
 import s from "@/app/admin/admin.module.css";
+import ProgramDetailsFields from "@/components/ProgramDetailsFields";
 
 type Filter = { query: string; state: string; page: number };
 const initialFilter: Filter = { query: "", state: "all", page: 0 };
@@ -110,9 +111,10 @@ export default function OwnerDashboard({
       generation.current++;
       loadNumber.current++;
     };
-    void load(initialFilter);
+    const timer = setTimeout(() => void load(initialFilter), 0);
     const { data } = client.auth.onAuthStateChange((_event, session) => {
       if (session?.user.id === ownerId) return;
+      clearTimeout(timer);
       invalidate();
       setAccessValid(false);
       setOverview(null);
@@ -122,6 +124,7 @@ export default function OwnerDashboard({
       setLoading(false);
     });
     return () => {
+      clearTimeout(timer);
       invalidate();
       data.subscription.unsubscribe();
     };
@@ -648,6 +651,7 @@ export default function OwnerDashboard({
                     />
                   </label>
                 </div>
+                <ProgramDetailsFields value={draft.details} onChange={details => setDraft({ ...draft, details })} />
                 <label className={s.publish}>
                   <input
                     type="checkbox"

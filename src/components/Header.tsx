@@ -171,6 +171,13 @@ export default function Header() {
                     My profile
                   </Link>
                   <Link
+                    href="/dashboard/your-documents"
+                    onClick={() => setSettingsOpen(false)}
+                    className="text-ink hover:text-accent-ink"
+                  >
+                    Your Documents
+                  </Link>
+                  <Link
                     href="/settings"
                     onClick={() => setSettingsOpen(false)}
                     className="text-ink hover:text-accent-ink"

@@ -34,7 +34,7 @@ const faq = [
   ],
   [
     "Can I upload my documents?",
-    "Not currently. The document checklist helps you track what you have prepared. It does not upload or store your files.",
+    "Your Documents is your private library for PDF, JPG, and PNG files, up to 3 MB each. Sign in to upload, download, or delete your files. The tracker checklist separately records what you have prepared; uploading does not submit anything to a university.",
   ],
   [
     "How do notifications work?",

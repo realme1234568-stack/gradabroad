@@ -11,6 +11,7 @@ export default function SettingsPage() {
       <p className="mt-2 text-sm text-muted">
         Control your preferences and notifications.
       </p>
+      <a href="/dashboard/your-documents" className="mt-6 inline-block rounded-xl border border-line bg-surface px-5 py-4 text-accent-ink">Your Documents — open your private library ↗</a>
 
       <section className="mt-8 rounded-xl border border-line bg-surface p-8 shadow-sm dark:shadow-none">
         <div className="flex flex-col gap-6">

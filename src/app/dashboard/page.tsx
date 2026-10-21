@@ -3,6 +3,7 @@ import { useNotifications } from "@/components/NotificationProvider";
 import ApplicationStatusOptions from "@/components/ApplicationStatusOptions";
 import { normalizeApplicationStatus } from "@/lib/applicationStatus";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { useUser } from "@/lib/UserContext";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -24,6 +25,7 @@ type Tracker = {
 
 
 export default function DashboardPage() {
+  const router = useRouter();
   const { notify } = useNotifications();
   const [shortlisted, setShortlisted] = useState<Shortlist[]>([]);
   const [tracker, setTracker] = useState<Tracker[]>([]);
@@ -111,13 +113,13 @@ export default function DashboardPage() {
           tabIndex={0}
           role="button"
           aria-label="Open My Shortlist"
-          onClick={() => window.location.href = '/dashboard/my-shortlist'}
-          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') window.location.href = '/dashboard/my-shortlist'; }}
+          onClick={() => router.push('/dashboard/my-shortlist')}
+          onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); router.push('/dashboard/my-shortlist'); } }}
         >
           <h2 className="text-lg font-semibold mb-4">My Shortlist</h2>
           {loading ? (
             <div>Loading...</div>
-          ) : loadError ? (<div role="alert" className="rounded-xl border border-red-300 p-4"><p>{loadError}</p><button type="button" className="mt-2 rounded border px-3 py-2" onClick={() => setLoadAttempt(attempt => attempt + 1)}>Retry</button></div>) : shortlisted.length === 0 ? (
+          ) : loadError ? (<div role="alert" className="rounded-xl border border-red-300 p-4"><p>{loadError}</p><button type="button" className="mt-2 rounded border px-3 py-2" onClick={event => { event.stopPropagation(); setLoadAttempt(attempt => attempt + 1); }}>Retry</button></div>) : shortlisted.length === 0 ? (
             <div className="rounded-xl border border-dashed border-line bg-surface p-4 text-sm text-muted">
               No shortlisted universities yet.
             </div>
@@ -147,9 +149,16 @@ export default function DashboardPage() {
 
         <section className="rounded-xl border border-line p-6">
           <h2 className="text-lg font-semibold">Document checklist</h2>
-          <p className="mt-2 text-sm">Track which documents you have prepared in My Tracker. File uploads and document storage are not available.</p>
+          <p className="mt-2 text-sm">Track which documents you have prepared in My Tracker, and keep private copies in Your Documents.</p>
           <a href="/dashboard/my-tracker" className="mt-3 inline-block underline">Open document checklist</a>
         </section>
+
+        <a href="/dashboard/your-documents" className="rounded-xl border border-line bg-surface p-6">
+          <p className="page-eyebrow">YOUR PRIVATE LIBRARY</p>
+          <h2 className="text-lg font-semibold">Your Documents <span aria-hidden="true">↗</span></h2>
+          <p className="mt-3 text-sm text-muted">Upload, organise, download, and delete your application documents. Files are private to your account.</p>
+          <span className="mt-5 inline-block text-sm text-accent-ink">Open your documents →</span>
+        </a>
 
         {/* My Tracker */}
         {/* My Expense Calculator Tab */}

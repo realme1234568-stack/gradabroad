@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import ProgramList from "@/components/ProgramList";
+import ProgramResearchNote from "@/components/ProgramResearchNote";
 import { supabase } from "@/lib/supabaseClient";
+import { admissionBands, catalogueReady, type ProgramDetails } from "@/lib/programDetails";
 
 type Program = {
   id: string;
@@ -9,8 +11,9 @@ type Program = {
   course_name: string;
   level: string | null;
   language: string | null;
+  details: ProgramDetails;
 };
-const pageSize = 48;
+const pageSize = 24;
 export default function BrowseProgramsPage() {
   const [selectedLevel, setSelectedLevel] = useState<"master" | "bachelor">(
     "master",
@@ -21,27 +24,25 @@ export default function BrowseProgramsPage() {
   const [attempt, setAttempt] = useState(0);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
+  const [query, setQuery] = useState("");
+  const [submittedQuery, setSubmittedQuery] = useState("");
+  const [band, setBand] = useState("all");
   useEffect(() => {
     let active = true;
     async function load() {
       setLoading(true);
       setLoadError(null);
       try {
-        const { data, count, error } = await supabase
-          .from("programs")
-          .select("id,university_name,course_name,level,language", {
-            count: "exact",
-          })
-          .in("level", [selectedLevel, `${selectedLevel}s`])
-          .eq("is_published", true)
-          .order("university_name")
-          .order("course_name")
-          .order("id")
-          .range(page * pageSize, (page + 1) * pageSize - 1);
+        const { data, error } = await supabase.rpc("search_english_programs", {
+          p_level: selectedLevel, p_query: submittedQuery, p_band: band, p_page: page,
+        });
         if (!active) return;
         if (error) throw error;
-        setPrograms(data ?? []);
-        setTotal(count ?? 0);
+        if (!data || !Array.isArray(data.items) || data.items.length > pageSize || !Number.isSafeInteger(data.total) || data.total < data.items.length || data.page !== page ||
+            !data.items.every((p: Program) => p && typeof p.id === "string" && typeof p.university_name === "string" && typeof p.course_name === "string" && p.language === "English" && p.level === selectedLevel && catalogueReady(p.details)))
+          throw new Error("Unexpected catalogue response");
+        setPrograms(data.items);
+        setTotal(data.total);
       } catch {
         if (active) setLoadError("Could not load programs. Please retry.");
       } finally {
@@ -52,7 +53,7 @@ export default function BrowseProgramsPage() {
     return () => {
       active = false;
     };
-  }, [selectedLevel, page, attempt]);
+  }, [selectedLevel, page, attempt, submittedQuery, band]);
   function choose(level: typeof selectedLevel) {
     setPage(0);
     setSelectedLevel(level);
@@ -62,8 +63,8 @@ export default function BrowseProgramsPage() {
       <p className="page-eyebrow">FIND YOUR DIRECTION</p>
       <h1>Browse Programs</h1>
       <p>
-        Find your next chapter in Germany. Explore programs and build your
-        personal shortlist.
+        English-taught degrees at public universities across Germany. Compare
+        published requirements, intakes and costs, then build your shortlist.
       </p>
       <div className="degree-tabs">
         {(
@@ -83,6 +84,22 @@ export default function BrowseProgramsPage() {
           </button>
         ))}
       </div>
+      <form className="my-8 flex flex-wrap items-end gap-4 rounded-xl border border-line bg-surface p-5" onSubmit={e => {
+        e.preventDefault(); setPage(0); setSubmittedQuery(query.trim());
+      }}>
+        <label className="w-full min-w-0 text-xs text-muted sm:flex-1">University or program
+          <input className="mt-2 block w-full rounded-lg border border-line bg-background px-3 py-3 text-sm text-ink" type="search" maxLength={120} value={query} onChange={e => setQuery(e.target.value)} placeholder="Search Germany’s public programs" />
+        </label>
+        <label className="w-full text-xs text-muted sm:w-auto">Admission requirements
+          <select className="mt-2 block w-full max-w-full rounded-lg border border-line bg-background px-3 py-3 text-sm text-ink" value={band} onChange={e => { setPage(0); setBand(e.target.value); }}>
+            <option value="all">All planning groups</option>
+            {Object.entries(admissionBands).map(([key,label]) => <option key={key} value={key}>{label}</option>)}
+          </select>
+        </label>
+        <button type="submit" className="ga-primary rounded-lg px-5 py-3 text-sm">Search</button>
+        {(submittedQuery || band !== "all") && <button type="button" className="px-3 py-3 text-sm underline" onClick={() => { setQuery(""); setSubmittedQuery(""); setBand("all"); setPage(0); }}>Clear filters</button>}
+      </form>
+      <p className="mb-6 text-xs leading-6 text-muted">Planning groups describe entry requirements, not acceptance chances or university rankings. Open admission still requires all stated qualifications. Check each program’s sources and review date.</p>
       {loading ? (
         <p role="status">Loading programs…</p>
       ) : loadError ? (
@@ -101,7 +118,7 @@ export default function BrowseProgramsPage() {
           <ProgramList key={`${selectedLevel}:${page}`} programs={programs} />
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4 text-xs text-muted">
             <span>
-              {total} programs · Page {page + 1} of{" "}
+              {total} {total === 1 ? "program" : "programs"} · Page {page + 1} of{" "}
               {Math.max(1, Math.ceil(total / pageSize))}
             </span>
             <div className="flex gap-3">
@@ -126,8 +143,7 @@ export default function BrowseProgramsPage() {
         </>
       ) : (
         <p className="rounded-xl border border-line bg-surface p-8 text-muted">
-          No {selectedLevel === "master" ? "Master’s" : "Bachelor’s"} programs
-          are available on this page.
+          No {selectedLevel === "master" ? "Master’s" : "Bachelor’s"} programs match these filters on this page.
           {page > 0 && (
             <button
               type="button"
@@ -139,6 +155,7 @@ export default function BrowseProgramsPage() {
           )}
         </p>
       )}
+      <ProgramResearchNote />
     </div>
   );
 }

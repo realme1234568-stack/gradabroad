@@ -13,6 +13,7 @@ export default function NotificationProvider({ children }: { children: React.Rea
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [hasAccount, setHasAccount] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const sequence = useRef(0);
   const owner = useRef<string | null>(null);
@@ -47,6 +48,7 @@ export default function NotificationProvider({ children }: { children: React.Rea
       if (!active || id === owner.current) return;
       generation.current++;
       owner.current = id;
+      setHasAccount(Boolean(id));
       setItems([]); setQueue([]); setError(null); setOpen(false); setLoading(false); setSaving(false);
       if (id) void load();
     };
@@ -117,7 +119,7 @@ export default function NotificationProvider({ children }: { children: React.Rea
       onClick={event => { if (event.target === dialog.current) close(); }}
       className="notification-center fixed inset-0 m-auto max-h-[80dvh] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-xl border border-line bg-surface p-5 text-ink shadow-sm backdrop:bg-surface">
       <div className="flex items-center justify-between gap-4"><h2 id="notification-title" className="text-xl font-semibold">Notifications</h2><button type="button" onClick={close} className="rounded border px-3 py-2">Close</button></div>
-      {!owner.current ? <p className="mt-4">Sign in to view your notifications.</p> : <>
+      {!hasAccount ? <p className="mt-4">Sign in to view your notifications.</p> : <>
         <p className="mt-2 text-sm">Your latest 100 shortlist and application updates.</p>
         {loading && <p role="status">Loading notifications…</p>}
         {error && <div role="alert" className="mt-3"><p>{error}</p><button type="button" onClick={() => void load()} className="mt-2 rounded border px-3 py-2">Retry</button></div>}

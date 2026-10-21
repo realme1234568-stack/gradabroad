@@ -1,4 +1,6 @@
 "use client";
+import Link from "next/link";
+import { admissionBands, catalogueReady, type ProgramDetails } from "@/lib/programDetails";
 import { useNotifications } from "@/components/NotificationProvider";
 import ApplicationStatusOptions from "@/components/ApplicationStatusOptions";
 import { normalizeApplicationStatus } from "@/lib/applicationStatus";
@@ -20,6 +22,7 @@ type Program = {
   gmat_required?: boolean | null;
   application_mode?: string | null;
   intake?: string | null;
+  details?: ProgramDetails | null;
 };
 
 type Status = "idle" | "loading" | "shortlisted" | "error" | "signin";
@@ -204,14 +207,14 @@ export default function ProgramList({ programs }: Props) {
       <section className="rounded-xl border border-line bg-surface p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-muted">
           <span className="rounded-full bg-surface px-3 py-1">
-            Showing {programs.length} of {programs.length}
+            {programs.length} {programs.length === 1 ? "program" : "programs"} on this page
           </span>
         </div>
       </section>
       <div className="grid gap-6 md:grid-cols-2">
         {programs.length === 0 ? (
         <div className="rounded-xl border border-dashed border-line bg-surface p-6 text-sm text-muted">
-          No programs yet. Add some rows in Supabase to see them here.
+          No programs match these filters. Try another degree level or search.
         </div>
       ) : (
         programs.map((program) => {
@@ -269,6 +272,12 @@ export default function ProgramList({ programs }: Props) {
                   </span>
                 ) : null}
               </div>
+              {catalogueReady(program.details) && <div className="mt-5 space-y-3 text-xs leading-6 text-muted">
+                <p>{[program.details.city, program.details.duration, program.details.credits && `${program.details.credits} ECTS`].filter(Boolean).join(" · ")}</p>
+                <p>{program.details.intakes || "Intake not yet verified"}</p>
+                <p>{admissionBands[program.details.admission_band]}</p>
+                <Link className="inline-block text-accent-ink underline underline-offset-4" href={`/programs/${program.id}`}>View requirements, fees & deadlines ↗</Link>
+              </div>}
               <div className="mt-6 flex flex-col gap-2">
                 <button
                   type="button"

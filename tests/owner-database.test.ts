@@ -2,6 +2,7 @@
 import { afterAll, beforeAll, beforeEach, expect, test } from "vitest";
 import { readFile } from "node:fs/promises";
 import { PGlite } from "@electric-sql/pglite";
+import catalogueSnapshot from "../data/programs-germany-english.json";
 
 // Real PostgreSQL policy/function execution in an isolated in-memory database.
 // Auth is a minimal fixture; no production credentials, records, or files are used.
@@ -36,7 +37,7 @@ async function save(
 ) {
   return (
     await sql<{
-      program: { id: string; revision: number; is_published: boolean };
+      program: { id: string; revision: number; is_published: boolean; details: unknown };
     }>("select public.owner_save_program($1::jsonb,$2::integer) as program", [
       JSON.stringify(program),
       revision,
@@ -88,6 +89,7 @@ beforeAll(async () => {
       "utf8",
     ),
   );
+  await db.exec(await readFile(new URL("../supabase/migrations/20261020190000_program_details.sql", import.meta.url), "utf8"));
   grant = await readFile(
     new URL("../supabase/owner/grant_owner.sql", import.meta.url),
     "utf8",
@@ -314,4 +316,52 @@ test("owner catalogue pagination returns all records across pages", async () => 
   expect(new Set([...first.items, ...second.items].map((p) => p.id)).size).toBe(
     31,
   );
+});
+
+
+test("program metadata preserves owner revisions and rejects malformed or future-dated information", async () => {
+  await asUser(owner);
+  const details = catalogueSnapshot[0].details;
+  const draft = await save({ ...payload, details });
+  const stored = await save({ ...payload, id: draft.id }, draft.revision);
+  expect(stored.details).toEqual(details);
+  await expect(save({ ...payload, id: draft.id, details: { ...details, official_url: "javascript:alert(1)" } }, stored.revision)).rejects.toMatchObject({code:"22023"});
+  await expect(save({ ...payload, id: draft.id, details: { ...details, admission_band: "constructor" } }, stored.revision)).rejects.toMatchObject({code:"22023"});
+  await expect(save({ ...payload, id: draft.id, details: { ...details, reviewed_on: "2999-01-01" } }, stored.revision)).rejects.toMatchObject({code:"22023"});
+  const cleared = await save({ ...payload, id: draft.id, details: null }, stored.revision);
+  expect(cleared.details).toBeNull();
+});
+
+test("200-program import is complete, paginated and read-only to visitors, and re-import preserves owner edits", async () => {
+  const seed = await readFile(new URL("../supabase/migrations/20261021010000_german_english_catalogue.sql",import.meta.url),"utf8");
+  await db.exec(seed);
+  await asUser(null,"anon");
+  async function search(level="master",query="",band="all",page=0) {
+    return (await sql<{data: {items: {id: string;details: unknown}[];total: number;page:number}}>("select public.search_english_programs($1,$2,$3,$4) as data",[level,query,band,page]))[0].data;
+  }
+  for (const level of ["master","bachelor"]) {
+    const seen = new Set<string>();
+    for(let page=0;page<5;page++) {
+      const result = await search(level,"","all",page);
+      expect(result.total).toBe(100);
+      expect(result.items).toHaveLength(page<4?24:4);
+      result.items.forEach(p=>seen.add(p.id));
+    }
+    expect(seen.size).toBe(100);
+  }
+  expect((await search("bachelor","","open")).total).toBe(catalogueSnapshot.filter(p=>p.level==="bachelor"&&p.details.admission_band==="open").length);
+  expect((await search("bachelor","%_(),'")).total).toBe(0);
+  await expect(search("invalid")).rejects.toMatchObject({code:"22023"});
+  await expect(search("master","","all",-1)).rejects.toMatchObject({code:"22023"});
+  await expect(sql("select public.owner_programs()")).rejects.toMatchObject({code:"42501"});
+  await asUser(owner);
+  const first = catalogueSnapshot[0];
+  await save({...first, details:{...first.details,notes:"Owner review retained"},is_published:false},1);
+  await db.exec("reset role");
+  await db.exec(seed);
+  const preserved = (await sql<{details:{notes:string};is_published:boolean}>("select details,is_published from public.programs where id=$1",[first.id]))[0];
+  expect(preserved.details.notes).toBe("Owner review retained");
+  expect(preserved.is_published).toBe(false);
+  await asUser(null,"anon");
+  expect((await search("bachelor")).total).toBe(99);
 });

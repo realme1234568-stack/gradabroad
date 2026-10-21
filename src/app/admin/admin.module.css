@@ -425,7 +425,8 @@
   font-size: 12px;
 }
 .dialog input:not([type="checkbox"]),
-.dialog select {
+.dialog select,
+.dialog textarea {
   width: 100%;
   min-width: 0;
   background: var(--app-bg);
@@ -435,6 +436,8 @@
   font-size: 13px;
   color: var(--app-ink);
 }
+.dialog details label { margin-top: 16px; }
+.dialog textarea { resize: vertical; min-height: 90px; }
 .editorGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;

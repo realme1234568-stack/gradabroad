@@ -1,4 +1,5 @@
 import { normalizeProgramLevel } from "@/lib/programLevel";
+import { detailsError, isProgramDetails, type ProgramDetails } from "@/lib/programDetails";
 export type OwnerProgram = {
   id: string;
   university_name: string;
@@ -7,6 +8,7 @@ export type OwnerProgram = {
   language: string | null;
   is_published: boolean;
   revision: number;
+  details?: ProgramDetails | null;
 };
 export type ProgramDraft = {
   university_name: string;
@@ -14,6 +16,7 @@ export type ProgramDraft = {
   level: string;
   language: string;
   is_published: boolean;
+  details?: ProgramDetails | null;
 };
 export type OwnerOverview = {
   email: string;
@@ -76,6 +79,7 @@ export function isOwnerProgram(v: unknown): v is OwnerProgram {
     (v.level === null || typeof v.level === "string") &&
     (v.language === null || typeof v.language === "string") &&
     typeof v.is_published === "boolean" &&
+    (v.details === undefined || v.details === null || isProgramDetails(v.details)) &&
     count(v.revision) &&
     v.revision > 0
   );
@@ -91,6 +95,10 @@ export function isOwnerCatalogue(v: unknown): v is OwnerCatalogue {
   );
 }
 export function programDraftError(draft: ProgramDraft): string | null {
+  if (draft.details) {
+    const error = detailsError(draft.details);
+    if (error) return error;
+  }
   if (
     !draft.university_name.trim() ||
     draft.university_name.trim().length > 240
@@ -111,6 +119,7 @@ export function editProgram(program: OwnerProgram): ProgramDraft {
     level: normalizeProgramLevel(program.level) ?? "",
     language: program.language ?? "",
     is_published: program.is_published,
+    ...(program.details ? { details: program.details } : {}),
   };
 }
 export function ownerError(
@@ -133,13 +142,14 @@ export function catalogueCsv(programs: OwnerProgram[]) {
   const cell = (v: string) =>
     '"' + (/^[\s]*[=+@\-\t\r]/.test(v) ? "'" + v : v).replace(/"/g, '""') + '"';
   return [
-    ["university_name", "course_name", "level", "language", "is_published"],
+    ["university_name", "course_name", "level", "language", "is_published", "reviewed_on", "admission_band", "academic_requirements", "english_requirement", "intakes", "deadlines", "tuition", "semester_fee", "source_url", "official_url"],
     ...programs.map((p) => [
       p.university_name,
       p.course_name,
       p.level ?? "",
       p.language ?? "",
       String(p.is_published),
+      ...["reviewed_on", "admission_band", "academic_requirements", "english_requirement", "intakes", "deadlines", "tuition", "semester_fee", "source_url", "official_url"].map(key => p.details?.[key as keyof ProgramDetails]?.toString() ?? ""),
     ]),
   ]
     .map((row) => row.map(cell).join(","))
