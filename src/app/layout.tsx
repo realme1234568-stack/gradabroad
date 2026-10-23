@@ -18,9 +18,24 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gradabroad | Study Abroad Planner",
+  metadataBase: new URL("https://www.gradabroad.online"),
+  title: "GradAbroad | Study Abroad Planner",
   description:
     "Plan your Germany study journey end-to-end: programs, shortlists, and application tracking.",
+  icons: {
+    icon: [
+      { url: "/brand/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/brand/favicon-16.png", type: "image/png", sizes: "16x16" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/brand/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  openGraph: {
+    type: "website", siteName: "GradAbroad", title: "GradAbroad | Study Abroad Planner",
+    description: "Find programmes and plan your studies in Germany.",
+    images: [{ url: "/brand/gradabroad-social-card.png", width: 1200, height: 630, alt: "GradAbroad — plan your studies in Germany" }],
+  },
+  twitter: { card: "summary_large_image", title: "GradAbroad", description: "Find programmes and plan your studies in Germany.", images: ["/brand/gradabroad-social-card.png"] },
 };
 
 export default function RootLayout({
@@ -30,15 +45,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="icon" href="/gradabroad.png" type="image/png" />
-        <meta property="og:image" content="/gradabroad.png" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="GradAbroad" />
-        <meta property="og:description" content="Your global study abroad companion." />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:image" content="/gradabroad.png" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

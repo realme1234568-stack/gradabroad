@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import landingStyles from "@/app/home.module.css";
 import Link from "next/link";
+import BrandMark from "@/components/BrandMark";
 import ThemeToggle from "@/components/ThemeToggle";
 import AuthPanel from "@/components/AuthPanel";
 import { useState, useRef, useEffect } from "react";
@@ -68,6 +69,7 @@ export default function Header() {
           href="/"
           className="flex items-center gap-2 text-lg font-semibold"
         >
+          <BrandMark size={32} />
           <span className="font-bold">GradAbroad</span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm font-medium text-ink lg:flex">

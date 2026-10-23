@@ -172,3 +172,31 @@ Applied the additive private receipt migration to production Supabase and checke
 Validation for this change: 180 automated tests passed; lint, production build and whitespace checks passed. Local desktop/phone browser inspection covered popup layout, policy switching, cancellation and the shared Settings entry/contact page. No live user accepted these new terms during testing; the production login/returning-account check remains pending deployment.
 
 Release approval: the owner requested committing and pushing the legal-acknowledgement and Contact Us changes to `main`. Supabase is already updated; production deployment and the live returning/new-account flow remain to be verified after this push.
+
+
+## 21 October 2026 — GradAbroad brand identity
+
+Created the mint-on-charcoal G monogram, exported a 1080px Instagram avatar, 512px general logo, 120px Google logo, header mark, favicons/ICO, Apple icon and a 1200×630 sharing card. Updated the shared header, homepage preview/footer, legacy logo URL and Next.js metadata. The reusable master and export script are retained in the project. Checked the actual desktop/mobile header and sharing-card output; 180 tests, lint, production build and whitespace checks passed. Source changes remain local, uncommitted and undeployed.
+
+Matched the live Supabase Google OAuth client to its existing Google Cloud project. The app name was already GradAbroad; Google was showing the technical service identity while the app remained in Testing without completed public branding links. Saved the homepage/privacy/terms URLs and the new logo. Existing OAuth credentials, scopes, redirect URIs and Supabase protections were unchanged. Google now permits publishing; its final confirmation would allow any Google account to use sign-in, so action-time owner approval was requested before confirming. Brand verification and the final account chooser display are still pending. See `assets/brand/README.md`.
+
+The owner subsequently approved publishing Google sign-in. Confirmed Google Audience is **In production** and initiated the saved brand’s verification check. The Google-side logo upload succeeded after the owner enabled the extension’s upload permission. Final branding approval and the Google account chooser must still be checked; website source changes remain local.
+
+
+## 22 October 2026 — Google branding verification blockers
+
+Google's automated check reported missing homepage domain ownership and 13 authorised domains exceeding the limit of 10. Removed two literal placeholder domains and one unused Vercel deployment domain; a fresh Google branding page confirmed 10 saved domains. Existing client redirect URIs, credentials and scopes were unchanged. With separate explicit owner approval, added Google's TXT ownership-verification record at GoDaddy; the registrar confirmed success. Existing DNS records were preserved. Search Console verification, DNS propagation and Google's final brand approval must be confirmed separately. Google instructs waiting 24 hours after ownership verification before retrying branding. Website logo changes remain local and uncommitted.
+
+Verification attempt on 22 October: Search Console could not yet find the TXT token. Both authoritative nameservers also returned no root TXT record at the time of checking. GoDaddy lists the correct saved token and reports that propagation usually takes up to an hour (exceptionally up to 48 hours). Ownership has therefore not yet been verified; retry once DNS propagation completes, then observe Google’s 24-hour branding wait.
+
+## 22–23 October 2026 — prelaunch journey, catalogue and support review
+
+The owner reported completing document-isolation and login tests. Independently checked live programme saving, cross-screen Interview status, checklist persistence/internal-navigation warning, shortlist removal, profile persistence, both decimal expense calculators and separate budgets, journey locking/unlocking/persistence and notification history. Restored changed planning values and removed the temporary Aalen shortlist. Three normal test activity notifications remain. Checked desktop and phone layouts. All five pages per degree yielded 100 unique programmes each; public rendered-page checks passed for all 200 detail URLs.
+
+Prepared local Contact/Settings privacy, support, deletion and security-report routes and a privacy note/accessible label for general feedback. Added the scoped operator procedure and launch evidence in `docs/PRIVACY_SUPPORT_OPERATIONS.md` and `docs/LAUNCH_REVIEW_2026-10-23.md`. Existing accepted policies, database permissions and private documents were preserved. Supabase region is Mumbai; its actual Free-plan page excludes project backups. Backup/restore, full legal-operator identity and formal retention/support practice remain operational decisions, not completed compliance work. Changes remain uncommitted and unpushed.
+
+## 23 October 2026 — approved website release
+
+The owner requested committing and pushing the prepared branding and launch-support changes to main for their own Vercel deployment review. This release includes the reusable brand assets, web/social metadata, Contact/Settings request routes, feedback privacy guidance and launch-review documentation. Earlier statements that these changes were local describe their status at the time of those reviews. Google branding verification remains separate and unconfirmed.
+
+The owner requires zero spending until GradAbroad generates revenue. The separate R2 backup experiment was retired: its empty bucket and dedicated API token were deleted, its private GitHub workflow was disabled, and R2 renewal was cancelled (the subscription expires 23 November 2026). No verified working production backup or restore rehearsal exists. Backup-runner code, credentials and private setup records are excluded from this website release.

@@ -1,6 +1,7 @@
 "use client";
 import { useNotifications } from "@/components/NotificationProvider";
 import ThemeToggle from "@/components/ThemeToggle";
+import Link from "next/link";
 
 export default function SettingsPage() {
   const { openCenter } = useNotifications();
@@ -37,6 +38,15 @@ export default function SettingsPage() {
               View notifications
             </button>
           </div>
+        </div>
+      </section>
+      <section className="mt-6 rounded-xl border border-line bg-surface p-6 sm:p-8">
+        <h2 className="text-xl">Privacy & account help</h2>
+        <p className="mt-3 text-sm leading-7 text-muted">Contact support for account help, a copy or correction of your data, or account deletion. Requests are verified before account data is disclosed or deleted.</p>
+        <div className="mt-5 flex flex-wrap gap-5 text-sm text-accent-ink underline underline-offset-4">
+          <Link href="/contact">Contact support & request deletion ↗</Link>
+          <Link href="/privacy">Privacy Policy</Link>
+          <Link href="/terms">Terms & Conditions</Link>
         </div>
       </section>
     </div>

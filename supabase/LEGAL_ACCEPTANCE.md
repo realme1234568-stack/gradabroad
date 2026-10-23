@@ -39,3 +39,9 @@ Primary drafting references checked on 21 October 2026:
 - [MeitY: DPDP Rules 2025](https://www.meity.gov.in/documents/act-and-policies/digital-personal-data-protection-rules-2025-gDOxUjMtQWa?pageTitle=Digital-Personal-Data-Protection-Rules-2025)
 
 The references inform the draft; they do not establish that GradAbroad has completed every operational requirement or that every provision has already commenced.
+
+## 22–23 October launch follow-up
+
+The owner reported that they completed live document-isolation and login tests. This is an owner-reported result, not a new independent security certification. The agent separately verified signed-in planning persistence and the live catalogue; see `docs/LAUNCH_REVIEW_2026-10-23.md`.
+
+Support/privacy/deletion routes and Settings links were clarified locally without rewriting the already accepted `2026-10-21` policies. The owner reconfirmed the brand, New Delhi/India and receiving support email, but the legal individual/entity and full publishable address remain unconfirmed. Verified Supabase region: Mumbai; actual Free project has no included project backups. The manual request/deletion procedure, retention limitations and remaining decisions are documented in `docs/PRIVACY_SUPPORT_OPERATIONS.md`.

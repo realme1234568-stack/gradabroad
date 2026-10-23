@@ -1,5 +1,6 @@
 import React from 'react';
 import emailjs from '@emailjs/browser';
+import Link from 'next/link';
 
 export default function FeedbackBox() {
   const [feedback, setFeedback] = React.useState("");
@@ -41,6 +42,8 @@ export default function FeedbackBox() {
         {showPopup && <p role="status" className="feedback-confirmation">Your feedback has been sent. Thank you for helping improve GradAbroad.</p>}
         <div className="text-sm font-semibold mb-2 text-ink">Have some feedback for us?</div>
         <textarea
+          aria-label="General product feedback"
+          aria-describedby="feedback-privacy-help"
           className="w-full rounded-lg border border-line border-accent-ink p-2 text-sm resize-none focus:ring-2 focus:ring-accent-ink focus:outline-none mb-2"
           rows={4}
           maxLength={800}
@@ -49,6 +52,7 @@ export default function FeedbackBox() {
           onChange={e => setFeedback(e.target.value)}
           style={{ minHeight: 80, maxHeight: 120, overflow: 'hidden' }}
         />
+        <p id="feedback-privacy-help" className="mb-3 text-xs leading-6 text-muted">General product feedback only. Do not include private documents, passwords or sign-in links. For account help, privacy or deletion requests, use <Link href="/contact" className="text-accent-ink underline underline-offset-4">Contact Us</Link>.</p>
         <button
           onClick={handleSend}
           disabled={sending || !feedback.trim()}

@@ -1,0 +1,1809 @@
+{
+  "date": "2026-10-22",
+  "checked": 200,
+  "passed": 200,
+  "failed": [],
+  "results": [
+    {
+      "id": "a8e2eceb-cb3b-57c9-a22e-e954cb2b324e",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b681ec7f-1cee-5aa4-948d-38ad4fc0a1ff",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "017dfcca-81f9-59aa-9d9a-1c708cacd6be",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "42dd481f-d896-53ad-8dbd-f483abefcf20",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "5dd9154d-b65c-5d96-b80f-d1b5168be5fa",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "7e1c9e2c-edc2-5ac9-acd3-c2d12ae17951",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "6b0591b7-e357-526f-8fb5-f8140df7ac27",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d3594fd7-0fe3-5daa-8f89-f398a78fbf9b",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "f65b6a3c-fd49-5a1d-835e-feeeb5c62cc5",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "423e66ec-e255-5839-bbf3-808885a516b9",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1c18c66f-63df-5c5d-8122-67a957d7899f",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1fd8d15c-f645-5b17-a945-875b097294af",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "2cc5d78c-5f37-514a-88bf-847cb5aa00ec",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "345b2e7e-129a-55e9-8b50-4b89598fdb7f",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "fc608743-3bcf-50aa-b659-1ed17c0c3304",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "48deafaf-2eb0-5de2-bf27-0bcec04600ce",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "a7310166-4eb8-5aff-95ff-32aa16123e6a",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "4c41f221-656e-5db4-b1bf-e8326efdd591",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d682dda1-4f00-5c4e-9f69-5566c9b493a3",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e39f6ac9-6d48-5631-9319-c2f7919cc4de",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "eda09b5e-7ae9-5ca0-9d90-3ce51f0a1d29",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "18c62bc7-8aa0-5ec7-8fe1-477e17d4720c",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "cd40d4c6-f361-53dc-ae46-bb07500ca33a",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "cd6ac967-ae61-5ef4-91a0-f7000b81abf4",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "947ff1a1-843f-5504-bcb2-0f994af662ef",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d78fbc46-5905-586e-89d5-52efa102d481",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "c956e006-e919-5318-99b0-7e09323b4658",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "fb055189-8827-5fd3-94cd-6a3b66d4a35a",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1064921f-a8a2-56e0-8721-a564ebbb93fb",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "aa43a65b-043d-5198-a008-7f44f81f5992",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "c475d7e4-2e72-52e0-b9b1-3a23d8f9f160",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "51abed30-096f-5440-bebf-30936fb9276a",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e628d532-aed5-5191-ad02-b6762da75301",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "7868a9cd-4d3e-5fdd-90fc-58cb6c1151e6",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "2e114530-b564-52fb-b899-19eedc0bd148",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "10bef2a3-1c4e-5a5c-90ef-bb3b2ddea4ee",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "bc90ca37-7e87-5fd3-917c-8ae21f6b7ab0",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e22e9663-ac31-5f87-a2ae-160943ee6f97",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b4c46852-3787-5ba0-a2f9-82a2f18006ff",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "4c87a4c7-3434-56ff-96c5-c3d477539625",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1e9255fb-a30c-5b56-9370-184dd4c4687f",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "9150c96f-7f4f-5c26-a832-41bb9865bf2c",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b1a0f381-e03f-576f-bbf3-0543496e691b",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1ad73198-3bc6-5b96-80f4-3e400684bec3",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "025c8121-fb6a-5ce2-87ea-06495de9c14c",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "5b1f83c4-8481-5bb5-824a-49b00827ae27",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b49ed363-6bbc-53c6-908b-46120e9b5d57",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "87cbe328-a1ba-5c1b-a57e-91bc5ee4c9d3",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "eafa5284-8172-5c21-ad07-4fb150aae313",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "2abfde18-9c7d-51a6-b22f-b1db713c1369",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "0b69d366-38ad-508d-86c2-eb3a7c9c09b2",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "4521cf7c-6d5d-5d92-a709-d773ca96a3b9",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "f8efaebf-a508-51b5-9b22-a8674fcaf39a",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "201e3e90-665c-555c-ad0d-74ce6608bae0",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "ee2d0cde-9ede-5742-b6bb-b515a08270aa",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b54f7a06-9946-5e18-a095-5cd5e4171b03",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "2f62c84c-4a0d-5109-93e1-43cc8ecd1781",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b78f3ec4-ac15-5313-a4e1-699a2a4d1a44",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "6363a756-8fe9-5c46-9301-cda8f89fdf52",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "95003fa9-b32c-5dc3-bfa4-7d04ba29556f",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "fcbc9bab-9f5a-5d04-b72e-037a2222cecb",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "32bdbb92-9b4a-5661-b51d-37aec62cfcf5",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "8460b654-54bf-5090-b4c2-e361aa85ce72",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "c5c47770-93b7-5566-959b-d5d4492f71b6",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "3c8272cc-0178-5b66-a756-1b1c98d18cf7",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "f9e2a25b-b62d-5e8d-b1d2-39d4ba48cf39",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "9e363b46-a904-5392-80fd-f126b9942adb",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "c047d834-4dba-55da-a132-f83354fbe6c1",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "8923d79f-c14a-528d-b208-4bc070c6ed87",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "3e4e285e-a5b2-5aa3-8924-b618685a1378",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1032b139-19b7-5333-ab33-747f98356185",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "9a6498c3-c7b7-5556-9412-b408d5f92e3c",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b6b55b92-9ad5-5245-9d9c-697edbce887c",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "6c685d4d-98ad-58e9-a8c7-0c7a1dd10d15",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "037bc40e-c73d-5eda-a210-7d3283c7a069",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "f9f3c07e-f469-5917-9864-4a123e426aa9",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "c21c8b61-219f-5d2e-b7e9-77f634d3d9de",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "c25a0767-61b9-5a71-bc8d-52cecbfb98f5",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "ac9cbb2a-1dd2-50b8-a580-ff9cfbac2440",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "bcbc7ad5-8323-58d1-98c0-86f673c9153d",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "20e9e1b0-d60c-511f-ba6e-7f8f5171512d",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "68325cc7-cd8a-5a25-ac04-92854ee47e80",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "a49ff61d-b56a-5726-9f17-d6f0bbe18d45",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "0aeab2c2-f5cb-5b48-b550-28453a58fc62",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "4953ba44-c894-551b-9a15-9fe810f415bd",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "06edaab6-3174-574c-b400-bc5b37c7909e",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "bda8defa-d254-5a7a-b4aa-41bcc0b2acf8",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "569192cd-3709-527f-8bbe-8ff9741cb460",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "0fd04ce4-9a3d-5601-8ec9-dcfcb7725fb2",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e40af681-8404-5711-9983-a10b5a029267",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "92177d4c-9f76-5123-a92b-e8456b88dd0a",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b3d43eb5-4b64-5c93-bb6e-b89c6e67fef7",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "6f442453-30b7-5d44-92df-e61b5ffdd70a",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "8dbf1e26-f5ff-5be4-8918-ae4921a27d4f",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "8ef184fc-5f07-5207-a112-a7a41689ba0a",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "096fe5fe-195c-55ad-8d90-66cd1a0df8b5",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e80a3c4e-2658-5782-b03b-a8682a6683ea",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e913887f-128a-5064-a889-936e768ba24b",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "daa87151-7f2b-550a-a29a-5357c263f8dc",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b487d55b-330a-50bd-84ac-9f016fd0440f",
+      "level": "bachelor",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "ed61e083-360b-5863-998d-203e35636387",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d1f6fe3e-9e6e-511c-b131-04486956dddc",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "8500813c-4d0a-5a79-810d-fdcc44a6f0a2",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1dc643c5-9ce0-58c2-8b83-2700a126325a",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "c3cdbd85-27d5-508c-89b8-02595ae38692",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "6c52df75-7d3b-57a5-b65c-2bb924d5f999",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "61aa2800-1ecd-5214-a9ee-ad64bfc33647",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "97ef020f-6b1f-50d0-bb26-b6b872e407ea",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1c042839-1072-5923-900c-5be30bf33ffd",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b77cfc4b-6994-5cb4-87c1-39b305847566",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "aac6ad88-7eae-5043-a775-37403f48523f",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b25d0d52-669b-5410-a4cb-39889e65a90c",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1ec3eb4c-5281-5416-b54e-e1a8870b154e",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d9cd6490-0bb9-58fd-87af-1bab7994afba",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "2bd5626d-44e8-5451-9932-8b38da781725",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "15a2ebd8-285d-5305-a66e-2450618dcfb2",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "2a2405b2-1233-5200-9092-ade9c4388323",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "ed0e350d-327d-5e49-9f2a-80dde1a29860",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "db7604e9-3f6d-5762-9a4e-8fd23f4c50a4",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "abdd4ae7-3a2e-581c-b0e2-c5ea05bf20bd",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1212ccd5-68c2-5ab6-a5e2-049e114ed60c",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "82e5cc5b-3cb2-5156-9f92-472b15870908",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "30631009-57e3-5ef7-ab10-373a9bcdd827",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "f49ab9aa-92dd-5fdf-ba1d-c6b7a5b7d67a",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "a1d62078-810c-5f2f-8627-a42f525d9346",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "6993a5e6-bd90-5071-b713-011beb31b575",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "615f5967-100f-59aa-8812-16178ea2ceca",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "483307af-c96a-5715-b2b6-0e17ff0224f3",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e9250b27-f46e-5a76-ac53-db10df16a832",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "8907e6b8-be64-5789-a283-7a303074a1f3",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "301bce90-cf4f-54fc-95bf-639eb92432cc",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "fb333420-b1eb-56ce-87e5-26267a98921b",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "64b05c1e-658a-5305-a158-3c10706b492f",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e356e187-6a19-57f2-92c8-723121f99c6b",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "6878f638-4016-5680-a58f-5d0273cd257e",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "60fbf8ea-ebbe-5e71-9425-697677ec00ba",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "a55efcf1-388c-5a1e-abc3-1722824edf02",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b7f4bede-8bba-5bc0-86a4-aaf7e30fee2e",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "73e61985-106c-5122-9347-873c43441f68",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "721ce406-e61d-57e6-b3eb-809123ed53fc",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "bbd713c9-1391-5ab2-8b37-9fa00f83e404",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "c7caba3a-bbff-5cbc-8bae-2494217fe3e6",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "02bfe8da-01f8-5ad9-8469-29933978ea88",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "03be33f8-2d5f-5266-b0f5-6abe2be39c55",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "2e7d1b3b-bb06-52e6-ad28-6fd1aac49526",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "5606c052-01b2-5009-8756-3b0d40882caa",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "0c886fa1-d371-59a1-b99d-933e2438b6e7",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1b4ef102-1811-5453-b6e5-9cec6b072476",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "05cffc54-beba-56c8-9728-bd533e9fa3c7",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d4cc6a11-c52b-5d78-9433-6b5153e23c45",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1bf79445-6282-58b4-ab7a-b9ec8e94bdbc",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1f96a506-93a5-548a-af13-58b657bbe7d4",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "dae85db8-48ad-5254-ae42-8dec63c662dc",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d92f9ebc-06a2-5020-8237-29774bb2d3a7",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "809cb37a-6b4f-5bb2-a311-fa18782a654d",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "8b445919-9be8-5be5-9325-d7bd5388e066",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "7db45551-0015-5df5-b1d4-cd851870a9ce",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "0a2e3f31-3130-533f-8471-daec31c4c9f3",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "62d6bb63-de5b-5abf-aa38-bcf03d21cfba",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "de563952-a2d6-5e6a-af47-b9844830de2a",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e015592c-9295-5124-b80f-61887b6818a3",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "976f9083-6dd1-53f1-86ab-5f9f3819336c",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "168e87be-18f7-51a7-b22d-b8f3d9bb937d",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "c1e108fc-2fcd-5346-9ff3-4fcfc9866784",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "49db697e-2c5f-537d-af9b-4ac5ff3bc6d7",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b5e742e2-b8ed-5d0b-9e19-afe52019baad",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "0abb61be-98fc-56b3-94f8-3451447c44c4",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "f2408e53-edfc-5a0f-a899-0228aacf03db",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "0e686747-0f39-57ea-8858-3856c5abf72f",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d688029b-731f-501b-8504-5125ee122811",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "05a20b7e-1f57-5bd7-8b44-f14d1ec9d96c",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d9fdf75d-f0dc-5b82-90c6-363cd0b27c36",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1712d260-8d76-5504-9c59-e69d9d16bcf5",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "ea50bb8e-b65e-58b9-b557-0e74286284c8",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "6a32ffd3-6306-5982-8646-e2a04cdfa1db",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "df39f216-20ac-570e-9ee7-b3d5c985d385",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "05f3057c-957e-5570-b48a-c08c1eccdd8a",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "42731626-6407-5c51-877d-9babf311b64b",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "801e2f22-9b14-526b-8254-2842fb059aed",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "1e14184b-e324-5eed-a2e0-1f188bfc5ea5",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "66a0e3eb-4f4a-51ab-bae8-4e2da1e58c27",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d080eb1c-0c47-5df3-851f-cc0640a938fd",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "5fb9474a-fb75-5eb6-b387-1f83e0daa8c0",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "58f7d965-e717-5009-92ee-7c16b1c7c2d3",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "891ff8c8-1d19-5baa-be38-d5c812f45a4e",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "6cc012b5-ae71-52e5-947f-e75c984e4db8",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e9d295dc-50fe-5179-a2e2-f785cfddfec2",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "da9ef921-04d5-5bcf-9b94-c98b2ab8689f",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "e6ee1912-f0ad-5e33-b86d-bcd5307f3cec",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "d0c43cbf-bd56-5125-acf5-b8a11193f786",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "415719d3-553f-5db5-920e-da553834fed6",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "db73f923-6964-5078-a81e-364fab0f9590",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "b6866b4f-cd4b-5d9f-954c-0799c8552654",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "c9adfcd8-d7f7-5e18-9ed6-5de53d67fcf8",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "4a868888-36fe-545d-84df-b9d928750efb",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "193c9b3f-d120-59c8-a8c1-373d556c7887",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "29bc3de1-aec5-5c6c-8327-b5bd7f54916e",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "4712e344-b22d-5da5-bc4f-8da507f513ee",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "fad8f59f-d6eb-58e1-8309-463087ce2e91",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    },
+    {
+      "id": "4ff75e6e-ebf1-55e3-bd5d-e7410e013e14",
+      "level": "master",
+      "http": 200,
+      "missing": [],
+      "daad_link": true,
+      "university_links": 8,
+      "ok": true
+    }
+  ],
+  "scope": "Public HTTP/rendered HTML checks, not a factual re-review of all university admission rules."
+}

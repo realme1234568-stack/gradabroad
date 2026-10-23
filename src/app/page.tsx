@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import BrandMark from "@/components/BrandMark";
 import { useEffect, useRef, useState } from "react";
 import {
   ArrowUpRight,
@@ -117,7 +118,7 @@ function ProductPreview() {
       <div className={s.workspaceBody}>
         <aside className={s.previewSidebar}>
           <span className={s.previewBrand}>
-            <Compass /> GradAbroad
+            <BrandMark size={26} /> GradAbroad
           </span>
           <p>MY WORKSPACE</p>
           <div
@@ -663,7 +664,7 @@ export default function Home() {
       <footer className={`${s.footer} ${s.container}`}>
         <div>
           <Link href="/" className={s.footerBrand}>
-            <Compass />
+            <BrandMark size={32} />
             GradAbroad
           </Link>
           <p>A clearer path to studying in Germany.</p>

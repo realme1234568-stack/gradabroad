@@ -2,6 +2,8 @@
 
 Implemented on 21 October 2026 in the approved production-review checkout.
 
+Launch follow-up, 22–23 October: the owner reported completing the two-account production document-isolation test. The agent did not independently repeat or certify that test in the launch review. See `docs/LAUNCH_REVIEW_2026-10-23.md` for the distinction and `docs/PRIVACY_SUPPORT_OPERATIONS.md` for account-deletion/file-cleanup procedures and backup limitations.
+
 ## User experience
 
 - `/dashboard/your-documents`, reachable from the dashboard, tracker, Settings page, and account menu.
