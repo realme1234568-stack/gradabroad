@@ -1,16 +1,24 @@
-import { notFound } from "next/navigation";
-import { createSupabaseServerClient } from "@/lib/supabaseServer";
-import { catalogueReady } from "@/lib/programDetails";
-import ProgramDetailsView from "@/components/ProgramDetailsView";
-
-export const dynamic = "force-dynamic";
-export default async function ProgramPage({ params }: { params: Promise<{ id: string }> }) {
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import ProgramDetailsView from '@/components/ProgramDetailsView';
+import { getPublicProgram } from '@/lib/publicCatalogue';
+import { jsonLd, noIndex, programDescription, publicMetadata, siteUrl } from '@/lib/seo';
+type Props = { params: Promise<{ id: string }> };
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) notFound();
-  const db = await createSupabaseServerClient();
-  const { data, error } = await db.from("programs").select("id,university_name,course_name,level,language,details")
-    .eq("id",id).eq("is_published",true).eq("language","English").maybeSingle();
-  if (error) return <div className="app-page mx-auto max-w-3xl px-6"><h1>Program temporarily unavailable</h1><p role="alert">We could not load this program. Please try again.</p><a href={`/programs/${id}`} className="mt-6 inline-block underline">Reload program</a></div>;
-  if (!data || !["bachelor", "master"].includes(data.level ?? "") || !catalogueReady(data.details)) notFound();
-  return <ProgramDetailsView program={{ ...data, details: data.details }} />;
+  let program;
+  try { program = await getPublicProgram(id); }
+  catch { return { title: 'Program temporarily unavailable | GradAbroad', robots: noIndex }; }
+  if (!program) return { title: 'Program not found | GradAbroad', robots: noIndex };
+  return publicMetadata(`${program.course_name} — ${program.university_name} | GradAbroad`, programDescription(program), `/programs/${program.id}`);
+}
+export default async function ProgramPage({ params }: Props) {
+  const { id } = await params, program = await getPublicProgram(id);
+  if (!program) notFound();
+  const url = `${siteUrl}/programs/${program.id}`;
+  const data = { '@context': 'https://schema.org', '@graph': [
+    { '@type': 'Course', name: program.course_name, description: programDescription(program), url, inLanguage: 'en', educationalLevel: program.level === 'master' ? 'Master’s' : 'Bachelor’s', provider: { '@type': 'CollegeOrUniversity', name: program.university_name } },
+    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'GradAbroad', item: siteUrl }, { '@type': 'ListItem', position: 2, name: 'Browse Programs', item: `${siteUrl}/browse-programs` }, { '@type': 'ListItem', position: 3, name: program.course_name, item: url }] },
+  ] };
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(data) }} /><ProgramDetailsView program={program} /></>;
 }

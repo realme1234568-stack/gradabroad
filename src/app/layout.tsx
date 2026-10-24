@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { noIndex, siteDescription } from "@/lib/seo";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NotificationProvider from "@/components/NotificationProvider";
@@ -21,7 +22,8 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.gradabroad.online"),
   title: "GradAbroad | Study Abroad Planner",
   description:
-    "Plan your Germany study journey end-to-end: programs, shortlists, and application tracking.",
+    siteDescription,
+  ...(process.env.VERCEL_ENV === "preview" ? { robots: noIndex } : {}),
   icons: {
     icon: [
       { url: "/brand/favicon-32.png", type: "image/png", sizes: "32x32" },

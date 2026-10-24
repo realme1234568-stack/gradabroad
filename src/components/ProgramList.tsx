@@ -232,7 +232,7 @@ export default function ProgramList({ programs }: Props) {
               className="group relative overflow-hidden rounded-xl border border-line bg-surface p-6 shadow-sm dark:shadow-none"
             >
               <div className="pointer-events-none absolute -right-16 -top-16 h-32 w-32 rounded-full bg-accent/10 blur-2xl transition group-hover:scale-110" />
-              <h2 className="text-lg font-semibold">{program.course_name}</h2>
+              <h2 className="text-lg font-semibold">{catalogueReady(program.details) ? <Link href={`/programs/${program.id}`} className="hover:text-accent-ink">{program.course_name}</Link> : program.course_name}</h2>
               <p className="mt-1 text-sm text-muted">
                 {program.university_name}
               </p>

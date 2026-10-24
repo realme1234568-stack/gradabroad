@@ -1,6 +1,7 @@
+import { publicMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { LEGAL_CONTACT } from "@/lib/legal";
-export const metadata = { title: "Contact Us | GradAbroad" };
+export const metadata = publicMetadata("Contact GradAbroad", "Contact GradAbroad for support, privacy questions and account help.", "/contact");
 const requests = [
   { title: "Support & feedback", action: "Email support", subject: "GradAbroad support request", description: "Tell us which page you were using, what you expected and what happened. Include your browser and device if the issue is technical." },
   { title: "Privacy & your data", action: "Make a privacy or data request", subject: "GradAbroad privacy or data access request", description: "Ask for a copy of your account information, a correction or help exercising your privacy rights. Describe the request without attaching private documents." },
