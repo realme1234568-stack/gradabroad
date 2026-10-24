@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import ProgramList from "@/components/ProgramList";
 import ProgramResearchNote from "@/components/ProgramResearchNote";
 import { supabase } from "@/lib/supabaseClient";
@@ -65,6 +66,9 @@ export default function BrowseProgramsPage() {
       <p>
         English-taught degrees at public universities across Germany. Compare
         published requirements, intakes and costs, then build your shortlist.
+      </p>
+      <p className="mt-6 rounded-xl border border-line bg-surface px-5 py-4 text-sm leading-7 text-ink">
+        <strong>Can’t find your dream university? Add it manually <Link href="/dashboard/my-shortlist" className="text-accent-ink underline underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-4" aria-label="Add your university or program in My Shortlist">here</Link>.</strong>
       </p>
       <div className="degree-tabs">
         {(

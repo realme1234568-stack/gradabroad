@@ -8,11 +8,12 @@ const rows = vi.hoisted(() => [
   { id: 'unknown', university_name: 'Unknown University', course_name: 'Unclassified Course', program_level: null, status: 'Shortlisted' },
 ]);
 vi.mock('@/lib/supabaseClient', () => ({ supabase: {
-  auth: { getUser: async () => ({ data: { user: { id: 'test-user' } } }) },
+  auth: { getUser: async () => ({ data: { user: { id: 'test-user' } } }), onAuthStateChange:()=>({data:{subscription:{unsubscribe(){}}}}) },
   from: () => {
     const chain = {
       select: () => chain, eq: () => chain,
-      order: async () => ({ data: rows, error: null }),
+      order: () => chain, range: async () => ({data:rows,error:null}),
+      then: (resolve: (value: {data:typeof rows;error:null})=>unknown) => Promise.resolve({data:rows,error:null}).then(resolve),
       maybeSingle: async () => ({ data: null, error: null }),
     };
     return chain;

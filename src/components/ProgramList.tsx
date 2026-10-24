@@ -8,6 +8,7 @@ import { normalizeApplicationStatus } from "@/lib/applicationStatus";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { normalizeProgramLevel } from "@/lib/programLevel";
+import { programWebsite } from "@/lib/shortlist";
 import { useUser } from "@/lib/UserContext";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -154,6 +155,8 @@ export default function ProgramList({ programs }: Props) {
       program_level: normalizeProgramLevel(program.level),
       deadline: null,
       status: "Shortlisted",
+      entry_source: "catalogue",
+      official_url: programWebsite(program.details?.official_url),
     });
     if (error) {
       if (error.code === "23505") {

@@ -17,16 +17,17 @@ vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh() {} }) }));
 vi.mock('@/lib/UserContext', () => ({ useUser: () => ({ email: 'test@example.com' }) }));
 vi.mock('@/lib/supabaseClient', () => ({
   supabase: {
-    auth: { getUser: async () => ({ data: { user: db.user ? { id: db.user } : null } }) },
+    auth: { getUser: async () => ({ data: { user: db.user ? { id: db.user } : null } }), onAuthStateChange:()=>({data:{subscription:{unsubscribe(){}}}}) },
     from(table: string) {
       const rows = [{ id: 'saved-row', university_name: 'TU Berlin', course_name: 'IMES', status: db.status, note: 'Existing note', deadline: null, program_level: 'master' }];
       const result = () => ({ data: table === 'tracker_preferences' ? db.preferences : rows, error: db.failLoad ? new Error('Unavailable') : null });
       const chain = {
         select: () => chain,
         eq: () => chain,
-        order: async () => { if (db.throwLoad) throw new Error('Network unavailable'); return result(); },
+        order: () => chain,
+        range: async () => { if (db.throwLoad) throw new Error('Network unavailable'); return result(); },
         maybeSingle: async () => result(),
-        then: (resolve: (value: ReturnType<typeof result>) => unknown) => Promise.resolve(result()).then(resolve),
+        then: (resolve: (value: ReturnType<typeof result>) => unknown, reject?: (error: unknown)=>unknown) => Promise.resolve().then(()=>{if(db.throwLoad)throw new Error('Network unavailable');return result();}).then(resolve,reject),
       };
       return {
         ...chain,
