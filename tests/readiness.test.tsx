@@ -123,7 +123,7 @@ test.each(['Admit', 'Accepted', 'Interview', 'Waitlisted'])('status %s is repres
     <MyTrackerPage key="tracker" />,
   ]) {
     const view = render(component);
-    const status = await screen.findByRole('combobox') as HTMLSelectElement;
+    const status = await screen.findByRole('combobox', component.type === MyTrackerPage ? { name: /Application status for/ } : {}) as HTMLSelectElement;
     await waitFor(() => expect(status.value).toBe(expected));
     const values = Array.from(status.options).map(option => option.value);
     expect(values).toEqual(stored === 'Waitlisted' ? ['Waitlisted', 'Shortlisted', 'Applied', 'Interview', 'Accepted', 'Rejected'] : ['Shortlisted', 'Applied', 'Interview', 'Accepted', 'Rejected']);
@@ -186,14 +186,14 @@ test('typing document names and changing application status do not dirty the che
   const save = screen.getByRole('button', { name: 'Save checklist' }) as HTMLButtonElement;
   fireEvent.change(screen.getByPlaceholderText('Add document...'), { target: { value: 'Visa' } });
   expect(save.disabled).toBe(true);
-  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Interview' } });
+  fireEvent.change(screen.getByRole('combobox', { name: /Application status for/ }), { target: { value: 'Interview' } });
   await waitFor(() => expect(db.updates).toContainEqual({ status: 'Interview' }));
   expect(save.disabled).toBe(true);
   expect(checklistDrafts.size).toBe(0);
   fireEvent.submit(screen.getByPlaceholderText('Add document...').closest('form')!);
   expect(save.disabled).toBe(false);
   fireEvent.click(save); await screen.findByText('Checklist saved.');
-  fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Accepted' } });
+  fireEvent.change(screen.getByRole('combobox', { name: /Application status for/ }), { target: { value: 'Accepted' } });
   await waitFor(() => expect(db.updates).toContainEqual({ status: 'Accepted' }));
   expect(save.disabled).toBe(true);
 });
@@ -211,4 +211,29 @@ test('signed-out shortlisting offers sign-in instead of a generic retry', async 
   await screen.findByText('Please sign in to save programs to your shortlist.');
   expect(screen.getByRole('button', { name: 'Sign in to shortlist' })).toBeTruthy();
   expect(screen.queryByRole('button', { name: 'Try again' })).toBeNull();
+});
+
+test('tracker status failures retain the saved status and allow retry without dirtying the checklist', async () => {
+  render(<MyTrackerPage />);
+  const control = await screen.findByRole('combobox', { name: /Application status for/ }) as HTMLSelectElement;
+  db.failLoad = true;
+  fireEvent.change(control, { target: { value: 'Interview' } });
+  await screen.findByText('Could not save application status. Please retry.');
+  expect(control.value).toBe('Applied');
+  expect(db.notify).not.toHaveBeenCalled();
+  expect((screen.getByRole('button', { name: 'Save checklist' }) as HTMLButtonElement).disabled).toBe(true);
+  db.failLoad = false;
+  fireEvent.change(control, { target: { value: 'Interview' } });
+  await screen.findByText('Application status saved.');
+  expect(control.value).toBe('Interview');
+  expect(db.notify).toHaveBeenCalledTimes(1);
+});
+
+test('tracker verifies the current account before changing an application status', async () => {
+  render(<MyTrackerPage />);
+  const control = await screen.findByRole('combobox', { name: /Application status for/ });
+  db.user = 'user-b';
+  fireEvent.change(control, { target: { value: 'Accepted' } });
+  await screen.findByText('Could not save application status. Please retry.');
+  expect(db.updates).toHaveLength(0);expect(db.notify).not.toHaveBeenCalled();
 });

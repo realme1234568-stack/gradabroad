@@ -103,3 +103,11 @@ test('save and cancel guard actual unsaved edits, and notes render as text',asyn
 test('saved programs beyond the default thousand-row API limit remain visible',async()=>{
  db.rows=Array.from({length:1001},(_,i)=>({...row,id:String(i),course_name:'Program '+i}));render(<Shortlist/>);await screen.findByText('Program 1000');expect(db.ranges).toEqual([0,1000]);expect(within(screen.getByLabelText('Shortlist summary')).getByText('1001')).toBeTruthy();
 },20000);
+test('tracker clears old account data and checkbox drafts when the signed-in account changes',async()=>{
+ db.rows=[{...row},{...row,id:'b',user_id:'user-b',university_name:'Other University',course_name:'Other Program'}];
+ render(<Tracker/>);await screen.findByText('M.Sc. Economics');
+ fireEvent.click(screen.getByLabelText('Mark Passport as complete'));
+ act(()=>{db.user='user-b';db.authListener?.('SIGNED_IN',{user:{id:'user-b'}});});
+ await screen.findByText('Other Program');expect(screen.queryByText('M.Sc. Economics')).toBeNull();
+ expect((screen.getByLabelText('Mark Passport as complete') as HTMLInputElement).checked).toBe(false);
+});

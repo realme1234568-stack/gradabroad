@@ -190,16 +190,6 @@ export default function Header() {
                     Settings
                   </Link>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setSettingsOpen(false);
-                    openCenter();
-                  }}
-                  className="mt-3 block text-sm underline"
-                >
-                  Notifications
-                </button>
                 <div className="mt-4 border-t border-line pt-4">
                   <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">
                     Theme
